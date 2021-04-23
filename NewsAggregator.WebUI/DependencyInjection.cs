@@ -25,6 +25,8 @@ namespace NewsAggregator.WebUI
             services.AddScoped<IScrapeJob, ScrapeJob>();
             services.AddScoped<IIdentityService, IdentityService>();
 
+            services.AddScoped<IUserService, UserService>();
+
             return services;
         }
     }
