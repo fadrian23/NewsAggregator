@@ -26,13 +26,6 @@ namespace NewsAggregator.WebUI.Controllers
         }
 
 
-        //
-        // not sure if want to leave it like here
-        // maybe return links to controllers and make multiple requests from frontend
-        // for eg user has reddit and hackernews then call:
-        // api/reddit/posts, api/hackernews/posts
-        // or maybe make two separate endpoints, one for links, one for posts
-
         [HttpGet]
         [Route("posts")]
         public IActionResult GetPostsFromSubscribedSites()
@@ -46,9 +39,6 @@ namespace NewsAggregator.WebUI.Controllers
                 return NotFound();
             }
 
-
-            // todo not sure if it should be like that
-            // maybe just return nulls in response
             string jsonWithoutNulls = JsonConvert.SerializeObject(posts, Formatting.Indented, new JsonSerializerSettings
             {
                 NullValueHandling = NullValueHandling.Ignore

@@ -67,7 +67,7 @@ namespace NewsAggregator.Services.Implementation
         {
             var userSettings = _context.ApplicationUserSettings.Include(x => x.SiteNames).FirstOrDefault(z => z.UserId == userId);
 
-            List<SiteName> siteNames = new List<SiteName>();
+            List<SiteName> siteNames = new();
 
             var result = new SiteSubscriptionResult
             {

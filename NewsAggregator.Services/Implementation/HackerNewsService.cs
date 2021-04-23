@@ -55,8 +55,8 @@ namespace NewsAggregator.Services.Implementation
         {
             var TopItemsIds = GetTopItemsId();
 
-            List<HackerNewsModel> TopPosts = new List<HackerNewsModel>();
-            List<Task<HackerNewsModel>> tasks = new List<Task<HackerNewsModel>>();
+            List<HackerNewsModel> TopPosts = new();
+            List<Task<HackerNewsModel>> tasks = new();
 
             foreach (var Id in TopItemsIds)
             {

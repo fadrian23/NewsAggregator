@@ -199,7 +199,7 @@ namespace NewsAggregator.Services.Implementation
 
         private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityTokenHandler tokenHandler = new();
 
             try
             {
