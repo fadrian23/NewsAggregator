@@ -4,72 +4,14 @@
     "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj": {
+    "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj",
-        "projectName": "NewsAggregator.Application",
-        "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj",
+        "projectUniqueName": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj",
+        "projectName": "NewsAggregator.Data",
+        "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj",
         "packagesPath": "C:\\Users\\adrian\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\obj\\",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "C:\\Users\\adrian\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
-        ],
-        "originalTargetFrameworks": [
-          "net5.0"
-        ],
-        "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net5.0": {
-            "targetAlias": "net5.0",
-            "projectReferences": {
-              "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Domain\\NewsAggregator.Domain.csproj": {
-                "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Domain\\NewsAggregator.Domain.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        }
-      },
-      "frameworks": {
-        "net5.0": {
-          "targetAlias": "net5.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
-            }
-          },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.201\\RuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Domain\\NewsAggregator.Domain.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Domain\\NewsAggregator.Domain.csproj",
-        "projectName": "NewsAggregator.Domain",
-        "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Domain\\NewsAggregator.Domain.csproj",
-        "packagesPath": "C:\\Users\\adrian\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Domain\\obj\\",
+        "outputPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\adrian\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -97,6 +39,26 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Tools": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.5, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -116,14 +78,14 @@
         }
       }
     },
-    "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Infrastructure\\NewsAggregator.Infrastructure.csproj": {
+    "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Infrastructure\\NewsAggregator.Infrastructure.csproj",
-        "projectName": "NewsAggregator.Infrastructure",
-        "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Infrastructure\\NewsAggregator.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj",
+        "projectName": "NewsAggregator.Services",
+        "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj",
         "packagesPath": "C:\\Users\\adrian\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Services\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\adrian\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -140,8 +102,8 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj": {
-                "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj"
+              "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj": {
+                "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj"
               }
             }
           }
@@ -155,6 +117,20 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
+          "dependencies": {
+            "Hangfire.AspNetCore": {
+              "target": "Package",
+              "version": "[1.7.22, )"
+            },
+            "Hangfire.SqlServer": {
+              "target": "Package",
+              "version": "[1.7.22, )"
+            },
+            "RestSharp": {
+              "target": "Package",
+              "version": "[106.11.7, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -198,11 +174,11 @@
           "net5.0": {
             "targetAlias": "net5.0",
             "projectReferences": {
-              "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj": {
-                "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj"
+              "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj": {
+                "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj"
               },
-              "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Infrastructure\\NewsAggregator.Infrastructure.csproj": {
-                "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Infrastructure\\NewsAggregator.Infrastructure.csproj"
+              "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj": {
+                "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj"
               }
             }
           }
@@ -217,6 +193,28 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.AspNetCore.Mvc.NewtonsoftJson": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[5.0.5, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.1, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[5.6.3, )"
