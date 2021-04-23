@@ -75,6 +75,42 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "NewsAggregator.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "NewsAggregator.Domain": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/NewsAggregator.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/NewsAggregator.Application.dll": {}
+        }
+      },
+      "NewsAggregator.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "compile": {
+          "bin/placeholder/NewsAggregator.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/NewsAggregator.Domain.dll": {}
+        }
+      },
+      "NewsAggregator.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "NewsAggregator.Application": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/NewsAggregator.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/NewsAggregator.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -185,10 +221,27 @@
         "swashbuckle.aspnetcore.swaggerui.5.6.3.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "NewsAggregator.Application/1.0.0": {
+      "type": "project",
+      "path": "../NewsAggregator.Application/NewsAggregator.Application.csproj",
+      "msbuildProject": "../NewsAggregator.Application/NewsAggregator.Application.csproj"
+    },
+    "NewsAggregator.Domain/1.0.0": {
+      "type": "project",
+      "path": "../NewsAggregator.Domain/NewsAggregator.Domain.csproj",
+      "msbuildProject": "../NewsAggregator.Domain/NewsAggregator.Domain.csproj"
+    },
+    "NewsAggregator.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../NewsAggregator.Infrastructure/NewsAggregator.Infrastructure.csproj",
+      "msbuildProject": "../NewsAggregator.Infrastructure/NewsAggregator.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
+      "NewsAggregator.Application >= 1.0.0",
+      "NewsAggregator.Infrastructure >= 1.0.0",
       "Swashbuckle.AspNetCore >= 5.6.3"
     ]
   },
@@ -218,7 +271,14 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj": {
+              "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Application\\NewsAggregator.Application.csproj"
+            },
+            "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Infrastructure\\NewsAggregator.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\adrian\\Documents\\repos\\NewsAggregator\\NewsAggregator.Infrastructure\\NewsAggregator.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
