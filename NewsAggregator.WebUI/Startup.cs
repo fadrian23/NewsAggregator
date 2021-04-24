@@ -21,6 +21,7 @@ using Microsoft.OpenApi.Models;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models.Identity;
 using NewsAggregator.Services.Options;
+using NewsAggregator.Services.Services;
 
 namespace NewsAggregator.WebUI
 {
@@ -106,7 +107,7 @@ namespace NewsAggregator.WebUI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -126,6 +127,11 @@ namespace NewsAggregator.WebUI
                 endpoints.MapControllers();
                 endpoints.MapHangfireDashboard();
             });
+
+            recurringJobManager.AddOrUpdate(
+                "ScrapingSites",
+                () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
+                "*/10 * * * * ");
         }
     }
 }

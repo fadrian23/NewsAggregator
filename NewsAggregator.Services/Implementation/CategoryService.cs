@@ -46,7 +46,7 @@ namespace NewsAggregator.Services.Implementation
         {
             var postCategoryFromDB = _context.PostCategories.Include(k => k.Keywords).FirstOrDefault(pc => pc.Id == id);
 
-            if (postCategoryFromDB is null)
+            if (postCategoryFromDB == null)
             {
                 return null;
             }
