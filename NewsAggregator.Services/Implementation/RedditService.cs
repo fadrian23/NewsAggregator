@@ -66,7 +66,7 @@ namespace NewsAggregator.Services.Implementation
                     Score = item.Data.Score,
                     Subreddit = item.Data.Subreddit,
                     Title = item.Data.Title,
-                    DateTime = DateTime.Now.Date,
+                    DateTime = DateTime.Now,
                     URL = $"http://www.reddit.com{item.Data.Permalink}"
                 };
                 RedditPosts.Add(redditPost);

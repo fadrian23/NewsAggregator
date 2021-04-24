@@ -93,7 +93,7 @@ namespace NewsAggregator.Services.Implementation
                     Author = item.By,
                     Title = item.Title,
                     URL = item.URL,
-                    DateTime = DateTime.Now.Date,
+                    DateTime = DateTime.Now,
                 };
 
                 // if a post has same author and content then don't add same to db.
