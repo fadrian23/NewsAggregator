@@ -149,16 +149,15 @@ namespace NewsAggregator.Services.Implementation
 
 
         // returns a response
-        public CategoryPostsDTO GetPostsOfCategory(int categoryId)
+        public CategoryPostsDTO GetPostsOfCategory(int categoryId, PaginationFilter paginationFilter)
         {
-
             var hackernewsService = _siteFactory.For(AvailableSites.HackerNews);
             var redditService = _siteFactory.For(AvailableSites.Reddit);
 
             var response = new CategoryPostsDTO
             {
-                RedditPosts = (IEnumerable<RedditPostDTO>)redditService.GetPosts(),
-                HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)hackernewsService.GetPosts()
+                RedditPosts = (IEnumerable<RedditPostDTO>)redditService.GetPosts(paginationFilter),
+                HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)hackernewsService.GetPosts(paginationFilter)
             };
 
             return response;
