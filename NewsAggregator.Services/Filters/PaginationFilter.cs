@@ -7,19 +7,21 @@ namespace NewsAggregator.Services.Filters
 {
     public class PaginationFilter
     {
-        public int PageSize { get; set; }
+        private int _PageSize = 10;
+        public int PageSize
+        {
+            get => _PageSize;
+            set
+            {
+                _PageSize = (value > 20) ? 20 : value;
+            }
+        }
         public int PageNumber { get; set; }
 
         public PaginationFilter()
         {
             PageSize = 5;
             PageNumber = 1;
-        }
-
-        public PaginationFilter(int pageSize, int pageNumber)
-        {
-            PageSize = pageSize > 20 ? 20 : pageSize;
-            PageNumber = pageNumber > 0 ? pageNumber : 1;
         }
     }
 }
