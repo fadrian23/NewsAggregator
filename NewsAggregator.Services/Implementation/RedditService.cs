@@ -10,6 +10,7 @@ using NewsAggregator.Services.Services;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Services.DTOs;
 using NewsAggregator.Data.Models;
+using NewsAggregator.Services.Filters;
 
 namespace NewsAggregator.Services.Implementation
 {
@@ -31,21 +32,23 @@ namespace NewsAggregator.Services.Implementation
 
 
 
-        public IEnumerable<ISocialModelDTO> GetPosts()
+        public IEnumerable<ISocialModelDTO> GetPosts(PaginationFilter paginationFilter)
         {
-            IEnumerable<ISocialModelDTO> posts = _context.RedditPosts.Select(x => new RedditPostDTO
-            {
-                Id = x.Id,
-                URL = x.URL,
-                Title = x.Title,
-                Score = x.Score,
-                Subreddit = x.Subreddit,
-                Author = x.Author
-            }).ToList();
+            IEnumerable<ISocialModelDTO> posts = _context
+                .RedditPosts
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                .Take(paginationFilter.PageSize)
+                .Select(x => new RedditPostDTO
+                {
+                    Id = x.Id,
+                    URL = x.URL,
+                    Title = x.Title,
+                    Score = x.Score,
+                    Subreddit = x.Subreddit,
+                    Author = x.Author
+                }).ToList();
 
             return posts;
-
-
         }
 
         private List<RedditPost> FetchPosts()

@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models;
 using NewsAggregator.Services.DTOs;
+using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.Services;
 using Newtonsoft.Json;
 using RestSharp;
@@ -27,15 +28,18 @@ namespace NewsAggregator.Services.Implementation
         }
 
 
-        public IEnumerable<ISocialModelDTO> GetPosts()
+        public IEnumerable<ISocialModelDTO> GetPosts(PaginationFilter paginationFilter)
         {
-            IEnumerable<HackerNewsPostDTO> posts = _context.HackerNewsPosts.Select(x => new HackerNewsPostDTO
-            {
-                Author = x.Author,
-                Id = x.Id,
-                Title = x.Title,
-                URL = x.URL,
-            });
+            IEnumerable<HackerNewsPostDTO> posts = _context.HackerNewsPosts
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                .Take(paginationFilter.PageSize)
+                .Select(x => new HackerNewsPostDTO
+                {
+                    Author = x.Author,
+                    Id = x.Id,
+                    Title = x.Title,
+                    URL = x.URL,
+                });
 
             return posts;
         }
