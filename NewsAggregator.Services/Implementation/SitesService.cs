@@ -9,6 +9,7 @@ using NewsAggregator.Services.Services;
 using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Helpers;
 using NewsAggregator.Data.Models;
+using NewsAggregator.Services.Filters;
 
 namespace NewsAggregator.Services.Implementation
 {
@@ -23,7 +24,7 @@ namespace NewsAggregator.Services.Implementation
             _siteFactory = siteFactory;
         }
 
-        public UserSitesPostsDTO GetPostsFromUserSites(string userId)
+        public UserSitesPostsDTO GetPostsFromUserSites(string userId, PaginationFilter paginationFilter)
         {
             var userSites = _context.ApplicationUserSettings
                 .Include(x => x.SiteNames)
@@ -39,17 +40,22 @@ namespace NewsAggregator.Services.Implementation
                 {
 
                     var siteService = _siteFactory.For(site);
+                    var filter = new PaginationFilter
+                    {
+                        PageNumber = paginationFilter.PageNumber,
+                        PageSize = paginationFilter.PageSize
+                    };
 
                     switch (site)
                     {
                         case AvailableSites.Reddit:
                             {
-                                userSitesPostsDTO.RedditPosts = (IEnumerable<RedditPostDTO>)siteService.GetPosts();
+                                userSitesPostsDTO.RedditPosts = (IEnumerable<RedditPostDTO>)siteService.GetPosts(filter);
                                 break;
                             }
                         case AvailableSites.HackerNews:
                             {
-                                userSitesPostsDTO.HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)siteService.GetPosts();
+                                userSitesPostsDTO.HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)siteService.GetPosts(filter);
                                 break;
                             }
                         default:

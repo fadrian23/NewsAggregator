@@ -18,7 +18,7 @@ namespace NewsAggregator.Services.Services
         List<KeywordDTO> GetCategoryKeywords(int id);
         bool AddKeywordsToCategory(List<Keyword> keywords, int postCategoryId);
         bool DeleteCategoryKeywords(int categoryId);
-        CategoryPostsDTO GetPostsOfCategory(int categoryId);
+        CategoryPostsDTO GetPostsOfCategory(int categoryId, PaginationFilter paginationFilter);
         ISocialModel CategorizePost(ISocialModel post);
 
     }

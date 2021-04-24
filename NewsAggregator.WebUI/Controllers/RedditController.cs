@@ -1,17 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using RestSharp;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NewsAggregator.Services.Services;
 using NewsAggregator.WebUI.Models.Requests;
+using NewsAggregator.Services.Filters;
 
 namespace NewsAggregator.WebUI.Controllers
 {
@@ -30,11 +23,18 @@ namespace NewsAggregator.WebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Posts()
+        public IActionResult Posts([FromQuery] PaginationFilter paginationFilter)
         {
-            _logger.LogInformation("getting reddit posts");
-            var posts = _redditService.GetPosts();
+            var filter = new PaginationFilter
+            {
+                PageNumber = paginationFilter.PageNumber,
+                PageSize = paginationFilter.PageSize
+            };
+
+            System.Console.WriteLine($"Pagenumber: {paginationFilter.PageNumber}, PageSize: {paginationFilter.PageSize}");
+            var posts = _redditService.GetPosts(filter);
             return Ok(posts);
+
         }
 
         [HttpGet]

@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Services.Extensions;
+using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
 using NewsAggregator.WebUI.Models.Requests;
@@ -15,7 +17,7 @@ namespace NewsAggregator.WebUI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UserSitesController : ControllerBase
     {
         private readonly ISitesService _sitesService;
@@ -28,11 +30,11 @@ namespace NewsAggregator.WebUI.Controllers
 
         [HttpGet]
         [Route("posts")]
-        public IActionResult GetPostsFromSubscribedSites()
+        public IActionResult GetPostsFromSubscribedSites([FromQuery] PaginationFilter paginationFilter)
         {
             string userId = User.GetUserId();
 
-            var posts = _sitesService.GetPostsFromUserSites(userId);
+            var posts = _sitesService.GetPostsFromUserSites(userId, paginationFilter);
 
             if (posts == null)
             {

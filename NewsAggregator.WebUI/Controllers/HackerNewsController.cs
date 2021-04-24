@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.Services;
 using NewsAggregator.WebUI.Models.Requests;
 
@@ -20,11 +21,11 @@ namespace NewsAggregator.WebUI.Controllers
         }
 
         [HttpGet]
-        public IActionResult Posts()
+        public IActionResult Posts([FromQuery] PaginationFilter paginationFilter)
         {
             _logger.LogInformation("GET all posts from HN");
 
-            var posts = _hackerNewsService.GetPosts();
+            var posts = _hackerNewsService.GetPosts(paginationFilter);
 
             return Ok(posts);
         }
