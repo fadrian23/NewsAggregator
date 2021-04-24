@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models;
 using NewsAggregator.Services.DTOs;
+using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
 using System;
@@ -25,14 +26,18 @@ namespace NewsAggregator.Services.Implementation
             _siteFactory = siteFactory;
         }
 
-        public List<PostCategoryDTO> GetCategories()
+        public List<PostCategoryDTO> GetCategories(PaginationFilter paginationFilter)
         {
-            var categories = _context.PostCategories.Select(x => new PostCategoryDTO
-            {
-                Id = x.Id,
-                Category = x.Name,
-                Keywords = x.Keywords.Select(k => k.Name).ToList()
-            }).ToList();
+            var categories = _context
+                .PostCategories
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                .Take(paginationFilter.PageSize)
+                .Select(x => new PostCategoryDTO
+                {
+                    Id = x.Id,
+                    Category = x.Name,
+                    Keywords = x.Keywords.Select(k => k.Name).ToList()
+                }).ToList();
 
             if (categories == null)
             {

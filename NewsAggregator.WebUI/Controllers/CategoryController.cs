@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Data.Models;
 using NewsAggregator.Services.Services;
+using NewsAggregator.Services.Filters;
 using NewsAggregator.WebUI.Models.Requests;
 using NewsAggregator.WebUI.Models.Responses;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NewsAggregator.WebUI.Controllers
@@ -19,9 +21,25 @@ namespace NewsAggregator.WebUI.Controllers
 
         // get api/category
         [HttpGet]
-        public IActionResult GetCategories()
+        public IActionResult GetCategories([FromQuery] PaginationFilter paginationFilter)
         {
-            var categories = _categoryService.GetCategories();
+
+            var filter = new PaginationFilter
+            {
+                PageNumber = paginationFilter.PageNumber,
+                PageSize = paginationFilter.PageSize
+            };
+
+            if (filter.PageSize < 1)
+            {
+                return BadRequest(new Response<CategoryResponse>(null)
+                {
+                    Success = false,
+                    Errors = new[] { "PageSize cannot be less than 1!" }
+                });
+            }
+
+            var categories = _categoryService.GetCategories(filter);
 
             if (categories is null)
             {
@@ -35,7 +53,8 @@ namespace NewsAggregator.WebUI.Controllers
                 Keywords = x.Keywords.ToList()
             }).ToList();
 
-            return Ok(response);
+
+            return Ok(new Response<List<CategoryResponse>>(response));
         }
 
         // get api/category/5

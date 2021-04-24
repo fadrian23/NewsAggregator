@@ -128,10 +128,10 @@ namespace NewsAggregator.WebUI
                 endpoints.MapHangfireDashboard();
             });
 
-            recurringJobManager.AddOrUpdate(
-                "ScrapingSites",
-                () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
-                "*/10 * * * * ");
+            //recurringJobManager.AddOrUpdate(
+            //    "ScrapingSites",
+            //    () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
+            //    "*/10 * * * * ");
         }
     }
 }

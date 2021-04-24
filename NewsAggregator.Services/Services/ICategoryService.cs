@@ -4,12 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using NewsAggregator.Data.Models;
 using NewsAggregator.Services.DTOs;
+using NewsAggregator.Services.Filters;
 
 namespace NewsAggregator.Services.Services
 {
     public interface ICategoryService
     {
-        List<PostCategoryDTO> GetCategories();
+        List<PostCategoryDTO> GetCategories(PaginationFilter paginationFilter);
         PostCategoryDTO GetCategory(int id);
         void AddCategory(PostCategory postCategory);
         bool EditCategory(int id, PostCategory postCategory);
