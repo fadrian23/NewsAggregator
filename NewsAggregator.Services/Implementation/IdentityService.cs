@@ -94,6 +94,14 @@ namespace NewsAggregator.Services.Implementation
                 };
             }
 
+            // add userid to applicationUserSettings table
+            // I think it's a good practice to decouple identity generated table from application specific tables.
+            _context.ApplicationUserSettings.Add(new ApplicationUserSettings
+            {
+                User = newUser
+            });
+            await _context.SaveChangesAsync();
+
             return await GenerateAuthResult(newUser);
         }
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
