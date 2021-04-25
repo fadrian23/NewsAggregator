@@ -5,6 +5,7 @@ NewsAggregator allows you to view top posts from Reddit and HackerNews.
 * ASP.NET Core 5.0
 * EF Core 5.0
 * Identity Auth with JWT
+* Hangfire
 
 ### Requirements
 * Dotnet SDK
