@@ -27,6 +27,8 @@ namespace NewsAggregator.WebUI
 
             services.AddScoped<IUserService, UserService>();
 
+            services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
+
             return services;
         }
     }

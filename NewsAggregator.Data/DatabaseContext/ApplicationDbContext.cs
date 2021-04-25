@@ -36,7 +36,6 @@ namespace NewsAggregator.Data.DatabaseContext
                 .Property(k => k.Token)
                 .ValueGeneratedOnAdd();
 
-
             builder.Entity<SiteName>()
                 .HasData(
                 new { Id = 1, Name = "Reddit" },

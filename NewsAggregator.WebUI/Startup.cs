@@ -132,6 +132,11 @@ namespace NewsAggregator.WebUI
             //    "ScrapingSites",
             //    () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
             //    "*/10 * * * * ");
+
+            var databaseSeeder = serviceProvider.GetService<IDatabaseSeeder>();
+
+            databaseSeeder.SeedDatabase();
+
         }
     }
 }
