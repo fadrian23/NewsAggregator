@@ -29,7 +29,9 @@ namespace NewsAggregator.Services.Implementation
 
             foreach (var postCategory in postCategories)
             {
-                var postCategoryFromDb = _context.PostCategories.Select(n => n.Name).FirstOrDefault(x => x == postCategory.Name);
+                var postCategoryFromDb = _context.PostCategories
+                    .Select(n => n.Name)
+                    .FirstOrDefault(x => x == postCategory.Name);
                 if (postCategoryFromDb == null)
                 {
                     _context.PostCategories.Add(postCategory);
