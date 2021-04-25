@@ -43,6 +43,7 @@ namespace NewsAggregator.Services.Implementation
         private IEnumerable<PostCategory> GetPostCategoriesData()
         {
             var postCategories = new List<PostCategory>();
+
             postCategories.Add(new PostCategory
             {
                 Name = AvailableRedditSubreddits.Csharp,
@@ -51,6 +52,16 @@ namespace NewsAggregator.Services.Implementation
                     new Keyword {Name = "csharp"}
                 }
             });
+
+            postCategories.Add(new PostCategory
+            {
+                Name = AvailableRedditSubreddits.Dotnet,
+                Keywords = new List<Keyword>
+                {
+                    new Keyword {Name = "dotnet"}
+                }
+            });
+
 
             return postCategories;
         }
