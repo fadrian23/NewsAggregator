@@ -11,6 +11,7 @@ using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Services.DTOs;
 using NewsAggregator.Data.Models;
 using NewsAggregator.Services.Filters;
+using NewsAggregator.Services.Helpers;
 
 namespace NewsAggregator.Services.Implementation
 {
@@ -29,8 +30,6 @@ namespace NewsAggregator.Services.Implementation
             _logger = logger;
             _categoryService = categoryService;
         }
-
-
 
         public IEnumerable<ISocialModelDTO> GetPosts(PaginationFilter paginationFilter)
         {
@@ -51,37 +50,41 @@ namespace NewsAggregator.Services.Implementation
             return posts;
         }
 
-        private List<RedditPost> FetchPosts()
+        private List<RedditPost> FetchPosts(IEnumerable<string> Subreddits, int numberOfPosts = 20)
         {
-            var restClient = _restService.CreateClient("https://www.reddit.com/r/all/");
-            var request = new RestRequest("top.json?limit=20", DataFormat.Json);
-            var response = restClient.Execute<RedditRoot>(request);
+            List<RedditPost> RedditPosts = new();
 
-            var RedditPost = JsonConvert.DeserializeObject<RedditRoot>(response.Content);//
-
-            var RedditPosts = new List<RedditPost>();
-
-            foreach (var item in RedditPost.Data.Children)
+            foreach (var subreddit in Subreddits)
             {
-                var redditPost = new RedditPost
+                var restClient = _restService.CreateClient($"https://www.reddit.com/r/{subreddit}/");
+                var request = new RestRequest($"top.json?limit={numberOfPosts}", DataFormat.Json);
+                var response = restClient.Execute<RedditRoot>(request);
+                var RedditPost = JsonConvert.DeserializeObject<RedditRoot>(response.Content);
+                foreach (var item in RedditPost.Data.Children)
                 {
-                    Author = item.Data.Author,
-                    Score = item.Data.Score,
-                    Subreddit = item.Data.Subreddit,
-                    Title = item.Data.Title,
-                    DateTime = DateTime.Now,
-                    URL = $"http://www.reddit.com{item.Data.Permalink}"
-                };
-                RedditPosts.Add(redditPost);
+                    var redditPost = new RedditPost
+                    {
+                        Author = item.Data.Author,
+                        Score = item.Data.Score,
+                        Subreddit = item.Data.Subreddit,
+                        Title = item.Data.Title,
+                        DateTime = DateTime.Now,
+                        URL = $"http://www.reddit.com{item.Data.Permalink}",
+                        PostCategory = _context.PostCategories.SingleOrDefault(x => x.Name.ToLower() == subreddit.ToLower())
+                    };
+                    RedditPosts.Add(redditPost);
+                }
             }
 
             return RedditPosts;
         }
 
 
+
         public bool GetAndSaveData()
         {
-            var data = FetchPosts();
+            var availableSubreddits = AvailableRedditSubreddits.GetAll();
+            var data = FetchPosts(availableSubreddits);
 
             _logger.LogInformation("fetching data from reddit");
 
