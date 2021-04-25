@@ -207,9 +207,10 @@ namespace NewsAggregator.WebUI.Controllers
         // get api/category/5/posts
         [HttpGet]
         [Route("{categoryId}/posts")]
-        public IActionResult GetPostsFromCategory(int categoryId)
+        public IActionResult GetPostsFromCategory(int categoryId, PaginationFilter paginationFilter)
         {
-            var response = _categoryService.GetPostsOfCategory(categoryId);
+
+            var response = _categoryService.GetPostsOfCategory(categoryId, paginationFilter);
             if (response == null)
             {
                 return NotFound();

@@ -148,7 +148,6 @@ namespace NewsAggregator.Services.Implementation
         }
 
 
-        // returns a response
         public CategoryPostsDTO GetPostsOfCategory(int categoryId, PaginationFilter paginationFilter)
         {
             var hackernewsService = _siteFactory.For(AvailableSites.HackerNews);
