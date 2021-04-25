@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Services.Implementation
 {
-    public class HackerNewsService : IHackerNewsService
+    public class HackerNewsService : ISiteService
     {
         private readonly IRestService _restService;
         private readonly ApplicationDbContext _context;

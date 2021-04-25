@@ -13,8 +13,6 @@ namespace NewsAggregator.WebUI
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             services.AddScoped<IRestService, RestService>();
-            services.AddScoped<IRedditService, RedditService>();
-            services.AddScoped<IHackerNewsService, HackerNewsService>();
             services.AddScoped<ISiteService, RedditService>();
             services.AddScoped<ISiteService, HackerNewsService>();
             services.AddScoped<ISitesService, SitesService>();

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Services.Filters;
+using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
 using NewsAggregator.WebUI.Models.Requests;
 
@@ -10,13 +11,13 @@ namespace NewsAggregator.WebUI.Controllers
     [Route("api/[controller]/[action]")]
     public class HackerNewsController : ControllerBase
     {
-        private readonly IHackerNewsService _hackerNewsService;
+        private readonly ISiteService _hackerNewsService;
         private readonly ILogger<HackerNewsController> _logger;
 
 
-        public HackerNewsController(IHackerNewsService hackerNewsService, ILogger<HackerNewsController> logger)
+        public HackerNewsController(ISiteFactory siteFactory, ILogger<HackerNewsController> logger)
         {
-            _hackerNewsService = hackerNewsService;
+            _hackerNewsService = siteFactory.For(AvailableSites.HackerNews);
             _logger = logger;
         }
 

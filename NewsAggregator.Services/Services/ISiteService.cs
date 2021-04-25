@@ -15,14 +15,4 @@ namespace NewsAggregator.Services.Services
     }
 
 
-    public interface IRedditService : ISiteService
-    {
-
-    }
-
-    public interface IHackerNewsService : ISiteService
-    {
-
-    }
-
 }

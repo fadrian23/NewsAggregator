@@ -15,7 +15,7 @@ using NewsAggregator.Services.Helpers;
 
 namespace NewsAggregator.Services.Implementation
 {
-    public class RedditService : IRedditService
+    public class RedditService : ISiteService
     {
 
         private readonly IRestService _restService;

@@ -5,18 +5,19 @@ using System.Reflection;
 using System.Threading.Tasks;
 using Hangfire;
 using Microsoft.Extensions.Logging;
+using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
 
 namespace NewsAggregator.Services.Implementation
 {
     public class ScrapeJob : IScrapeJob
     {
-        private readonly IEnumerable<ISiteService> _socialServices;
+        private readonly ISiteFactory _siteFactory;
         private readonly ILogger<ScrapeJob> _logger;
 
-        public ScrapeJob(IEnumerable<ISiteService> socialServices, ILogger<ScrapeJob> logger)
+        public ScrapeJob(ISiteFactory siteFactory, ILogger<ScrapeJob> logger)
         {
-            _socialServices = socialServices;
+            _siteFactory = siteFactory;
             _logger = logger;
         }
 
@@ -24,10 +25,11 @@ namespace NewsAggregator.Services.Implementation
         public void ScrapSites()
         {
             _logger.LogInformation("Running a scrapjob");
-            foreach (var service in _socialServices)
+            foreach (var site in AvailableSites.GetAll())
             {
-                service.GetAndSaveData();
+                _siteFactory.For(site).GetAndSaveData();
             }
+
         }
 
 

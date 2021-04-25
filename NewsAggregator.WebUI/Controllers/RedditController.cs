@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using NewsAggregator.Services.Services;
 using NewsAggregator.WebUI.Models.Requests;
 using NewsAggregator.Services.Filters;
+using NewsAggregator.Services.Helpers;
 
 namespace NewsAggregator.WebUI.Controllers
 {
@@ -13,12 +14,12 @@ namespace NewsAggregator.WebUI.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RedditController : ControllerBase
     {
-        private readonly IRedditService _redditService;
+        private readonly ISiteService _redditService;
         private readonly ILogger<RedditController> _logger;
 
-        public RedditController(IRedditService redditService, ILogger<RedditController> logger)
+        public RedditController(ISiteFactory siteFactory, ILogger<RedditController> logger)
         {
-            _redditService = redditService;
+            _redditService = siteFactory.For(AvailableSites.Reddit);
             _logger = logger;
         }
 
