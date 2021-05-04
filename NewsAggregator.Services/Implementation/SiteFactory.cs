@@ -1,4 +1,5 @@
-﻿using NewsAggregator.Services.Services;
+﻿using NewsAggregator.Services.Helpers;
+using NewsAggregator.Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,8 +20,9 @@ namespace NewsAggregator.Services.Implementation
         {
             return userSelection switch
             {
-                "Reddit" => (ISiteService)_serviceProvider.GetService(typeof(RedditService)),
-                "HackerNews" => (ISiteService)_serviceProvider.GetService(typeof(HackerNewsService)),
+                AvailableSites.Reddit => (ISiteService)_serviceProvider.GetService(typeof(RedditService)),
+                AvailableSites.HackerNews => (ISiteService)_serviceProvider.GetService(typeof(HackerNewsService)),
+                AvailableSites.PolsatNews => (ISiteService)_serviceProvider.GetService(typeof(PolsatNewsService)),
                 _ => throw new NotImplementedException($"not implemented service for {userSelection}")
             };
         }

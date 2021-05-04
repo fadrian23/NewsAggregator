@@ -17,6 +17,7 @@ namespace NewsAggregator.Data.DatabaseContext
         }
         public DbSet<RedditPost> RedditPosts { get; set; }
         public DbSet<HackerNewsPost> HackerNewsPosts { get; set; }
+        public DbSet<RssPost> InformationSitesPosts { get; set; }
         public DbSet<PostCategory> PostCategories { get; set; }
         public DbSet<Keyword> Keywords { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }

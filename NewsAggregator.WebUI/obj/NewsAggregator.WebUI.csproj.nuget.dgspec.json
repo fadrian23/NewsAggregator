@@ -129,6 +129,14 @@
             "RestSharp": {
               "target": "Package",
               "version": "[106.11.7, )"
+            },
+            "Selenium.WebDriver": {
+              "target": "Package",
+              "version": "[3.141.0, )"
+            },
+            "System.ServiceModel.Syndication": {
+              "target": "Package",
+              "version": "[5.0.0, )"
             }
           },
           "imports": [

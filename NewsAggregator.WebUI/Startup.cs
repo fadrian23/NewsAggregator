@@ -20,6 +20,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models.Identity;
+using NewsAggregator.Services.Helpers;
+using NewsAggregator.Services.Implementation;
 using NewsAggregator.Services.Options;
 using NewsAggregator.Services.Services;
 
@@ -133,9 +135,12 @@ namespace NewsAggregator.WebUI
             //    () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
             //    "*/10 * * * * ");
 
+
             var databaseSeeder = serviceProvider.GetService<IDatabaseSeeder>();
 
             databaseSeeder.SeedDatabase();
+
+
 
         }
     }
