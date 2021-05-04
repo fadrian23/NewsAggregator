@@ -1,5 +1,5 @@
 ### NewsAggregator
-NewsAggregator allows you to view top posts from Reddit and HackerNews.
+NewsAggregator allows you to view top posts from information sites, hackernews and redditservice.
 
 ### Tech
 * ASP.NET Core 5.0
