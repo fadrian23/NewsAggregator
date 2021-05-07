@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 using NewsAggregator.Services.Implementation;
 using NewsAggregator.Services.Services;
 using System;
@@ -33,6 +34,16 @@ namespace NewsAggregator.WebUI
             services.AddScoped<IUserService, UserService>();
 
             services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
+
+            services.AddHttpContextAccessor();
+            services.AddSingleton<IUriService>(x =>
+            {
+                var accessor = x.GetRequiredService<IHttpContextAccessor>();
+                var request = accessor.HttpContext.Request;
+                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+
+                return new UriService(uri);
+            });
 
             return services;
         }

@@ -12,6 +12,7 @@ using NewsAggregator.Services.DTOs;
 using NewsAggregator.Data.Models;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.Helpers;
+using NewsAggregator.Services.HelperModels;
 
 namespace NewsAggregator.Services.Implementation
 {
@@ -31,10 +32,11 @@ namespace NewsAggregator.Services.Implementation
             _categoryService = categoryService;
         }
 
-        public IEnumerable<ISocialModelDTO> GetPosts(PaginationFilter paginationFilter)
+        public PagedResponse<IEnumerable<ISocialModelDTO>> GetPosts(PaginationFilter paginationFilter)
         {
             IEnumerable<ISocialModelDTO> posts = _context
                 .RedditPosts
+                .OrderBy(x => x.DateTime)
                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                 .Take(paginationFilter.PageSize)
                 .Select(x => new RedditPostDTO
@@ -45,9 +47,16 @@ namespace NewsAggregator.Services.Implementation
                     Score = x.Score,
                     Subreddit = x.Subreddit,
                     Author = x.Author
-                }).ToList();
+                });
+            var postsCount = _context.RedditPosts.Count();
 
-            return posts;
+            return new PagedResponse<IEnumerable<ISocialModelDTO>>
+                (
+                    posts,
+                    paginationFilter.PageNumber,
+                    paginationFilter.PageSize,
+                    postsCount
+                );
         }
 
         private List<RedditPost> FetchPosts(IEnumerable<string> Subreddits, int numberOfPosts = 20)

@@ -4,6 +4,7 @@ using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models;
 using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Filters;
+using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Services;
 using Newtonsoft.Json;
 using RestSharp;
@@ -28,9 +29,10 @@ namespace NewsAggregator.Services.Implementation
         }
 
 
-        public IEnumerable<ISocialModelDTO> GetPosts(PaginationFilter paginationFilter)
+        public PagedResponse<IEnumerable<ISocialModelDTO>> GetPosts(PaginationFilter paginationFilter)
         {
             IEnumerable<HackerNewsPostDTO> posts = _context.HackerNewsPosts
+                .OrderBy(x => x.DateTime)
                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                 .Take(paginationFilter.PageSize)
                 .Select(x => new HackerNewsPostDTO
@@ -40,8 +42,16 @@ namespace NewsAggregator.Services.Implementation
                     Title = x.Title,
                     URL = x.URL,
                 });
+            var postsCount = _context.HackerNewsPosts.Count();
 
-            return posts;
+            return new PagedResponse<IEnumerable<ISocialModelDTO>>
+                (
+                     posts,
+                     paginationFilter.PageNumber,
+                     paginationFilter.PageSize,
+                     postsCount
+                );
+
         }
 
         private List<int> GetTopItemsId()

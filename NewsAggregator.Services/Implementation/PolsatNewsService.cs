@@ -2,6 +2,7 @@
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Filters;
+using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
 using System;
@@ -36,7 +37,7 @@ namespace NewsAggregator.Services.Implementation
             return _context.SaveChanges() > 0;
         }
 
-        public IEnumerable<ISocialModelDTO> GetPosts(PaginationFilter paginationFilter)
+        public PagedResponse<IEnumerable<ISocialModelDTO>> GetPosts(PaginationFilter paginationFilter)
         {
             throw new NotImplementedException();
         }

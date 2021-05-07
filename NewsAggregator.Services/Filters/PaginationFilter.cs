@@ -16,7 +16,15 @@ namespace NewsAggregator.Services.Filters
                 _PageSize = (value > 20) ? 20 : value;
             }
         }
-        public int PageNumber { get; set; }
+        private int _PageNumber = 1;
+        public int PageNumber
+        {
+            get => _PageNumber;
+            set
+            {
+                _PageNumber = (value >= 1) ? value : 1;
+            }
+        }
 
         public PaginationFilter()
         {

@@ -32,7 +32,6 @@ namespace NewsAggregator.WebUI.Controllers
                 PageSize = paginationFilter.PageSize
             };
 
-            System.Console.WriteLine($"Pagenumber: {paginationFilter.PageNumber}, PageSize: {paginationFilter.PageSize}");
             var posts = _redditService.GetPosts(filter);
             return Ok(posts);
 

@@ -6,6 +6,7 @@ using NewsAggregator.WebUI.Models.Requests;
 using NewsAggregator.WebUI.Models.Responses;
 using System.Collections.Generic;
 using System.Linq;
+using NewsAggregator.Services.HelperModels;
 
 namespace NewsAggregator.WebUI.Controllers
 {

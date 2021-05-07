@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace NewsAggregator.WebUI.Models.Responses
+namespace NewsAggregator.Services.HelperModels
 {
     public class Response<T>
     {
