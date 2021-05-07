@@ -35,15 +35,7 @@ namespace NewsAggregator.WebUI
 
             services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
 
-            services.AddHttpContextAccessor();
-            services.AddSingleton<IUriService>(x =>
-            {
-                var accessor = x.GetRequiredService<IHttpContextAccessor>();
-                var request = accessor.HttpContext.Request;
-                var uri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
 
-                return new UriService(uri);
-            });
 
             return services;
         }

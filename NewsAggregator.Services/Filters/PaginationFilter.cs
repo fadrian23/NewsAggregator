@@ -7,22 +7,22 @@ namespace NewsAggregator.Services.Filters
 {
     public class PaginationFilter
     {
-        private int _PageSize = 10;
+        private int _pageSize = 10;
         public int PageSize
         {
-            get => _PageSize;
+            get => _pageSize;
             set
             {
-                _PageSize = (value > 20) ? 20 : value;
+                _pageSize = (value > 20) ? 20 : value;
             }
         }
-        private int _PageNumber = 1;
+        private int _pageNumber = 1;
         public int PageNumber
         {
-            get => _PageNumber;
+            get => _pageNumber;
             set
             {
-                _PageNumber = (value >= 1) ? value : 1;
+                _pageNumber = (value >= 1) ? value : 1;
             }
         }
 

@@ -32,7 +32,7 @@ namespace NewsAggregator.Services.Implementation
         public PagedResponse<IEnumerable<ISocialModelDTO>> GetPosts(PaginationFilter paginationFilter)
         {
             IEnumerable<HackerNewsPostDTO> posts = _context.HackerNewsPosts
-                .OrderBy(x => x.DateTime)
+                .OrderByDescending(x => x.DateTime)
                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                 .Take(paginationFilter.PageSize)
                 .Select(x => new HackerNewsPostDTO

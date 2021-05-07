@@ -36,7 +36,7 @@ namespace NewsAggregator.Services.Implementation
         {
             IEnumerable<ISocialModelDTO> posts = _context
                 .RedditPosts
-                .OrderBy(x => x.DateTime)
+                .OrderByDescending(x => x.DateTime)
                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                 .Take(paginationFilter.PageSize)
                 .Select(x => new RedditPostDTO

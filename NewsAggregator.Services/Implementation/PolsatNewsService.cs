@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
+using NewsAggregator.Data.Models;
 using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.HelperModels;
@@ -39,7 +40,26 @@ namespace NewsAggregator.Services.Implementation
 
         public PagedResponse<IEnumerable<ISocialModelDTO>> GetPosts(PaginationFilter paginationFilter)
         {
-            throw new NotImplementedException();
+            IEnumerable<RssPostDTO> posts = _context.InformationSitesPosts
+                .Where(x => x.SiteName == AvailableSites.PolsatNews)
+                .OrderByDescending(x => x.Date)
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                .Take(paginationFilter.PageSize)
+                .Select(x => new RssPostDTO
+                {
+                    Id = x.Id,
+                    DateTime = x.Date,
+                    Description = x.Description,
+                    Title = x.Title,
+                    URL = x.URL
+                });
+
+            var postsCount = _context.InformationSitesPosts
+                .Where(x => x.SiteName == AvailableSites.PolsatNews)
+                .Count();
+
+            return new PagedResponse<IEnumerable<ISocialModelDTO>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+
         }
 
         public IEnumerable<ISocialModelDTO> GetPostsByDate(DateTime Date)
