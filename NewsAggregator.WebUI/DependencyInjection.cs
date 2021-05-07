@@ -17,19 +17,19 @@ namespace NewsAggregator.WebUI
 
             services.AddScoped<ISiteService, RedditService>();
             services.AddScoped<ISiteService, HackerNewsService>();
-            services.AddScoped<ISiteService, PolsatNewsService>();
+            //services.AddScoped<ISiteService, PolsatNewsService>();
 
             services.AddScoped<ISitesService, SitesService>();
             services.AddScoped<ISiteFactory, SiteFactory>();
 
             services.AddScoped<RedditService>();
             services.AddScoped<HackerNewsService>();
-            services.AddScoped<PolsatNewsService>();
+            //services.AddScoped<PolsatNewsService>();
 
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<IScrapeJob, ScrapeJob>();
             services.AddScoped<IIdentityService, IdentityService>();
-            services.AddScoped<IRssFeedService, RssFeedService>();
+            services.AddScoped<IRssSitesService, RssSitesService>();
 
             services.AddScoped<IUserService, UserService>();
 

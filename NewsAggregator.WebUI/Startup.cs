@@ -130,10 +130,15 @@ namespace NewsAggregator.WebUI
                 endpoints.MapHangfireDashboard();
             });
 
-            //recurringJobManager.AddOrUpdate(
-            //    "ScrapingSites",
-            //    () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
-            //    "*/10 * * * * ");
+            recurringJobManager.AddOrUpdate(
+                "DataFromExternalAPIS",
+                () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
+                "*/10 * * * * ");
+
+            recurringJobManager.AddOrUpdate(
+                "DataFromRssFeeds",
+                () => serviceProvider.GetService<IScrapeJob>().GetDataFromRssFeeds(),
+                "*/10 * * * * ");
 
 
             var databaseSeeder = serviceProvider.GetService<IDatabaseSeeder>();

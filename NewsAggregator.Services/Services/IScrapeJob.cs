@@ -5,5 +5,6 @@ namespace NewsAggregator.Services.Services
     public interface IScrapeJob
     {
         void ScrapSites();
+        void GetDataFromRssFeeds();
     }
 }

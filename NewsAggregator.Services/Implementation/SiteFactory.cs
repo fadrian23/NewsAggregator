@@ -22,7 +22,7 @@ namespace NewsAggregator.Services.Implementation
             {
                 AvailableSites.Reddit => (ISiteService)_serviceProvider.GetService(typeof(RedditService)),
                 AvailableSites.HackerNews => (ISiteService)_serviceProvider.GetService(typeof(HackerNewsService)),
-                AvailableSites.PolsatNews => (ISiteService)_serviceProvider.GetService(typeof(PolsatNewsService)),
+                //AvailableSites.PolsatNews => (ISiteService)_serviceProvider.GetService(typeof(PolsatNewsService)),
                 _ => throw new NotImplementedException($"not implemented service for {userSelection}")
             };
         }

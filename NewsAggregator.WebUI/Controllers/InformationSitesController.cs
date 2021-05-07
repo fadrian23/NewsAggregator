@@ -33,7 +33,7 @@ namespace NewsAggregator.WebUI.Controllers
             {
                 return BadRequest("Wrong sitename");
             }
-
         }
+
     }
 }

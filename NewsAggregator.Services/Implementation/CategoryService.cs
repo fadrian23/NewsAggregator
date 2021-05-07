@@ -153,10 +153,15 @@ namespace NewsAggregator.Services.Implementation
             var hackernewsService = _siteFactory.For(AvailableSites.HackerNews);
             var redditService = _siteFactory.For(AvailableSites.Reddit);
 
+
             var response = new CategoryPostsDTO
             {
                 RedditPosts = (IEnumerable<RedditPostDTO>)redditService.GetPosts(paginationFilter),
-                HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)hackernewsService.GetPosts(paginationFilter)
+                HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)hackernewsService.GetPosts(paginationFilter),
+                //todo not sure if split rss posts to for eg. "tvn24" "polsatnews" or keep them together
+                //probably split them
+                //PolsatNewsPosts = (IEnumerable<PolsatNewsPostDTO>)
+
             };
 
             return response;

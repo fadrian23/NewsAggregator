@@ -9,8 +9,8 @@ namespace NewsAggregator.Services.Helpers
     {
         public const string Reddit = "Reddit";
         public const string HackerNews = "HackerNews";
-        public const string PolsatNews = "PolsatNews";
 
-        public static IEnumerable<string> GetAll() => new List<string> { Reddit, HackerNews, PolsatNews };
+
+        public static IEnumerable<string> GetAll() => new List<string> { Reddit, HackerNews };
     }
 }

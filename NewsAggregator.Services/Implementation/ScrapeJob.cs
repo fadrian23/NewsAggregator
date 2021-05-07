@@ -14,22 +14,33 @@ namespace NewsAggregator.Services.Implementation
     {
         private readonly ISiteFactory _siteFactory;
         private readonly ILogger<ScrapeJob> _logger;
+        private readonly IRssSitesService _rssSitesService;
 
-        public ScrapeJob(ISiteFactory siteFactory, ILogger<ScrapeJob> logger)
+        public ScrapeJob(ISiteFactory siteFactory, ILogger<ScrapeJob> logger, IRssSitesService rssSitesService)
         {
             _siteFactory = siteFactory;
             _logger = logger;
+            _rssSitesService = rssSitesService;
         }
 
         [AutomaticRetry(Attempts = 0)]
         public void ScrapSites()
         {
-            _logger.LogInformation("Running a scrapjob");
+            _logger.LogInformation("Getting data from external APIs");
             foreach (var site in AvailableSites.GetAll())
             {
                 _siteFactory.For(site).GetAndSaveData();
             }
+        }
 
+        [AutomaticRetry(Attempts = 0)]
+        public void GetDataFromRssFeeds()
+        {
+            _logger.LogInformation("Getting data from rss feeds.");
+            foreach (var site in AvailableRssFeeds.GetAll())
+            {
+                _rssSitesService.FetchDataFromRssFeed(site.siteName, site.feedURL);
+            }
         }
 
 
