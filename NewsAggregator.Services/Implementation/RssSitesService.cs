@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models;
 using NewsAggregator.Services.Filters;
@@ -60,17 +61,18 @@ namespace NewsAggregator.Services.Implementation
 
             foreach (var item in feed.Items)
             {
-                items.Add(new RssPost
-                {
-                    Title = item.Title.Text,
-                    SiteName = siteName,
-                    Date = item.PublishDate.DateTime,
-                    Description = item.Summary.Text,
-                    URL = item.Id
-                });
+                items.Add(DeleteXmlTagsFromPostDescription(
+                    new RssPost
+                    {
+                        Title = item.Title.Text,
+                        SiteName = siteName,
+                        Date = item.PublishDate.DateTime,
+                        Description = item.Summary.Text,
+                        URL = item.Id
+                    }));
             }
 
-            // todo: figure out better way to check for duplicates
+            //todo: figure out better way to check for duplicates
             foreach (var item in items)
             {
                 if (!_context.InformationSitesPosts.Any(x => x.URL == item.URL))
@@ -89,6 +91,22 @@ namespace NewsAggregator.Services.Implementation
                 _logger.LogInformation($"no new posts on {siteName}");
             }
 
+        }
+
+        private RssPost DeleteXmlTagsFromPostDescription(RssPost post)
+        {
+            HtmlDocument htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(post.Description);
+            var description = htmlDocument.DocumentNode.InnerText.Trim();
+
+            return new RssPost
+            {
+                Date = post.Date,
+                Description = description,
+                SiteName = post.SiteName,
+                Title = post.Title,
+                URL = post.URL
+            };
         }
     }
 }
