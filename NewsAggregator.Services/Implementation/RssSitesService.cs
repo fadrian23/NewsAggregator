@@ -33,7 +33,7 @@ namespace NewsAggregator.Services.Implementation
         {
             var posts = _context.InformationSitesPosts
                                 .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                                .OrderByDescending(x => x.Date)
+                                .OrderByDescending(x => x.DateTime)
                                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                                 .Take(paginationFilter.PageSize);
             var postsCount = _context.InformationSitesPosts
@@ -66,7 +66,7 @@ namespace NewsAggregator.Services.Implementation
                     {
                         Title = item.Title.Text,
                         SiteName = siteName,
-                        Date = item.PublishDate.DateTime,
+                        DateTime = item.PublishDate.DateTime,
                         Description = item.Summary.Text,
                         URL = item.Id
                     }));
@@ -101,7 +101,7 @@ namespace NewsAggregator.Services.Implementation
 
             return new RssPost
             {
-                Date = post.Date,
+                DateTime = post.DateTime,
                 Description = description,
                 SiteName = post.SiteName,
                 Title = post.Title,
