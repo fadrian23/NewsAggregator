@@ -19,14 +19,12 @@ namespace NewsAggregator.Services.Implementation
     public class RedditService : ISiteService
     {
 
-        private readonly IRestService _restService;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<RedditService> _logger;
         private readonly ICategoryService _categoryService;
 
-        public RedditService(IRestService restService, ApplicationDbContext context, ILogger<RedditService> logger, ICategoryService categoryService)
+        public RedditService(ApplicationDbContext context, ILogger<RedditService> logger, ICategoryService categoryService)
         {
-            _restService = restService;
             _context = context;
             _logger = logger;
             _categoryService = categoryService;
@@ -65,7 +63,8 @@ namespace NewsAggregator.Services.Implementation
 
             foreach (var subreddit in Subreddits)
             {
-                var restClient = _restService.CreateClient($"https://www.reddit.com/r/{subreddit}/");
+                //var restClient = _restService.CreateClient($"https://www.reddit.com/r/{subreddit}/");
+                var restClient = new RestClient($"https://www.reddit.com/r/{subreddit}/");
                 var request = new RestRequest($"top.json?limit={numberOfPosts}", DataFormat.Json);
                 var response = restClient.Execute<RedditRoot>(request);
                 var RedditPost = JsonConvert.DeserializeObject<RedditRoot>(response.Content);

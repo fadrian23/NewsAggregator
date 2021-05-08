@@ -17,13 +17,11 @@ namespace NewsAggregator.Services.Implementation
 {
     public class HackerNewsService : ISiteService
     {
-        private readonly IRestService _restService;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HackerNewsService> _logger;
 
-        public HackerNewsService(IRestService restService, ApplicationDbContext context, ILogger<HackerNewsService> logger)
+        public HackerNewsService(ApplicationDbContext context, ILogger<HackerNewsService> logger)
         {
-            _restService = restService;
             _context = context;
             _logger = logger;
         }
@@ -56,7 +54,7 @@ namespace NewsAggregator.Services.Implementation
 
         private List<int> GetTopItemsId()
         {
-            var restClient = _restService.CreateClient("https://hacker-news.firebaseio.com/v0/");
+            var restClient = new RestClient("https://hacker-news.firebaseio.com/v0/");
             var request = new RestRequest("topstories.json?limitToFirst=20&orderBy=\"$key\"", DataFormat.Json);
             var response = restClient.Get(request);
 
@@ -83,7 +81,7 @@ namespace NewsAggregator.Services.Implementation
 
         private HackerNewsModel GetPost(int id)
         {
-            var restClient = _restService.CreateClient("https://hacker-news.firebaseio.com/v0/item/");
+            var restClient = new RestClient("https://hacker-news.firebaseio.com/v0/item/");
             var request = new RestRequest($"{id}.json", DataFormat.Json);
             var response = restClient.Get(request);
 
