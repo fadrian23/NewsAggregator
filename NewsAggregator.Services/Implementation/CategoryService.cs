@@ -18,12 +18,14 @@ namespace NewsAggregator.Services.Implementation
         private readonly ApplicationDbContext _context;
         private readonly ILogger<CategoryService> _logger;
         private readonly ISiteFactory _siteFactory;
+        private readonly IRssSitesService _rssSitesService;
 
-        public CategoryService(ApplicationDbContext context, ILogger<CategoryService> logger, ISiteFactory siteFactory)
+        public CategoryService(ApplicationDbContext context, ILogger<CategoryService> logger, ISiteFactory siteFactory, IRssSitesService rssSitesService)
         {
             _context = context;
             _logger = logger;
             _siteFactory = siteFactory;
+            _rssSitesService = rssSitesService;
         }
 
         public List<PostCategoryDTO> GetCategories(PaginationFilter paginationFilter)
@@ -150,37 +152,51 @@ namespace NewsAggregator.Services.Implementation
 
         public CategoryPostsDTO GetPostsOfCategory(int categoryId, PaginationFilter paginationFilter)
         {
-            var hackernewsService = _siteFactory.For(AvailableSites.HackerNews);
-            var redditService = _siteFactory.For(AvailableSites.Reddit);
+            var listOfRssFeeds = AvailableRssFeeds.GetAll();
+
+            List<RssPostDTO> rssPosts = new List<RssPostDTO>();
+
+            foreach (var feed in listOfRssFeeds)
+            {
+                rssPosts.AddRange(_rssSitesService.GetPosts(paginationFilter, feed.siteName).Data.Select(x => new RssPostDTO
+                {
+                    Id = x.Id,
+                    DateTime = x.DateTime,
+                    Description = x.Description,
+                    SiteName = x.SiteName,
+                    Title = x.Title,
+                    URL = x.URL
+                }));
+            }
+
 
 
             var response = new CategoryPostsDTO
             {
-                RedditPosts = (IEnumerable<RedditPostDTO>)redditService.GetPosts(paginationFilter),
-                HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)hackernewsService.GetPosts(paginationFilter),
+                RedditPosts = (IEnumerable<RedditPostDTO>)_siteFactory.For(AvailableSites.Reddit).GetPosts(paginationFilter),
+                HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)_siteFactory.For(AvailableSites.HackerNews).GetPosts(paginationFilter),
                 //todo not sure if split rss posts to for eg. "tvn24" "polsatnews" or keep them together
                 //probably split them
-                //PolsatNewsPosts = (IEnumerable<PolsatNewsPostDTO>)
-
+                RssPosts = rssPosts
             };
 
             return response;
         }
 
-        public ISocialModel CategorizePost(ISocialModel post)
-        {
-            var postCategoriesList = _context.PostCategories.Include(k => k.Keywords).ToList();
-            foreach (var postCategory in postCategoriesList)
-            {
-                if (postCategory.Keywords.Any(s => post.Title.Contains(s.Name)))
-                {
-                    _logger.LogInformation("post contains keyword!" + post.Title);
-                    post.PostCategory = postCategory;
-                }
-            }
+        //public ISocialModel CategorizePost(ISocialModel post)
+        //{
+        //    var postCategoriesList = _context.PostCategories.Include(k => k.Keywords).ToList();
+        //    foreach (var postCategory in postCategoriesList)
+        //    {
+        //        if (postCategory.Keywords.Any(s => post.Title.Contains(s.Name)))
+        //        {
+        //            _logger.LogInformation("post contains keyword!" + post.Title);
+        //            post.PostCategory = postCategory;
+        //        }
+        //    }
 
-            return post;
-        }
+        //    return post;
+        //}
 
     }
 }

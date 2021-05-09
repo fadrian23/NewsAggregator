@@ -22,11 +22,13 @@ namespace NewsAggregator.Services.Implementation
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<RssSitesService> _logger;
+        private readonly IPostCategorizationService _postCategorizationService;
 
-        public RssSitesService(ApplicationDbContext context, ILogger<RssSitesService> logger)
+        public RssSitesService(ApplicationDbContext context, ILogger<RssSitesService> logger, IPostCategorizationService postCategorizationService)
         {
             _context = context;
             _logger = logger;
+            _postCategorizationService = postCategorizationService;
         }
 
         public PagedResponse<IEnumerable<RssPost>> GetPosts(PaginationFilter paginationFilter, string sitename)
@@ -61,7 +63,7 @@ namespace NewsAggregator.Services.Implementation
 
             foreach (var item in feed.Items)
             {
-                items.Add(DeleteXmlTagsFromPostDescription(
+                items.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(
                     new RssPost
                     {
                         Title = item.Title.Text,
@@ -69,7 +71,7 @@ namespace NewsAggregator.Services.Implementation
                         DateTime = item.PublishDate.DateTime,
                         Description = item.Summary.Text,
                         URL = item.Id
-                    }));
+                    })));
             }
 
             //todo: figure out better way to check for duplicates

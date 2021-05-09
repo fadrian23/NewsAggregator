@@ -21,13 +21,13 @@ namespace NewsAggregator.Services.Implementation
 
         private readonly ApplicationDbContext _context;
         private readonly ILogger<RedditService> _logger;
-        private readonly ICategoryService _categoryService;
+        private readonly IPostCategorizationService _postCategorizationService;
 
-        public RedditService(ApplicationDbContext context, ILogger<RedditService> logger, ICategoryService categoryService)
+        public RedditService(ApplicationDbContext context, ILogger<RedditService> logger, IPostCategorizationService postCategorizationService)
         {
             _context = context;
             _logger = logger;
-            _categoryService = categoryService;
+            _postCategorizationService = postCategorizationService;
         }
 
         public PagedResponse<IEnumerable<ISocialModelDTO>> GetPosts(PaginationFilter paginationFilter)
@@ -101,7 +101,7 @@ namespace NewsAggregator.Services.Implementation
                 if (!_context.RedditPosts.Any(x => x.Title == item.Title && x.Author == item.Author && x.Subreddit == item.Subreddit))
                 {
                     var post = item;
-                    post = (RedditPost)_categoryService.CategorizePost(post);
+                    post = (RedditPost)_postCategorizationService.CategorizePost(post);
                     _context.RedditPosts.Add(post);
                 }
             }

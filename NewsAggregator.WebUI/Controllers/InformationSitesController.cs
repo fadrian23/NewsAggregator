@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.WebUI.Controllers
 {
+    [ApiController]
     [Route("api/[controller]")]
     public class InformationSitesController : ControllerBase
     {
