@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Data.Models
 {
-    public interface ISocialModel
+    public interface IPost
     {
         public int Id { get; set; }
         public string Title { get; set; }

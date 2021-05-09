@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace NewsAggregator.Data.Models
 {
-    public class RedditPost : ISocialModel
+    public class RedditPost : IPost
     {
         public int Id { get; set; }
         public string URL { get; set; }

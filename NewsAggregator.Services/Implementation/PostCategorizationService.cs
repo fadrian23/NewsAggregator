@@ -22,7 +22,7 @@ namespace NewsAggregator.Services.Implementation
             _logger = logger;
         }
 
-        public ISocialModel CategorizePost(ISocialModel post)
+        public IPost CategorizePost(IPost post)
         {
             var postCategoriesList = _context.PostCategories.Include(k => k.Keywords).ToList();
             foreach (var postCategory in postCategoriesList)

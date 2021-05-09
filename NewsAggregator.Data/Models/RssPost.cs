@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.Data.Models
 {
-    public class RssPost : ISocialModel
+    public class RssPost : IPost
     {
         public int Id { get; set; }
         public string SiteName { get; set; }

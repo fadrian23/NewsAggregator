@@ -9,6 +9,6 @@ namespace NewsAggregator.Services.Services
 {
     public interface IPostCategorizationService
     {
-        ISocialModel CategorizePost(ISocialModel post);
+        IPost CategorizePost(IPost post);
     }
 }
