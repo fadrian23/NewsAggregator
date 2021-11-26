@@ -26,5 +26,18 @@ namespace NewsAggregator.Services.Implementation
             };
         }
 
+        public IRssSitesService ForRssSite(string userSelection)
+        {
+            var x = _serviceProvider.GetService(typeof(RssSitesService));
+            Console.WriteLine("from sitefactory");
+            System.Console.WriteLine(x);
+
+            return userSelection switch
+            {
+                AvailableSites.PolsatNews => (IRssSitesService)_serviceProvider.GetService(typeof(IRssSitesService)),
+                _ => throw new NotImplementedException($"not implemented service for {userSelection}"),
+            };
+        }
+
     }
 }

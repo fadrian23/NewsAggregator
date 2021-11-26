@@ -26,8 +26,10 @@ namespace NewsAggregator.WebUI.Controllers
         {
             try
             {
-                var siteService = _siteFactory.For(sitename);
-                var posts = siteService.GetPosts(paginationFilter);
+                var siteService = _siteFactory.ForRssSite(sitename);
+                Console.WriteLine("aaa");
+                Console.WriteLine(siteService);
+                var posts = siteService.GetPosts(paginationFilter, sitename);
                 return Ok(posts);
             }
             catch (NotImplementedException ex)

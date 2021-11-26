@@ -1,9 +1,14 @@
 version: "3.9"  # optional since v1.27.0
 services:
   database:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/azure-sql-edge:latest
+    volumes:
+      - events_mssql:/var/opt/mssql
     ports: 
       - 1433:1433
-    environment:
-      SA_PASSWORD: "User123!"
-      ACCEPT_EULA: "Y"
+    environment: 
+      - ACCEPT_EULA=1
+      - MSSQL_SA_PASSWORD=User123!
+
+volumes:
+    events_mssql:

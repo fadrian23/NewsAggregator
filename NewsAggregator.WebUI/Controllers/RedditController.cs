@@ -11,7 +11,7 @@ namespace NewsAggregator.WebUI.Controllers
 {
     [ApiController]
     [Route("api/[controller]/[action]")]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class RedditController : ControllerBase
     {
         private readonly ISiteService _redditService;

@@ -20,6 +20,7 @@ namespace NewsAggregator.WebUI
             services.AddScoped<ISiteService, HackerNewsService>();
 
             services.AddScoped<ISitesService, SitesService>();
+            services.AddScoped<IRssSitesService, RssSitesService>();
             services.AddScoped<ISiteFactory, SiteFactory>();
 
             services.AddScoped<RedditService>();
@@ -34,7 +35,6 @@ namespace NewsAggregator.WebUI
 
 
 
-            services.AddScoped<IRssSitesService, RssSitesService>();
             return services;
         }
     }
