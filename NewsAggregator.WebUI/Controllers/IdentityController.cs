@@ -61,6 +61,7 @@ namespace NewsAggregator.WebUI.Controllers
             {
                 return BadRequest(new FailedAuthResponse
                 {
+                    Result = authenticationResponse.Result,
                     Errors = authenticationResponse.Errors
                 });
             }
@@ -69,6 +70,7 @@ namespace NewsAggregator.WebUI.Controllers
             {
                 return NotFound( new FailedAuthResponse 
                 {
+                    Result = authenticationResponse.Result,
                     Errors = authenticationResponse.Errors
                 });
             }
