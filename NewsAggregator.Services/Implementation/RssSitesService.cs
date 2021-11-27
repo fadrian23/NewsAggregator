@@ -38,6 +38,7 @@ namespace NewsAggregator.Services.Implementation
                                 .OrderByDescending(x => x.DateTime)
                                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                                 .Take(paginationFilter.PageSize);
+
             var postsCount = _context.InformationSitesPosts
                                      .Where(x => x.SiteName.ToLower() == sitename.ToLower())
                                      .Count();
@@ -67,6 +68,8 @@ namespace NewsAggregator.Services.Implementation
         {
             string rss;
             _logger.LogInformation($"Fetching posts from {siteName}");
+
+            System.Console.WriteLine(URL);
             using (var wc = new WebClient())
             {
                 wc.Headers["User-Agent"] = "github.com/risenn23";

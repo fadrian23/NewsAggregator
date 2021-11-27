@@ -133,12 +133,12 @@ namespace NewsAggregator.WebUI
             recurringJobManager.AddOrUpdate(
                 "DataFromExternalAPIS",
                 () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
-                "*/10 * * * * ");
+                "*/30 * * * * ");
 
             recurringJobManager.AddOrUpdate(
                 "DataFromRssFeeds",
                 () => serviceProvider.GetService<IScrapeJob>().GetDataFromRssFeeds(),
-                "*/10 * * * * ");
+                "*/30 * * * * ");
 
 
             var databaseSeeder = serviceProvider.GetService<IDatabaseSeeder>();

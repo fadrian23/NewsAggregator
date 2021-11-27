@@ -152,13 +152,13 @@ namespace NewsAggregator.Services.Implementation
 
         public CategoryPostsDTO GetPostsOfCategory(int categoryId, PaginationFilter paginationFilter)
         {
-            var listOfRssFeeds = AvailableRssFeeds.GetAll();
+            var listOfRssFeeds = AvailableRssFeeds.RssFeeds.Keys;
 
             List<RssPostDTO> rssPosts = new List<RssPostDTO>();
 
             foreach (var feed in listOfRssFeeds)
             {
-                rssPosts.AddRange(_rssSitesService.GetPosts(paginationFilter, feed.siteName).Data.Select(x => new RssPostDTO
+                rssPosts.AddRange(_rssSitesService.GetPosts(paginationFilter, feed).Data.Select(x => new RssPostDTO
                 {
                     Id = x.Id,
                     DateTime = x.DateTime,

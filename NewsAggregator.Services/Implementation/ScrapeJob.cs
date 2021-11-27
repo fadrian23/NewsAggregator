@@ -37,9 +37,9 @@ namespace NewsAggregator.Services.Implementation
         public void GetDataFromRssFeeds()
         {
             _logger.LogInformation("Getting data from rss feeds.");
-            foreach (var site in AvailableRssFeeds.GetAll())
+            foreach (var site in AvailableRssFeeds.RssFeeds)
             {
-                _rssSitesService.FetchDataFromRssFeed(site.siteName, site.feedURL);
+                _rssSitesService.FetchDataFromRssFeed(site.Key, site.Value);
             }
         }
 
