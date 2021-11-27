@@ -14,10 +14,11 @@ namespace NewsAggregator.WebUI.Controllers
     public class InformationSitesController : ControllerBase
     {
         private readonly ISiteFactory _siteFactory;
+        private readonly IRssSitesService _rssSiteService;
 
-        public InformationSitesController(ISiteFactory siteFactory)
+        public InformationSitesController(IRssSitesService rssSiteService)
         {
-            _siteFactory = siteFactory;
+            _rssSiteService = rssSiteService;
         }
 
         [HttpGet]
@@ -26,10 +27,7 @@ namespace NewsAggregator.WebUI.Controllers
         {
             try
             {
-                var siteService = _siteFactory.ForRssSite(sitename);
-                Console.WriteLine("aaa");
-                Console.WriteLine(siteService);
-                var posts = siteService.GetPosts(paginationFilter, sitename);
+                var posts = _rssSiteService.GetPosts(paginationFilter, sitename);
                 return Ok(posts);
             }
             catch (NotImplementedException ex)

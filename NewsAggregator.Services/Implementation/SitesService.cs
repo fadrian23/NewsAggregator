@@ -103,6 +103,7 @@ namespace NewsAggregator.Services.Implementation
 
 
             _context.SaveChanges();
+            
             return new SiteSubscriptionResult
             {
                 Success = true
