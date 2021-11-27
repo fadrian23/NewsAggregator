@@ -19,7 +19,7 @@ namespace NewsAggregator.Services.Helpers
             {"PolsatNews_Moto", "https://www.polsatnews.pl/rss/moto.xml"},
             {"PolsatNews_Kultura", "https://www.polsatnews.pl/rss/kultura.xml"},
             {"PolsatNews_Sport", "https://www.polsatnews.pl/rss/sport.xml"},
-            {"PolsatNews_Czysta_Polska", "https://www.polsatnews.pl/rss/czysta-polska.xml"},
+            {"PolsatNews_CzystaPolska", "https://www.polsatnews.pl/rss/czysta-polska.xml"},
             {"Tvn24", "https://tvn24.pl/najnowsze.xml"},
         };
     }
