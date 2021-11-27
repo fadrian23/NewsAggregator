@@ -9,7 +9,16 @@ namespace NewsAggregator.Services.HelperModels
     {
         public string Token { get; set; }
         public string RefreshToken { get; set; }
-        public bool Result { get; set; }
+        public AuthenticationResultType Result { get; set; }
         public IEnumerable<string> Errors { get; set; }
+    }
+
+    public enum AuthenticationResultType {
+        WrongCombination = 0,
+        UserNotFound = 1,
+        LoginSuccess = 2,
+
+        UserAlreadyExists = 3,
+        RegisterSuccess = 4,
     }
 }

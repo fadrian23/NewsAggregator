@@ -38,7 +38,7 @@ namespace NewsAggregator.Services.Implementation
             {
                 return new AuthenticationResult
                 {
-                    Result = false,
+                    Result = AuthenticationResultType.UserNotFound,
                     Errors = new[]
                     {
                         "User does not exist"
@@ -56,7 +56,7 @@ namespace NewsAggregator.Services.Implementation
                     {
                         "Wrong name/password combination"
                     },
-                    Result = false,
+                    Result = AuthenticationResultType.WrongCombination,
                 };
             }
 
@@ -73,7 +73,7 @@ namespace NewsAggregator.Services.Implementation
             {
                 return new AuthenticationResult
                 {
-                    Result = false,
+                    Result = AuthenticationResultType.UserAlreadyExists,
                     Errors = new[] { "user with given name already exists" },
                 };
             }
@@ -89,7 +89,7 @@ namespace NewsAggregator.Services.Implementation
             {
                 return new AuthenticationResult
                 {
-                    Result = false,
+                    Result = AuthenticationResultType.RegisterSuccess,
                     Errors = createdUser.Errors.Select(x => x.Description),
                 };
             }
@@ -278,7 +278,7 @@ namespace NewsAggregator.Services.Implementation
 
             return new AuthenticationResult
             {
-                Result = true,
+                Result = AuthenticationResultType.LoginSuccess,
                 Token = tokenHandler.WriteToken(token),
                 //this token is GUID from sql server, because I added a valueGeneratedOnAdd()
                 RefreshToken = refreshToken.Token

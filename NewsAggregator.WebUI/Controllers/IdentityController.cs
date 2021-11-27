@@ -57,9 +57,17 @@ namespace NewsAggregator.WebUI.Controllers
 
         private IActionResult Result(AuthenticationResult authenticationResponse)
         {
-            if (!authenticationResponse.Result)
+            if (authenticationResponse.Result == AuthenticationResultType.WrongCombination)
             {
                 return BadRequest(new FailedAuthResponse
+                {
+                    Errors = authenticationResponse.Errors
+                });
+            }
+
+            if(authenticationResponse.Result == AuthenticationResultType.UserNotFound) 
+            {
+                return NotFound( new FailedAuthResponse 
                 {
                     Errors = authenticationResponse.Errors
                 });
