@@ -46,6 +46,23 @@ namespace NewsAggregator.Services.Implementation
                 (posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
 
+        public PagedResponse<IEnumerable<RssPost>> GetPostsByDate(PaginationFilter paginationFilter, string sitename, DateTime date)
+        {
+            var posts = _context.InformationSitesPosts
+                                .Where(x => x.SiteName.ToLower() == sitename.ToLower())
+                                .Where(z => z.DateTime.Date == date.Date)
+                                .OrderByDescending(x => x.DateTime)
+                                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                                .Take(paginationFilter.PageSize);
+
+            var postsCount = _context.InformationSitesPosts
+                                    .Where(x => x.SiteName.ToLower() == sitename.ToLower())
+                                    .Where(z => z.DateTime.Date == date.Date)
+                                    .Count();
+
+            return new PagedResponse<IEnumerable<RssPost>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+        }
+
         public void FetchDataFromRssFeed(string siteName, string URL)
         {
             string rss;
