@@ -126,6 +126,18 @@ namespace NewsAggregator.Services.Implementation
                             )));
                             break;
                         }
+                    case "WP":
+                        {
+                            posts.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(new RssPost
+                            {
+                                Title = item.Title.Text,
+                                SiteName = siteName,
+                                DateTime = item.PublishDate.DateTime,
+                                Description = item.Summary.Text,
+                                URL = "http://wiadomosci.wp.pl" + item.Links[0].Uri.AbsolutePath,
+                            })));
+                            break;
+                        }
                     default:
                         {
                             posts.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(
