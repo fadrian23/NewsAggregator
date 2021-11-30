@@ -21,6 +21,7 @@ namespace NewsAggregator.Services.Helpers
             {"PolsatNews_Sport", "https://www.polsatnews.pl/rss/sport.xml"},
             {"PolsatNews_CzystaPolska", "https://www.polsatnews.pl/rss/czysta-polska.xml"},
             {"Tvn24", "https://tvn24.pl/najnowsze.xml"},
+            {"Onet", "https://wiadomosci.onet.pl/.feed"},
         };
     }
 }

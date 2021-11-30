@@ -56,6 +56,7 @@ namespace NewsAggregator.Services.Implementation
                                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                                 .Take(paginationFilter.PageSize);
 
+
             var postsCount = _context.InformationSitesPosts
                                     .Where(x => x.SiteName.ToLower() == sitename.ToLower())
                                     .Where(z => z.DateTime.Date == date.Date)
@@ -81,20 +82,8 @@ namespace NewsAggregator.Services.Implementation
 
             List<RssPost> items = new();
 
-            foreach (var item in feed.Items)
-            {
-                items.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(
-                    new RssPost
-                    {
-                        Title = item.Title.Text,
-                        SiteName = siteName,
-                        DateTime = item.PublishDate.DateTime,
-                        Description = item.Summary.Text,
-                        URL = item.Id
-                    })));
-            }
+            items = GetRssPostList(feed, siteName);
 
-            //todo: figure out better way to check for duplicates
             foreach (var item in items)
             {
                 if (!_context.InformationSitesPosts.Any(x => x.URL == item.URL))
@@ -113,6 +102,47 @@ namespace NewsAggregator.Services.Implementation
                 _logger.LogInformation($"no new posts on {siteName}");
             }
 
+        }
+
+        private List<RssPost> GetRssPostList(SyndicationFeed feed, string siteName)
+        {
+            List<RssPost> posts = new List<RssPost>();
+
+            foreach (var item in feed.Items)
+            {
+                switch (siteName)
+                {
+                    case "Onet":
+                        {
+                            posts.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(
+                                new RssPost
+                                {
+                                    Title = item.Title.Text,
+                                    SiteName = siteName,
+                                    DateTime = item.PublishDate.DateTime,
+                                    Description = item.Summary.Text,
+                                    URL = "http://wiadomosci.onet.pl/" + item.Links[0].Uri.AbsolutePath,
+                                }
+                            )));
+                            break;
+                        }
+                    default:
+                        {
+                            posts.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(
+                                new RssPost
+                                {
+                                    Title = item.Title.Text,
+                                    SiteName = siteName,
+                                    DateTime = item.PublishDate.DateTime,
+                                    Description = item.Summary.Text,
+                                    URL = item.Id
+                                })));
+                            break;
+                        }
+                }
+            }
+
+            return posts;
         }
 
         private RssPost DeleteXmlTagsFromPostDescription(RssPost post)
