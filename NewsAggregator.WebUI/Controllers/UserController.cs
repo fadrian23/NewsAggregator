@@ -23,18 +23,21 @@ namespace NewsAggregator.WebUI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ChangeName([FromBody] string newUsername)
+        public async Task<IActionResult> ChangeName([FromBody] UserChangeNameRequest userChangeNameRequest)
         {
-            if (newUsername == null)
+            if (userChangeNameRequest.UserName == null)
             {
                 return BadRequest("null username");
             }
-            var result = await _userService.ChangeNameAsync(newUsername, User.GetUserId());
+            var result = await _userService.ChangeNameAsync(userChangeNameRequest.UserName, User.GetUserId());
             if (!result.Success)
             {
                 return BadRequest(result.Errors);
             }
-            return Ok();
+            return Ok(new UserChangeNameRequest
+            {
+                UserName = userChangeNameRequest.UserName
+            });
         }
 
         [HttpPost]

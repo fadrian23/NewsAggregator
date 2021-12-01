@@ -123,16 +123,16 @@ namespace NewsAggregator.Services.Implementation
 
             var expiryDateUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(expiryDateUnixTimeStamp);
 
-            if (expiryDateUtc > DateTime.UtcNow)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[]
-                    {
-                        "This token hasn't expired yet"
-                    }
-                };
-            }
+            // if (expiryDateUtc > DateTime.UtcNow)
+            // {
+            //     return new AuthenticationResult
+            //     {
+            //         Errors = new[]
+            //         {
+            //             "This token hasn't expired yet"
+            //         }
+            //     };
+            // }
 
             var jti = principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 

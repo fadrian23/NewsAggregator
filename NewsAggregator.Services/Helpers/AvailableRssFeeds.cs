@@ -22,7 +22,24 @@ namespace NewsAggregator.Services.Helpers
             {"PolsatNews_CzystaPolska", "https://www.polsatnews.pl/rss/czysta-polska.xml"},
             {"Tvn24", "https://tvn24.pl/najnowsze.xml"},
             {"Onet", "https://wiadomosci.onet.pl/.feed"},
-            {"WP", "https://wiadomosci.wp.pl/RSS.XML"}
+            {"WP", "https://wiadomosci.wp.pl/RSS.XML"},
+            {"Interia", "https://wydarzenia.interia.pl/feed"},
+            {"Interia_Polska", "https://wydarzenia.interia.pl/polska/feed"},
+            {"Interia_Wywiady", "https://wydarzenia.interia.pl/wywiady/feed"},
+            {"Interia_Swiat", "https://wydarzenia.interia.pl/swiat/feed"},
+            {"Interia_Zagranica", "https://wydarzenia.interia.pl/zagranica/feed"},
+            {"Interia_Kultura", "https://wydarzenia.interia.pl/kultura/feed"},
+            {"Interia_Historia", "https://wydarzenia.interia.pl/historia/feed"},
+            {"Interia_Nauka", "https://wydarzenia.interia.pl/nauka/feed"},
+            {"Interia_Religia", "https://wydarzenia.interia.pl/religia/feed"},
+            {"Interia_Ciekawostki", "https://wydarzenia.interia.pl/ciekawostki/feed"},
+            {"Interia_Autorzy", "https://wydarzenia.interia.pl/autor/feed"},
+            {"Interia_Opinie", "https://wydarzenia.interia.pl/opinie/feed"},
+            {"Interia_Sport", "https://sport.interia.pl/feed"},
+            {"Interia_Kobieta", "https://kobieta.interia.pl/feed"},
+            {"Interia_Menway", "https://menway.interia.pl/feed"},
+            {"Interia_Gry", "https://gry.interia.pl/feed"},
+            {"Interia_NoweTechnologie", "https://nt.interia.pl/feed"},
         };
     }
 }
