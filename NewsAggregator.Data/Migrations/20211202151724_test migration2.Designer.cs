@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsAggregator.Data.DatabaseContext;
 
 namespace NewsAggregator.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20211202151724_test migration2")]
+    partial class testmigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -427,152 +429,7 @@ namespace NewsAggregator.Data.Migrations
                         new
                         {
                             Id = 1,
-                            Name = "PolsatNews"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "PolsatNews_Polska"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "PolsatNews_Swiat"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "PolsatNews_Wideo"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "PolsatNews_Biznes"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "PolsatNews_Technologie"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "PolsatNews_Moto"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "PolsatNews_Kultura"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "PolsatNews_Sport"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "PolsatNews_CzystaPolska"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Tvn24"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Onet"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "WP"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "Interia"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "Interia_Polska"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "Interia_Wywiady"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "Interia_Swiat"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Interia_Zagranica"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Interia_Kultura"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Interia_Historia"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Name = "Interia_Nauka"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Name = "Interia_Religia"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Name = "Interia_Ciekawostki"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Name = "Interia_Autorzy"
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Name = "Interia_Opinie"
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Name = "Interia_Sport"
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Name = "Interia_Kobieta"
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Name = "Interia_Menway"
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Name = "Interia_Gry"
-                        },
-                        new
-                        {
-                            Id = 30,
-                            Name = "Interia_NoweTechnologie"
+                            Name = "Abc"
                         });
                 });
 
