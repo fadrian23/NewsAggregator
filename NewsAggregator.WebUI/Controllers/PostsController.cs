@@ -33,5 +33,13 @@ namespace NewsAggregator.WebUI.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("getallbydaterange")]
+        public IActionResult GetAllByDateRange([FromQuery] PaginationFilter paginationFilter, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            var posts = _rssSiteService.GetAllPostsByDateRange(paginationFilter, startDate, endDate);
+            return Ok(posts);
+        }
+
     }
 }

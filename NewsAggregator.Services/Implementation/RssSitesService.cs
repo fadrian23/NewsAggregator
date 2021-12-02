@@ -43,6 +43,23 @@ namespace NewsAggregator.Services.Implementation
             return new PagedResponse<IEnumerable<RssPost>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
 
+        public PagedResponse<IEnumerable<RssPost>> GetAllPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate)
+        {
+            var posts = _context.InformationSitesPosts
+                                .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
+                                .OrderByDescending(x => x.DateTime)
+                                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                                .Take(paginationFilter.PageSize);
+
+            var postsCount = _context.InformationSitesPosts
+                                    .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
+                                    .Count();
+
+            return new PagedResponse<IEnumerable<RssPost>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+
+
+        }
+
         public PagedResponse<IEnumerable<RssPost>> GetPosts(PaginationFilter paginationFilter, string sitename)
         {
             var posts = _context.InformationSitesPosts
@@ -59,11 +76,11 @@ namespace NewsAggregator.Services.Implementation
                 (posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
 
-        public PagedResponse<IEnumerable<RssPost>> GetPostsByDate(PaginationFilter paginationFilter, string sitename, DateTime date)
+        public PagedResponse<IEnumerable<RssPost>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate)
         {
             var posts = _context.InformationSitesPosts
                                 .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                                .Where(z => z.DateTime.Date == date.Date)
+                                .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
                                 .OrderByDescending(x => x.DateTime)
                                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                                 .Take(paginationFilter.PageSize);
@@ -71,7 +88,7 @@ namespace NewsAggregator.Services.Implementation
 
             var postsCount = _context.InformationSitesPosts
                                     .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                                    .Where(z => z.DateTime.Date == date.Date)
+                                    .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
                                     .Count();
 
             return new PagedResponse<IEnumerable<RssPost>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);

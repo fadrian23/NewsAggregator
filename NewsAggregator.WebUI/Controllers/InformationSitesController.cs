@@ -40,12 +40,12 @@ namespace NewsAggregator.WebUI.Controllers
         }
 
         [HttpGet]
-        [Route("getpostsbydate")]
-        public IActionResult GetPostsByDate([FromQuery] string sitename, [FromQuery] PaginationFilter paginationFilter, [FromQuery] DateTime date)
+        [Route("getpostsbydaterange")]
+        public IActionResult GetPostsByDateRange([FromQuery] string sitename, [FromQuery] PaginationFilter paginationFilter, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             try
             {
-                var posts = _rssSiteService.GetPostsByDate(paginationFilter, sitename, date);
+                var posts = _rssSiteService.GetPostsByDateRange(paginationFilter, sitename, startDate, endDate);
                 return Ok(posts);
             }
             catch (NotImplementedException ex)
