@@ -31,6 +31,18 @@ namespace NewsAggregator.Services.Implementation
             _postCategorizationService = postCategorizationService;
         }
 
+        public PagedResponse<IEnumerable<RssPost>> GetAllPosts(PaginationFilter paginationFilter)
+        {
+            var posts = _context.InformationSitesPosts
+                                .OrderByDescending(x => x.DateTime)
+                                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                                .Take(paginationFilter.PageSize);
+
+            var postsCount = _context.InformationSitesPosts.Count();
+
+            return new PagedResponse<IEnumerable<RssPost>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+        }
+
         public PagedResponse<IEnumerable<RssPost>> GetPosts(PaginationFilter paginationFilter, string sitename)
         {
             var posts = _context.InformationSitesPosts

@@ -11,6 +11,7 @@ namespace NewsAggregator.Services.Services
 {
     public interface IRssSitesService
     {
+        PagedResponse<IEnumerable<RssPost>> GetAllPosts(PaginationFilter paginationFilter);
         PagedResponse<IEnumerable<RssPost>> GetPosts(PaginationFilter paginationFilter, string sitename);
         PagedResponse<IEnumerable<RssPost>> GetPostsByDate(PaginationFilter paginationFilter, string sitename, DateTime date);
         void FetchDataFromRssFeed(string siteName, string URL);
