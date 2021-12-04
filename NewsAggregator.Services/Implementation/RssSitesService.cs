@@ -111,7 +111,7 @@ namespace NewsAggregator.Services.Implementation
                 (postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
 
-        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate)
+        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate, string userId = null)
         {
             var posts = _context.InformationSitesPosts
                                 .Where(x => x.SiteName.ToLower() == sitename.ToLower())
@@ -133,7 +133,10 @@ namespace NewsAggregator.Services.Implementation
                 Id = x.Id,
                 SiteName = x.SiteName,
                 Title = x.Title,
-                URL = x.URL
+                URL = x.URL,
+                IsSavedForLater = !string.IsNullOrEmpty(userId) ? _context.ApplicationUserSettings.Include(a => a.SavedPosts)
+                                            .FirstOrDefault(c => c.UserId == userId)
+                                            .SavedPosts.Any(z => z.Id == x.Id) : false,
             });
 
             return new PagedResponse<IEnumerable<RssPostDTO>>(postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);

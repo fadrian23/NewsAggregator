@@ -15,7 +15,7 @@ namespace NewsAggregator.Services.Extensions
                 throw new ArgumentNullException(nameof(principal));
             }
 
-            var claim = principal.Claims.Single(x => x.Type == "UserId").Value;
+            var claim = principal.Claims.SingleOrDefault(x => x.Type == "UserId")?.Value;
             return claim;
         }
     }

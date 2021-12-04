@@ -14,5 +14,7 @@ namespace NewsAggregator.Services.DTOs
         public string Title { get; set; }
         public string URL { get; set; }
         public DateTime DateTime { get; set; }
+
+        public bool IsSavedForLater { get; set; }
     }
 }
