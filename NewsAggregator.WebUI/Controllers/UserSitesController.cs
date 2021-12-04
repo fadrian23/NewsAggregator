@@ -73,6 +73,17 @@ namespace NewsAggregator.WebUI.Controllers
         }
 
         [HttpGet]
+        [Route("getsubscribedsites")]
+        public IActionResult GetSubscribedSites()
+        {
+            string userId = User.GetUserId();
+
+            var result = _sitesService.GetSubscribedSites(userId);
+
+            return Ok(result);
+        }
+
+        [HttpGet]
         [Route("available")]
         public IActionResult GetAvailableSites()
         {

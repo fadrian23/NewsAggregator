@@ -9,5 +9,6 @@ namespace NewsAggregator.Services.Services
     {
         PagedResponse<UserSitesPostsDTO> GetPostsFromUserSites(string userId, PaginationFilter paginationFilter);
         SiteSubscriptionResult SubscribeToSites(IEnumerable<string> sites, string userId);
+        List<string> GetSubscribedSites(string userId);
     }
 }

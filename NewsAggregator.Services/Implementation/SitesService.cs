@@ -55,6 +55,12 @@ namespace NewsAggregator.Services.Implementation
             return new PagedResponse<UserSitesPostsDTO>(userSitesPostsDTO, paginationFilter.PageNumber, paginationFilter.PageNumber, postsCount);
         }
 
+        public List<string> GetSubscribedSites(string userId)
+        {
+            var result = _context.ApplicationUserSettings.Include(x => x.SiteNames).FirstOrDefault(x => x.UserId == userId).SiteNames.Select(x => x.Name).ToList();
+            return result;
+        }
+
         public SiteSubscriptionResult SubscribeToSites(IEnumerable<string> sites, string userId)
         {
             var userSettings = _context.ApplicationUserSettings.Include(x => x.SiteNames).FirstOrDefault(z => z.UserId == userId);
