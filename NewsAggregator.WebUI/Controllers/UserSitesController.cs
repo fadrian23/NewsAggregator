@@ -76,7 +76,7 @@ namespace NewsAggregator.WebUI.Controllers
         [Route("available")]
         public IActionResult GetAvailableSites()
         {
-            var availableSites = AvailableSites.GetAll();
+            var availableSites = AvailableRssFeeds.RssFeeds.Keys.ToArray();
 
             return Ok(availableSites);
         }

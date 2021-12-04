@@ -52,36 +52,6 @@ namespace NewsAggregator.Services.Implementation
                 URL = c.URL,
             });
 
-            // foreach (var site in userSites)
-            // {
-            //     if (AvailableSites.GetAll().Contains(site))
-            //     {
-
-            //         var siteService = _siteFactory.For(site);
-            //         var filter = new PaginationFilter
-            //         {
-            //             PageNumber = paginationFilter.PageNumber,
-            //             PageSize = paginationFilter.PageSize
-            //         };
-
-            //         switch (site)
-            //         {
-            //             case AvailableSites.Reddit:
-            //                 {
-            //                     userSitesPostsDTO.RedditPosts = (IEnumerable<RedditPostDTO>)siteService.GetPosts(filter);
-            //                     break;
-            //                 }
-            //             case AvailableSites.HackerNews:
-            //                 {
-            //                     userSitesPostsDTO.HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)siteService.GetPosts(filter);
-            //                     break;
-            //                 }
-            //             default:
-            //                 throw new NotImplementedException($"not implemented for {site}");
-            //         }
-            //     }
-            // }
-
             return new PagedResponse<UserSitesPostsDTO>(userSitesPostsDTO, paginationFilter.PageNumber, paginationFilter.PageNumber, postsCount);
         }
 
