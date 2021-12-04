@@ -12,10 +12,8 @@ namespace NewsAggregator.Services.Services
 {
     public interface IRssSitesService
     {
-        PagedResponse<IEnumerable<RssPostDTO>> GetAllPosts(PaginationFilter paginationFilter);
-        PagedResponse<IEnumerable<RssPostDTO>> GetAllPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate);
-        PagedResponse<IEnumerable<RssPostDTO>> GetPosts(PaginationFilter paginationFilter, string sitename);
-        PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate, string userId = null);
+        PagedResponse<IEnumerable<RssPostDTO>> GetPosts(PaginationFilter paginationFilter, string sitename = null);
+        PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate, string userId = null, string sitename = null);
         void FetchDataFromRssFeed(string siteName, string URL);
         bool SavePostForLater(string userId, int postId);
         bool RemovePostForLater(string userId, int postId);

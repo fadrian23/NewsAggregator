@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NewsAggregator.Data.Models;
+using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Extensions;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.HelperModels;
@@ -17,7 +19,6 @@ namespace NewsAggregator.WebUI.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class InformationSitesController : ControllerBase
     {
-        private readonly ISiteFactory _siteFactory;
         private readonly IRssSitesService _rssSiteService;
 
         public InformationSitesController(IRssSitesService rssSiteService)
@@ -25,21 +26,21 @@ namespace NewsAggregator.WebUI.Controllers
             _rssSiteService = rssSiteService;
         }
 
-        [HttpGet]
-        [AllowAnonymous]
-        [Route("getposts")]
-        public IActionResult GetPosts([FromQuery] string sitename, [FromQuery] PaginationFilter paginationFilter)
-        {
-            try
-            {
-                var posts = _rssSiteService.GetPosts(paginationFilter, sitename);
-                return Ok(posts);
-            }
-            catch (NotImplementedException ex)
-            {
-                return BadRequest("Wrong sitename");
-            }
-        }
+        // [HttpGet]
+        // [AllowAnonymous]
+        // [Route("getposts")]
+        // public IActionResult GetPosts([FromQuery] string sitename, [FromQuery] PaginationFilter paginationFilter)
+        // {
+        //     try
+        //     {
+        //         var posts = _rssSiteService.GetPosts(paginationFilter, sitename);
+        //         return Ok(posts);
+        //     }
+        //     catch (NotImplementedException ex)
+        //     {
+        //         return BadRequest("Wrong sitename");
+        //     }
+        // }
 
         [HttpGet]
         [AllowAnonymous]
@@ -48,7 +49,7 @@ namespace NewsAggregator.WebUI.Controllers
         {
             try
             {
-                var posts = _rssSiteService.GetPostsByDateRange(paginationFilter, sitename, startDate, endDate);
+                var posts = _rssSiteService.GetPostsByDateRange(paginationFilter, startDate, endDate, null, sitename);
                 return Ok(posts);
             }
             catch (NotImplementedException ex)
@@ -63,7 +64,7 @@ namespace NewsAggregator.WebUI.Controllers
             var userId = User.GetUserId();
             try
             {
-                var posts = _rssSiteService.GetPostsByDateRange(paginationFilter, sitename, startDate, endDate, userId);
+                var posts = _rssSiteService.GetPostsByDateRange(paginationFilter, startDate, endDate, userId, sitename);
                 return Ok(posts);
             }
             catch (NotImplementedException ex)

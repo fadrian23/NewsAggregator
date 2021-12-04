@@ -52,6 +52,9 @@ namespace NewsAggregator.Services.Implementation
                 SiteName = x.SiteName,
                 Title = x.Title,
                 URL = x.URL,
+                IsSavedForLater = !string.IsNullOrEmpty(userId) ? _context.ApplicationUserSettings.Include(a => a.SavedPosts)
+                                            .FirstOrDefault(c => c.UserId == userId)
+                                            .SavedPosts.Any(z => z.Id == x.Id) : false,
             });
 
             return new PagedResponse<IEnumerable<RssPostDTO>>(data, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);

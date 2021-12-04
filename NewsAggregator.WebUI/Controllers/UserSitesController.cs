@@ -29,7 +29,7 @@ namespace NewsAggregator.WebUI.Controllers
 
 
         [HttpGet]
-        [Route("getpostsbydate")]
+        [Route("getpostsbydaterange")]
         public IActionResult GetPostsByDateFromSubscribedSites([FromQuery] PaginationFilter paginationFilter, DateTime startDate, DateTime endDate)
         {
             string userId = User.GetUserId();

@@ -20,29 +20,6 @@ namespace NewsAggregator.WebUI.Controllers
         }
 
         [HttpGet]
-        [Route("getall")]
-        public IActionResult GetAll([FromQuery] PaginationFilter paginationFilter)
-        {
-            try
-            {
-                var posts = _rssSiteService.GetAllPosts(paginationFilter);
-                return Ok(posts);
-            }
-            catch (NotImplementedException ex)
-            {
-                return BadRequest("Wrong sitename");
-            }
-        }
-
-        [HttpGet]
-        [Route("getallbydaterange")]
-        public IActionResult GetAllByDateRange([FromQuery] PaginationFilter paginationFilter, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
-        {
-            var posts = _rssSiteService.GetAllPostsByDateRange(paginationFilter, startDate, endDate);
-            return Ok(posts);
-        }
-
-        [HttpGet]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [Route("saveforlater")]
         public IActionResult SavePostForLater([FromQuery] int postId)
@@ -63,7 +40,7 @@ namespace NewsAggregator.WebUI.Controllers
 
             var result = _rssSiteService.RemovePostForLater(userId, postId);
 
-            return result ? Ok(result) : NotFound(result);
+            return result ? Ok(result) : BadRequest(result);
         }
 
     }
