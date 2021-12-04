@@ -51,7 +51,7 @@ namespace NewsAggregator.WebUI.Controllers
 
         [HttpPost]
         [Route("subscribe")]
-        public IActionResult SubscribeToASite(UserSitesSubscribeRequest userSitesSubscribeRequest)
+        public IActionResult SubscribeToSites(UserSitesSubscribeRequest userSitesSubscribeRequest)
         {
             string userId = User.GetUserId();
 

@@ -24,49 +24,65 @@ namespace NewsAggregator.Services.Implementation
             _siteFactory = siteFactory;
         }
 
-        public UserSitesPostsDTO GetPostsFromUserSites(string userId, PaginationFilter paginationFilter)
+        public PagedResponse<UserSitesPostsDTO> GetPostsFromUserSites(string userId, PaginationFilter paginationFilter)
         {
             var userSites = _context.ApplicationUserSettings
                 .Include(x => x.SiteNames)
                 .FirstOrDefault(z => z.UserId == userId)
-                .SiteNames.Select(xz => xz.Name)
+                .SiteNames.Select(xz => xz.Name.ToLower())
                 .ToList();
 
             var userSitesPostsDTO = new UserSitesPostsDTO();
 
-            foreach (var site in userSites)
+            var rssPosts = _context.InformationSitesPosts
+                                .Where(x => userSites.Contains(x.SiteName.ToLower()))
+                                .OrderByDescending(x => x.DateTime)
+                                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                                .Take(paginationFilter.PageSize);
+
+            var postsCount = _context.InformationSitesPosts.Where(x => userSites.Contains(x.SiteName.ToLower())).Count();
+
+            userSitesPostsDTO.RssPosts = rssPosts.Select(c => new RssPostDTO
             {
-                if (AvailableSites.GetAll().Contains(site))
-                {
+                Id = c.Id,
+                DateTime = c.DateTime,
+                Description = c.Description,
+                SiteName = c.SiteName,
+                Title = c.Title,
+                URL = c.URL,
+            });
 
-                    var siteService = _siteFactory.For(site);
-                    var filter = new PaginationFilter
-                    {
-                        PageNumber = paginationFilter.PageNumber,
-                        PageSize = paginationFilter.PageSize
-                    };
+            // foreach (var site in userSites)
+            // {
+            //     if (AvailableSites.GetAll().Contains(site))
+            //     {
 
-                    switch (site)
-                    {
-                        case AvailableSites.Reddit:
-                            {
-                                userSitesPostsDTO.RedditPosts = (IEnumerable<RedditPostDTO>)siteService.GetPosts(filter);
-                                break;
-                            }
-                        case AvailableSites.HackerNews:
-                            {
-                                userSitesPostsDTO.HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)siteService.GetPosts(filter);
-                                break;
-                            }
-                        default:
-                            throw new NotImplementedException($"not implemented for {site}");
-                    }
-                }
-            }
+            //         var siteService = _siteFactory.For(site);
+            //         var filter = new PaginationFilter
+            //         {
+            //             PageNumber = paginationFilter.PageNumber,
+            //             PageSize = paginationFilter.PageSize
+            //         };
 
+            //         switch (site)
+            //         {
+            //             case AvailableSites.Reddit:
+            //                 {
+            //                     userSitesPostsDTO.RedditPosts = (IEnumerable<RedditPostDTO>)siteService.GetPosts(filter);
+            //                     break;
+            //                 }
+            //             case AvailableSites.HackerNews:
+            //                 {
+            //                     userSitesPostsDTO.HackerNewsPosts = (IEnumerable<HackerNewsPostDTO>)siteService.GetPosts(filter);
+            //                     break;
+            //                 }
+            //             default:
+            //                 throw new NotImplementedException($"not implemented for {site}");
+            //         }
+            //     }
+            // }
 
-
-            return userSitesPostsDTO;
+            return new PagedResponse<UserSitesPostsDTO>(userSitesPostsDTO, paginationFilter.PageNumber, paginationFilter.PageNumber, postsCount);
         }
 
         public SiteSubscriptionResult SubscribeToSites(IEnumerable<string> sites, string userId)
@@ -103,7 +119,7 @@ namespace NewsAggregator.Services.Implementation
 
 
             _context.SaveChanges();
-            
+
             return new SiteSubscriptionResult
             {
                 Success = true

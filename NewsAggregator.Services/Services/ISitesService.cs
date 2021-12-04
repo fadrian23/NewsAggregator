@@ -7,7 +7,7 @@ namespace NewsAggregator.Services.Services
 {
     public interface ISitesService
     {
-        UserSitesPostsDTO GetPostsFromUserSites(string userId, PaginationFilter paginationFilter);
+        PagedResponse<UserSitesPostsDTO> GetPostsFromUserSites(string userId, PaginationFilter paginationFilter);
         SiteSubscriptionResult SubscribeToSites(IEnumerable<string> sites, string userId);
     }
 }
