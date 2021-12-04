@@ -46,7 +46,7 @@ namespace NewsAggregator.Services.Implementation
 
             var data = rssPosts.ToList();
 
-            return new PagedResponse<IEnumerable<RssPost>>(data, paginationFilter.PageNumber, paginationFilter.PageNumber, postsCount);
+            return new PagedResponse<IEnumerable<RssPost>>(data, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
 
         public List<string> GetSubscribedSites(string userId)
