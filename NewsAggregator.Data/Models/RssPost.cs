@@ -15,5 +15,8 @@ namespace NewsAggregator.Data.Models
         public string URL { get; set; }
         public DateTime DateTime { get; set; }
         public PostCategory PostCategory { get; set; }
+
+        public IEnumerable<ApplicationUserSettings> ApplicationUserSettings { get; set; }
+
     }
 }

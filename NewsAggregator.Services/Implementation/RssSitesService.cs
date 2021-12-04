@@ -1,4 +1,6 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models;
@@ -200,6 +202,49 @@ namespace NewsAggregator.Services.Implementation
                 Title = post.Title,
                 URL = post.URL
             };
+        }
+
+        public bool SavePostForLater(string userId, int postId)
+        {
+            var userSettings = _context.ApplicationUserSettings
+                                        .Include(x => x.SavedPosts)
+                                        .FirstOrDefault(x => x.UserId == userId);
+
+            var post = _context.InformationSitesPosts.FirstOrDefault(x => x.Id == postId);
+
+            var savedPosts = userSettings.SavedPosts.ToList();
+
+            if (!savedPosts.Contains(post))
+            {
+                savedPosts.Add(post);
+            }
+
+            userSettings.SavedPosts = savedPosts;
+
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public bool RemovePostForLater(string userId, int postId)
+        {
+            var userSettings = _context.ApplicationUserSettings.Include(x => x.SavedPosts).FirstOrDefault(x => x.UserId == userId);
+
+            var post = _context.InformationSitesPosts.FirstOrDefault(x => x.Id == postId);
+
+            var savedPosts = userSettings.SavedPosts.ToList();
+
+            savedPosts.Remove(post);
+
+            userSettings.SavedPosts = savedPosts;
+
+            if (_context.SaveChanges() > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

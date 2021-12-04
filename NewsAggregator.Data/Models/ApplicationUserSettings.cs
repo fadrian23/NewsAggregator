@@ -9,5 +9,7 @@ namespace NewsAggregator.Data.Models
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
         public IEnumerable<SiteName> SiteNames { get; set; }
+
+        public IEnumerable<RssPost> SavedPosts { get; set; }
     }
 }

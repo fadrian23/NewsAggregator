@@ -16,5 +16,7 @@ namespace NewsAggregator.Services.Services
         PagedResponse<IEnumerable<RssPost>> GetPosts(PaginationFilter paginationFilter, string sitename);
         PagedResponse<IEnumerable<RssPost>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate);
         void FetchDataFromRssFeed(string siteName, string URL);
+        bool SavePostForLater(string userId, int postId);
+        bool RemovePostForLater(string userId, int postId);
     }
 }
