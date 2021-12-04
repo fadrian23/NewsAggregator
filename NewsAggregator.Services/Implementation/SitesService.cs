@@ -24,7 +24,7 @@ namespace NewsAggregator.Services.Implementation
             _siteFactory = siteFactory;
         }
 
-        public PagedResponse<UserSitesPostsDTO> GetPostsFromUserSites(string userId, PaginationFilter paginationFilter)
+        public PagedResponse<IEnumerable<RssPost>> GetPostsFromUserSites(string userId, PaginationFilter paginationFilter, DateTime startDate, DateTime endDate)
         {
             var userSites = _context.ApplicationUserSettings
                 .Include(x => x.SiteNames)
@@ -32,27 +32,21 @@ namespace NewsAggregator.Services.Implementation
                 .SiteNames.Select(xz => xz.Name.ToLower())
                 .ToList();
 
-            var userSitesPostsDTO = new UserSitesPostsDTO();
 
             var rssPosts = _context.InformationSitesPosts
                                 .Where(x => userSites.Contains(x.SiteName.ToLower()))
+                                .Where(x => x.DateTime.Date >= startDate.Date && x.DateTime.Date <= endDate.Date)
                                 .OrderByDescending(x => x.DateTime)
                                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                                 .Take(paginationFilter.PageSize);
 
-            var postsCount = _context.InformationSitesPosts.Where(x => userSites.Contains(x.SiteName.ToLower())).Count();
+            var postsCount = _context.InformationSitesPosts.Where(x => userSites.Contains(x.SiteName.ToLower()))
+                                                            .Where(x => x.DateTime.Date >= startDate.Date && x.DateTime.Date <= endDate.Date)
+                                                            .Count();
 
-            userSitesPostsDTO.RssPosts = rssPosts.Select(c => new RssPostDTO
-            {
-                Id = c.Id,
-                DateTime = c.DateTime,
-                Description = c.Description,
-                SiteName = c.SiteName,
-                Title = c.Title,
-                URL = c.URL,
-            });
+            var data = rssPosts.ToList();
 
-            return new PagedResponse<UserSitesPostsDTO>(userSitesPostsDTO, paginationFilter.PageNumber, paginationFilter.PageNumber, postsCount);
+            return new PagedResponse<IEnumerable<RssPost>>(data, paginationFilter.PageNumber, paginationFilter.PageNumber, postsCount);
         }
 
         public List<string> GetSubscribedSites(string userId)

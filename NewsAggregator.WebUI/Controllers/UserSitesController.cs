@@ -29,24 +29,19 @@ namespace NewsAggregator.WebUI.Controllers
 
 
         [HttpGet]
-        [Route("posts")]
-        public IActionResult GetPostsFromSubscribedSites([FromQuery] PaginationFilter paginationFilter)
+        [Route("getpostsbydate")]
+        public IActionResult GetPostsByDateFromSubscribedSites([FromQuery] PaginationFilter paginationFilter, DateTime startDate, DateTime endDate)
         {
             string userId = User.GetUserId();
 
-            var posts = _sitesService.GetPostsFromUserSites(userId, paginationFilter);
+            var posts = _sitesService.GetPostsFromUserSites(userId, paginationFilter, startDate, endDate);
 
             if (posts == null)
             {
                 return NotFound();
             }
 
-            string jsonWithoutNulls = JsonConvert.SerializeObject(posts, Formatting.Indented, new JsonSerializerSettings
-            {
-                NullValueHandling = NullValueHandling.Ignore
-            });
-
-            return Content(jsonWithoutNulls, "application/json");
+            return Ok(posts);
         }
 
         [HttpPost]
