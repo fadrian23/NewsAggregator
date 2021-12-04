@@ -1,4 +1,5 @@
 ﻿using NewsAggregator.Data.Models;
+using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.HelperModels;
 using System;
@@ -11,10 +12,10 @@ namespace NewsAggregator.Services.Services
 {
     public interface IRssSitesService
     {
-        PagedResponse<IEnumerable<RssPost>> GetAllPosts(PaginationFilter paginationFilter);
-        PagedResponse<IEnumerable<RssPost>> GetAllPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate);
-        PagedResponse<IEnumerable<RssPost>> GetPosts(PaginationFilter paginationFilter, string sitename);
-        PagedResponse<IEnumerable<RssPost>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate);
+        PagedResponse<IEnumerable<RssPostDTO>> GetAllPosts(PaginationFilter paginationFilter);
+        PagedResponse<IEnumerable<RssPostDTO>> GetAllPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate);
+        PagedResponse<IEnumerable<RssPostDTO>> GetPosts(PaginationFilter paginationFilter, string sitename);
+        PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate);
         void FetchDataFromRssFeed(string siteName, string URL);
         bool SavePostForLater(string userId, int postId);
         bool RemovePostForLater(string userId, int postId);

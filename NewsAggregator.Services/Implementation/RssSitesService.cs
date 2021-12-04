@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models;
+using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Helpers;
@@ -33,19 +34,30 @@ namespace NewsAggregator.Services.Implementation
             _postCategorizationService = postCategorizationService;
         }
 
-        public PagedResponse<IEnumerable<RssPost>> GetAllPosts(PaginationFilter paginationFilter)
+        public PagedResponse<IEnumerable<RssPostDTO>> GetAllPosts(PaginationFilter paginationFilter)
         {
             var posts = _context.InformationSitesPosts
                                 .OrderByDescending(x => x.DateTime)
                                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                                .Take(paginationFilter.PageSize);
+                                .Take(paginationFilter.PageSize)
+                                .ToList();
 
             var postsCount = _context.InformationSitesPosts.Count();
 
-            return new PagedResponse<IEnumerable<RssPost>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+            var postsDto = posts.Select(x => new RssPostDTO
+            {
+                DateTime = x.DateTime,
+                Description = x.Description,
+                Id = x.Id,
+                SiteName = x.SiteName,
+                Title = x.Title,
+                URL = x.URL
+            });
+
+            return new PagedResponse<IEnumerable<RssPostDTO>>(postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
 
-        public PagedResponse<IEnumerable<RssPost>> GetAllPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate)
+        public PagedResponse<IEnumerable<RssPostDTO>> GetAllPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate)
         {
             var posts = _context.InformationSitesPosts
                                 .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
@@ -57,12 +69,23 @@ namespace NewsAggregator.Services.Implementation
                                     .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
                                     .Count();
 
-            return new PagedResponse<IEnumerable<RssPost>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+
+            var postsDto = posts.Select(x => new RssPostDTO
+            {
+                DateTime = x.DateTime,
+                Description = x.Description,
+                Id = x.Id,
+                SiteName = x.SiteName,
+                Title = x.Title,
+                URL = x.URL
+            });
+
+            return new PagedResponse<IEnumerable<RssPostDTO>>(postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
 
 
         }
 
-        public PagedResponse<IEnumerable<RssPost>> GetPosts(PaginationFilter paginationFilter, string sitename)
+        public PagedResponse<IEnumerable<RssPostDTO>> GetPosts(PaginationFilter paginationFilter, string sitename)
         {
             var posts = _context.InformationSitesPosts
                                 .Where(x => x.SiteName.ToLower() == sitename.ToLower())
@@ -74,11 +97,21 @@ namespace NewsAggregator.Services.Implementation
                                      .Where(x => x.SiteName.ToLower() == sitename.ToLower())
                                      .Count();
 
-            return new PagedResponse<IEnumerable<RssPost>>
-                (posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+            var postsDto = posts.Select(x => new RssPostDTO
+            {
+                DateTime = x.DateTime,
+                Description = x.Description,
+                Id = x.Id,
+                SiteName = x.SiteName,
+                Title = x.Title,
+                URL = x.URL
+            });
+
+            return new PagedResponse<IEnumerable<RssPostDTO>>
+                (postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
 
-        public PagedResponse<IEnumerable<RssPost>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate)
+        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(PaginationFilter paginationFilter, string sitename, DateTime startDate, DateTime endDate)
         {
             var posts = _context.InformationSitesPosts
                                 .Where(x => x.SiteName.ToLower() == sitename.ToLower())
@@ -93,7 +126,17 @@ namespace NewsAggregator.Services.Implementation
                                     .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
                                     .Count();
 
-            return new PagedResponse<IEnumerable<RssPost>>(posts, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+            var postsDto = posts.Select(x => new RssPostDTO
+            {
+                DateTime = x.DateTime,
+                Description = x.Description,
+                Id = x.Id,
+                SiteName = x.SiteName,
+                Title = x.Title,
+                URL = x.URL
+            });
+
+            return new PagedResponse<IEnumerable<RssPostDTO>>(postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
 
         public void FetchDataFromRssFeed(string siteName, string URL)

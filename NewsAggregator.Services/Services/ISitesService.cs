@@ -9,7 +9,7 @@ namespace NewsAggregator.Services.Services
 {
     public interface ISitesService
     {
-        PagedResponse<IEnumerable<RssPost>> GetPostsFromUserSites(string userId, PaginationFilter paginationFilter, DateTime startDate, DateTime endDate);
+        PagedResponse<IEnumerable<RssPostDTO>> GetPostsFromUserSites(string userId, PaginationFilter paginationFilter, DateTime startDate, DateTime endDate);
         SiteSubscriptionResult SubscribeToSites(IEnumerable<string> sites, string userId);
         List<string> GetSubscribedSites(string userId);
     }
