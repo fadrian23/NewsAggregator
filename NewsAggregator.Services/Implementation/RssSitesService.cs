@@ -32,56 +32,6 @@ namespace NewsAggregator.Services.Implementation
             _logger = logger;
         }
 
-        public PagedResponse<IEnumerable<RssPostDTO>> GetPosts(PaginationFilter paginationFilter, string sitename = null)
-        {
-            if (!string.IsNullOrEmpty(sitename))
-            {
-                var allPosts = _context.InformationSitesPosts
-                                .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                                .OrderByDescending(x => x.DateTime)
-                                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                                .Take(paginationFilter.PageSize);
-
-                var allPostsCount = _context.InformationSitesPosts
-                                 .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                                 .Count();
-
-                var allPostsDto = allPosts.Select(x => new RssPostDTO
-                {
-                    DateTime = x.DateTime,
-                    Description = x.Description,
-                    Id = x.Id,
-                    SiteName = x.SiteName,
-                    Title = x.Title,
-                    URL = x.URL
-                });
-
-                return new PagedResponse<IEnumerable<RssPostDTO>>
-                    (allPostsDto, paginationFilter.PageNumber, paginationFilter.PageSize, allPostsCount);
-            }
-
-            var posts = _context.InformationSitesPosts
-                                .OrderByDescending(x => x.DateTime)
-                                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                                .Take(paginationFilter.PageSize);
-
-            var postsCount = _context.InformationSitesPosts
-                                     .Count();
-
-            var postsDto = posts.Select(x => new RssPostDTO
-            {
-                DateTime = x.DateTime,
-                Description = x.Description,
-                Id = x.Id,
-                SiteName = x.SiteName,
-                Title = x.Title,
-                URL = x.URL
-            });
-
-            return new PagedResponse<IEnumerable<RssPostDTO>>
-                (postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
-        }
-
         public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate, string userId = null, string sitename = null)
         {
             if (string.IsNullOrEmpty(sitename))
