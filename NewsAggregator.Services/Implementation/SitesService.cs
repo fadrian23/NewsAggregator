@@ -16,12 +16,10 @@ namespace NewsAggregator.Services.Implementation
     public class SitesService : ISitesService
     {
         private readonly ApplicationDbContext _context;
-        private readonly ISiteFactory _siteFactory;
 
-        public SitesService(ApplicationDbContext context, ISiteFactory siteFactory)
+        public SitesService(ApplicationDbContext context)
         {
             _context = context;
-            _siteFactory = siteFactory;
         }
 
         public PagedResponse<IEnumerable<RssPostDTO>> GetPostsFromUserSites(string userId, PaginationFilter paginationFilter, DateTime startDate, DateTime endDate)

@@ -25,13 +25,11 @@ namespace NewsAggregator.Services.Implementation
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<RssSitesService> _logger;
-        private readonly IPostCategorizationService _postCategorizationService;
 
-        public RssSitesService(ApplicationDbContext context, ILogger<RssSitesService> logger, IPostCategorizationService postCategorizationService)
+        public RssSitesService(ApplicationDbContext context, ILogger<RssSitesService> logger)
         {
             _context = context;
             _logger = logger;
-            _postCategorizationService = postCategorizationService;
         }
 
         public PagedResponse<IEnumerable<RssPostDTO>> GetPosts(PaginationFilter paginationFilter, string sitename = null)
@@ -189,7 +187,7 @@ namespace NewsAggregator.Services.Implementation
                 {
                     case "Onet":
                         {
-                            posts.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(
+                            posts.Add((RssPost)DeleteXmlTagsFromPostDescription(
                                 new RssPost
                                 {
                                     Title = item.Title.Text,
@@ -198,24 +196,24 @@ namespace NewsAggregator.Services.Implementation
                                     Description = item.Summary.Text,
                                     URL = "http://wiadomosci.onet.pl/" + item.Links[0].Uri.AbsolutePath,
                                 }
-                            )));
+                            ));
                             break;
                         }
                     case "WP":
                         {
-                            posts.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(new RssPost
+                            posts.Add((RssPost)DeleteXmlTagsFromPostDescription(new RssPost
                             {
                                 Title = item.Title.Text,
                                 SiteName = siteName,
                                 DateTime = item.PublishDate.DateTime,
                                 Description = item.Summary.Text,
                                 URL = "http://wiadomosci.wp.pl" + item.Links[0].Uri.AbsolutePath,
-                            })));
+                            }));
                             break;
                         }
                     default:
                         {
-                            posts.Add((RssPost)_postCategorizationService.CategorizePost(DeleteXmlTagsFromPostDescription(
+                            posts.Add((RssPost)(DeleteXmlTagsFromPostDescription(
                                 new RssPost
                                 {
                                     Title = item.Title.Text,
@@ -289,6 +287,29 @@ namespace NewsAggregator.Services.Implementation
                 return true;
             }
             return false;
+        }
+
+        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRangeForLater(PaginationFilter paginationFilter, string userId)
+        {
+            var userSettings = _context.ApplicationUserSettings.Include(x => x.SavedPosts).FirstOrDefault(x => x.UserId == userId);
+
+            var posts = userSettings.SavedPosts.OrderByDescending(x => x.DateTime).Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                                                .Take(paginationFilter.PageSize);
+
+            var postsCount = userSettings.SavedPosts.Count();
+
+            var postsDto = posts.Select(x => new RssPostDTO
+            {
+                DateTime = x.DateTime,
+                Description = x.Description,
+                Id = x.Id,
+                IsSavedForLater = true,
+                SiteName = x.SiteName,
+                Title = x.Title,
+                URL = x.URL
+            });
+
+            return new PagedResponse<IEnumerable<RssPostDTO>>(postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
         }
     }
 }

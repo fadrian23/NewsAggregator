@@ -26,22 +26,6 @@ namespace NewsAggregator.WebUI.Controllers
             _rssSiteService = rssSiteService;
         }
 
-        // [HttpGet]
-        // [AllowAnonymous]
-        // [Route("getposts")]
-        // public IActionResult GetPosts([FromQuery] string sitename, [FromQuery] PaginationFilter paginationFilter)
-        // {
-        //     try
-        //     {
-        //         var posts = _rssSiteService.GetPosts(paginationFilter, sitename);
-        //         return Ok(posts);
-        //     }
-        //     catch (NotImplementedException ex)
-        //     {
-        //         return BadRequest("Wrong sitename");
-        //     }
-        // }
-
         [HttpGet]
         [AllowAnonymous]
         [Route("getpostsbydaterange")]

@@ -14,11 +14,7 @@ namespace NewsAggregator.Data.DatabaseContext
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
-        public DbSet<RedditPost> RedditPosts { get; set; }
-        public DbSet<HackerNewsPost> HackerNewsPosts { get; set; }
         public DbSet<RssPost> InformationSitesPosts { get; set; }
-        public DbSet<PostCategory> PostCategories { get; set; }
-        public DbSet<Keyword> Keywords { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<SiteName> SiteNames { get; set; }
         public DbSet<ApplicationUserSettings> ApplicationUserSettings { get; set; }
@@ -60,7 +56,7 @@ namespace NewsAggregator.Data.DatabaseContext
                 {"Interia_NoweTechnologie", "https://nt.interia.pl/feed"},
             };
 
-            var x = rssFeeds.Select((value, index) => new { Id = index + 1, Name = value.Key });
+            var siteNames = rssFeeds.Select((value, index) => new { Id = index + 1, Name = value.Key });
 
             base.OnModelCreating(builder);
 
@@ -73,7 +69,7 @@ namespace NewsAggregator.Data.DatabaseContext
 
             builder.Entity<SiteName>()
                     .HasData(
-                        x
+                        siteNames
                     );
 
         }

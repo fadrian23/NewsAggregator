@@ -6394,35 +6394,37 @@
     ]
   },
   "packageFolders": {
-    "/Users/adrian/.nuget/packages/": {}
+    "C:\\Users\\Adrian\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/Users/adrian/apps/inzynierka/NewsAggregator/NewsAggregator.WebUI/NewsAggregator.WebUI.csproj",
+      "projectUniqueName": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj",
       "projectName": "NewsAggregator.WebUI",
-      "projectPath": "/Users/adrian/apps/inzynierka/NewsAggregator/NewsAggregator.WebUI/NewsAggregator.WebUI.csproj",
-      "packagesPath": "/Users/adrian/.nuget/packages/",
-      "outputPath": "/Users/adrian/apps/inzynierka/NewsAggregator/NewsAggregator.WebUI/obj/",
+      "projectPath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj",
+      "packagesPath": "C:\\Users\\Adrian\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.WebUI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/Users/adrian/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Adrian\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
         "net5.0"
       ],
       "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "/Users/adrian/apps/inzynierka/NewsAggregator/NewsAggregator.Data/NewsAggregator.Data.csproj": {
-              "projectPath": "/Users/adrian/apps/inzynierka/NewsAggregator/NewsAggregator.Data/NewsAggregator.Data.csproj"
+            "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj": {
+              "projectPath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj"
             },
-            "/Users/adrian/apps/inzynierka/NewsAggregator/NewsAggregator.Services/NewsAggregator.Services.csproj": {
-              "projectPath": "/Users/adrian/apps/inzynierka/NewsAggregator/NewsAggregator.Services/NewsAggregator.Services.csproj"
+            "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj": {
+              "projectPath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj"
             }
           }
         }
@@ -6482,7 +6484,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/5.0.402/RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
       }
     }
   }

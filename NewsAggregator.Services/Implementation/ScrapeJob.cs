@@ -12,25 +12,13 @@ namespace NewsAggregator.Services.Implementation
 {
     public class ScrapeJob : IScrapeJob
     {
-        private readonly ISiteFactory _siteFactory;
         private readonly ILogger<ScrapeJob> _logger;
         private readonly IRssSitesService _rssSitesService;
 
-        public ScrapeJob(ISiteFactory siteFactory, ILogger<ScrapeJob> logger, IRssSitesService rssSitesService)
+        public ScrapeJob(ILogger<ScrapeJob> logger, IRssSitesService rssSitesService)
         {
-            _siteFactory = siteFactory;
             _logger = logger;
             _rssSitesService = rssSitesService;
-        }
-
-        [AutomaticRetry(Attempts = 0)]
-        public void ScrapSites()
-        {
-            _logger.LogInformation("Getting data from external APIs");
-            foreach (var site in AvailableSites.GetAll())
-            {
-                _siteFactory.For(site).GetAndSaveData();
-            }
         }
 
         [AutomaticRetry(Attempts = 0)]

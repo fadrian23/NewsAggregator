@@ -160,21 +160,9 @@ namespace NewsAggregator.WebUI
             });
 
             recurringJobManager.AddOrUpdate(
-                "DataFromExternalAPIS",
-                () => serviceProvider.GetService<IScrapeJob>().ScrapSites(),
-                "*/30 * * * * ");
-
-            recurringJobManager.AddOrUpdate(
                 "DataFromRssFeeds",
                 () => serviceProvider.GetService<IScrapeJob>().GetDataFromRssFeeds(),
-                "*/30 * * * * ");
-
-
-            var databaseSeeder = serviceProvider.GetService<IDatabaseSeeder>();
-
-            databaseSeeder.SeedDatabase();
-
-
+                "*/10 * * * * ");
 
         }
     }
