@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Services;
+using NewsAggregator.WebUI.Helpers;
 using NewsAggregator.WebUI.Models.Requests;
 using NewsAggregator.WebUI.Models.Responses;
 using System.Linq;
@@ -66,35 +67,31 @@ namespace NewsAggregator.WebUI.Controllers
 
         private IActionResult Result(AuthenticationResult authenticationResponse)
         {
-            if (authenticationResponse.Result == AuthenticationResultType.WrongCombination)
+            switch (authenticationResponse.Result)
             {
-                return BadRequest(
-                    new FailedAuthResponse
-                    {
-                        Result = authenticationResponse.Result,
-                        Errors = authenticationResponse.Errors
-                    }
-                );
-            }
-
-            if (authenticationResponse.Result == AuthenticationResultType.UserNotFound)
-            {
-                return NotFound(
-                    new FailedAuthResponse
-                    {
-                        Result = authenticationResponse.Result,
-                        Errors = authenticationResponse.Errors
-                    }
-                );
-            }
-
-            return Ok(
-                new SuccessfulAuthResponse
+                case AuthenticationResultType.WrongCombination:
                 {
-                    Token = authenticationResponse.Token,
-                    RefreshToken = authenticationResponse.RefreshToken
+                    return BadRequest(
+                        AuthResponseHelper.getFailedAuthResponse(authenticationResponse)
+                    );
                 }
-            );
+                case AuthenticationResultType.UserNotFound:
+                {
+                    return NotFound(
+                        AuthResponseHelper.getFailedAuthResponse(authenticationResponse)
+                    );
+                }
+                default:
+                {
+                    return Ok(
+                        new SuccessfulAuthResponse
+                        {
+                            Token = authenticationResponse.Token,
+                            RefreshToken = authenticationResponse.RefreshToken,
+                        }
+                    );
+                }
+            }
         }
     }
 }
