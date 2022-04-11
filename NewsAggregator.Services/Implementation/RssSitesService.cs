@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
@@ -7,7 +6,6 @@ using NewsAggregator.Data.Models;
 using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.HelperModels;
-using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
 using System;
 using System.Collections.Generic;
@@ -15,8 +13,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace NewsAggregator.Services.Implementation
@@ -32,60 +28,84 @@ namespace NewsAggregator.Services.Implementation
             _logger = logger;
         }
 
-        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(PaginationFilter paginationFilter, DateTime startDate, DateTime endDate, string userId = null, string sitename = null)
+        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(
+            PaginationFilter paginationFilter,
+            DateTime startDate,
+            DateTime endDate,
+            string userId = null,
+            string sitename = null
+        )
         {
             if (string.IsNullOrEmpty(sitename))
             {
                 var allPosts = _context.InformationSitesPosts
-                                .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
-                                .OrderByDescending(x => x.DateTime)
-                                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                                .Take(paginationFilter.PageSize);
+                    .Where(
+                        z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date
+                    )
+                    .OrderByDescending(x => x.DateTime)
+                    .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                    .Take(paginationFilter.PageSize);
 
-                var allPostsCount = _context.InformationSitesPosts
-                                 .Count();
+                var allPostsCount = _context.InformationSitesPosts.Count();
 
-                var allPostsDto = allPosts.Select(x => new RssPostDTO
-                {
-                    DateTime = x.DateTime,
-                    Description = x.Description,
-                    Id = x.Id,
-                    SiteName = x.SiteName,
-                    Title = x.Title,
-                    URL = x.URL
-                });
+                var allPostsDto = allPosts.Select(
+                    x =>
+                        new RssPostDTO
+                        {
+                            DateTime = x.DateTime,
+                            Description = x.Description,
+                            Id = x.Id,
+                            SiteName = x.SiteName,
+                            Title = x.Title,
+                            URL = x.URL
+                        }
+                );
 
-                return new PagedResponse<IEnumerable<RssPostDTO>>
-                    (allPostsDto, paginationFilter.PageNumber, paginationFilter.PageSize, allPostsCount);
+                return new PagedResponse<IEnumerable<RssPostDTO>>(
+                    allPostsDto,
+                    paginationFilter.PageNumber,
+                    paginationFilter.PageSize,
+                    allPostsCount
+                );
             }
 
             var posts = _context.InformationSitesPosts
-                                .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                                .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
-                                .OrderByDescending(x => x.DateTime)
-                                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                                .Take(paginationFilter.PageSize);
-
+                .Where(x => x.SiteName.ToLower() == sitename.ToLower())
+                .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
+                .OrderByDescending(x => x.DateTime)
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                .Take(paginationFilter.PageSize);
 
             var postsCount = _context.InformationSitesPosts
-                                    .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                                    .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
-                                    .Count();
+                .Where(x => x.SiteName.ToLower() == sitename.ToLower())
+                .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
+                .Count();
 
-            var postsDto = posts.Select(x => new RssPostDTO
-            {
-                DateTime = x.DateTime,
-                Description = x.Description,
-                Id = x.Id,
-                SiteName = x.SiteName,
-                Title = x.Title,
-                URL = x.URL,
-                IsSavedForLater = !string.IsNullOrEmpty(userId) ? _context.ApplicationUserSettings.Include(a => a.SavedPosts)
-                                            .FirstOrDefault(c => c.UserId == userId)
-                                            .SavedPosts.Any(z => z.Id == x.Id) : false,
-            });
+            var postsDto = posts.Select(
+                x =>
+                    new RssPostDTO
+                    {
+                        DateTime = x.DateTime,
+                        Description = x.Description,
+                        Id = x.Id,
+                        SiteName = x.SiteName,
+                        Title = x.Title,
+                        URL = x.URL,
+                        IsSavedForLater = !string.IsNullOrEmpty(userId)
+                            ? _context.ApplicationUserSettings
+                              .Include(a => a.SavedPosts)
+                              .FirstOrDefault(c => c.UserId == userId)
+                              .SavedPosts.Any(z => z.Id == x.Id)
+                            : false,
+                    }
+            );
 
-            return new PagedResponse<IEnumerable<RssPostDTO>>(postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+            return new PagedResponse<IEnumerable<RssPostDTO>>(
+                postsDto,
+                paginationFilter.PageNumber,
+                paginationFilter.PageSize,
+                postsCount
+            );
         }
 
         public void FetchDataFromRssFeed(string siteName, string URL)
@@ -115,7 +135,6 @@ namespace NewsAggregator.Services.Implementation
                 }
             }
 
-
             if (_context.SaveChanges() > 0)
             {
                 _logger.LogInformation($"found new posts on {siteName}");
@@ -124,7 +143,6 @@ namespace NewsAggregator.Services.Implementation
             {
                 _logger.LogInformation($"no new posts on {siteName}");
             }
-
         }
 
         private List<RssPost> GetRssPostList(SyndicationFeed feed, string siteName)
@@ -136,44 +154,58 @@ namespace NewsAggregator.Services.Implementation
                 switch (siteName)
                 {
                     case "Onet":
-                        {
-                            posts.Add((RssPost)DeleteXmlTagsFromPostDescription(
+                    {
+                        posts.Add(
+                            (RssPost)DeleteXmlTagsFromPostDescription(
                                 new RssPost
                                 {
                                     Title = item.Title.Text,
                                     SiteName = siteName,
                                     DateTime = item.PublishDate.DateTime,
                                     Description = item.Summary.Text,
-                                    URL = "http://wiadomosci.onet.pl/" + item.Links[0].Uri.AbsolutePath,
+                                    URL =
+                                        "http://wiadomosci.onet.pl/"
+                                        + item.Links[0].Uri.AbsolutePath,
                                 }
-                            ));
-                            break;
-                        }
+                            )
+                        );
+                        break;
+                    }
                     case "WP":
-                        {
-                            posts.Add((RssPost)DeleteXmlTagsFromPostDescription(new RssPost
-                            {
-                                Title = item.Title.Text,
-                                SiteName = siteName,
-                                DateTime = item.PublishDate.DateTime,
-                                Description = item.Summary.Text,
-                                URL = "http://wiadomosci.wp.pl" + item.Links[0].Uri.AbsolutePath,
-                            }));
-                            break;
-                        }
-                    default:
-                        {
-                            posts.Add((RssPost)(DeleteXmlTagsFromPostDescription(
+                    {
+                        posts.Add(
+                            (RssPost)DeleteXmlTagsFromPostDescription(
                                 new RssPost
                                 {
                                     Title = item.Title.Text,
                                     SiteName = siteName,
                                     DateTime = item.PublishDate.DateTime,
                                     Description = item.Summary.Text,
-                                    URL = item.Id
-                                })));
-                            break;
-                        }
+                                    URL =
+                                        "http://wiadomosci.wp.pl" + item.Links[0].Uri.AbsolutePath,
+                                }
+                            )
+                        );
+                        break;
+                    }
+                    default:
+                    {
+                        posts.Add(
+                            (RssPost)(
+                                DeleteXmlTagsFromPostDescription(
+                                    new RssPost
+                                    {
+                                        Title = item.Title.Text,
+                                        SiteName = siteName,
+                                        DateTime = item.PublishDate.DateTime,
+                                        Description = item.Summary.Text,
+                                        URL = item.Id
+                                    }
+                                )
+                            )
+                        );
+                        break;
+                    }
                 }
             }
 
@@ -199,8 +231,8 @@ namespace NewsAggregator.Services.Implementation
         public bool SavePostForLater(string userId, int postId)
         {
             var userSettings = _context.ApplicationUserSettings
-                                        .Include(x => x.SavedPosts)
-                                        .FirstOrDefault(x => x.UserId == userId);
+                .Include(x => x.SavedPosts)
+                .FirstOrDefault(x => x.UserId == userId);
 
             var post = _context.InformationSitesPosts.FirstOrDefault(x => x.Id == postId);
 
@@ -222,7 +254,9 @@ namespace NewsAggregator.Services.Implementation
 
         public bool RemovePostForLater(string userId, int postId)
         {
-            var userSettings = _context.ApplicationUserSettings.Include(x => x.SavedPosts).FirstOrDefault(x => x.UserId == userId);
+            var userSettings = _context.ApplicationUserSettings
+                .Include(x => x.SavedPosts)
+                .FirstOrDefault(x => x.UserId == userId);
 
             var post = _context.InformationSitesPosts.FirstOrDefault(x => x.Id == postId);
 
@@ -239,27 +273,42 @@ namespace NewsAggregator.Services.Implementation
             return false;
         }
 
-        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRangeForLater(PaginationFilter paginationFilter, string userId)
+        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRangeForLater(
+            PaginationFilter paginationFilter,
+            string userId
+        )
         {
-            var userSettings = _context.ApplicationUserSettings.Include(x => x.SavedPosts).FirstOrDefault(x => x.UserId == userId);
+            var userSettings = _context.ApplicationUserSettings
+                .Include(x => x.SavedPosts)
+                .FirstOrDefault(x => x.UserId == userId);
 
-            var posts = userSettings.SavedPosts.OrderByDescending(x => x.DateTime).Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                                                .Take(paginationFilter.PageSize);
+            var posts = userSettings.SavedPosts
+                .OrderByDescending(x => x.DateTime)
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                .Take(paginationFilter.PageSize);
 
             var postsCount = userSettings.SavedPosts.Count();
 
-            var postsDto = posts.Select(x => new RssPostDTO
-            {
-                DateTime = x.DateTime,
-                Description = x.Description,
-                Id = x.Id,
-                IsSavedForLater = true,
-                SiteName = x.SiteName,
-                Title = x.Title,
-                URL = x.URL
-            });
+            var postsDto = posts.Select(
+                x =>
+                    new RssPostDTO
+                    {
+                        DateTime = x.DateTime,
+                        Description = x.Description,
+                        Id = x.Id,
+                        IsSavedForLater = true,
+                        SiteName = x.SiteName,
+                        Title = x.Title,
+                        URL = x.URL
+                    }
+            );
 
-            return new PagedResponse<IEnumerable<RssPostDTO>>(postsDto, paginationFilter.PageNumber, paginationFilter.PageSize, postsCount);
+            return new PagedResponse<IEnumerable<RssPostDTO>>(
+                postsDto,
+                paginationFilter.PageNumber,
+                paginationFilter.PageSize,
+                postsCount
+            );
         }
     }
 }

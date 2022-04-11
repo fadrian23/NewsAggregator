@@ -1,8 +1,5 @@
-﻿using System;
+﻿using NewsAggregator.Services.HelperModels;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using NewsAggregator.Services.HelperModels;
 
 namespace NewsAggregator.WebUI.Models.Responses
 {

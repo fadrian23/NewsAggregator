@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace NewsAggregator.Services.HelperModels
 {
@@ -13,6 +10,7 @@ namespace NewsAggregator.Services.HelperModels
             Success = true;
             Errors = null;
         }
+
         public T Data { get; set; }
         public bool Success { get; set; }
         public IEnumerable<string> Errors { get; set; }

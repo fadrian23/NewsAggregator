@@ -7,7 +7,6 @@ using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Options;
 using NewsAggregator.Services.Services;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -23,7 +22,12 @@ namespace NewsAggregator.Services.Implementation
         private readonly TokenValidationParameters _tokenValidationParameters;
         private readonly ApplicationDbContext _context;
 
-        public IdentityService(UserManager<ApplicationUser> userManager, JwtSettings jwtSettings, TokenValidationParameters tokenValidationParameters, ApplicationDbContext context)
+        public IdentityService(
+            UserManager<ApplicationUser> userManager,
+            JwtSettings jwtSettings,
+            TokenValidationParameters tokenValidationParameters,
+            ApplicationDbContext context
+        )
         {
             _userManager = userManager;
             _jwtSettings = jwtSettings;
@@ -39,10 +43,7 @@ namespace NewsAggregator.Services.Implementation
                 return new AuthenticationResult
                 {
                     Result = AuthenticationResultType.UserNotFound,
-                    Errors = new[]
-                    {
-                        "User does not exist"
-                    }
+                    Errors = new[] { "User does not exist" }
                 };
             }
 
@@ -52,18 +53,13 @@ namespace NewsAggregator.Services.Implementation
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[]
-                    {
-                        "Wrong name/password combination"
-                    },
+                    Errors = new[] { "Wrong name/password combination" },
                     Result = AuthenticationResultType.WrongCombination,
                 };
             }
 
             return await GenerateAuthResult(user);
-
         }
-
 
         public async Task<AuthenticationResult> RegisterAsync(string name, string password)
         {
@@ -78,10 +74,7 @@ namespace NewsAggregator.Services.Implementation
                 };
             }
 
-            var newUser = new ApplicationUser
-            {
-                UserName = name
-            };
+            var newUser = new ApplicationUser { UserName = name };
 
             var createdUser = await _userManager.CreateAsync(newUser, password);
 
@@ -96,32 +89,28 @@ namespace NewsAggregator.Services.Implementation
 
             // add userid to applicationUserSettings table
             // I think it's a good practice to decouple identity generated table from application specific tables.
-            _context.ApplicationUserSettings.Add(new ApplicationUserSettings
-            {
-                User = newUser
-            });
+            _context.ApplicationUserSettings.Add(new ApplicationUserSettings { User = newUser });
             await _context.SaveChangesAsync();
 
             return await GenerateAuthResult(newUser);
         }
+
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
         {
             var principal = GetPrincipalFromExpiredToken(token);
 
             if (principal == null)
             {
-                return new AuthenticationResult
-                {
-                    Errors = new[]
-                    {
-                        "Invalid token"
-                    }
-                };
+                return new AuthenticationResult { Errors = new[] { "Invalid token" } };
             }
 
-            var expiryDateUnixTimeStamp = long.Parse(principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
+            var expiryDateUnixTimeStamp = long.Parse(
+                principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value
+            );
 
-            var expiryDateUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(expiryDateUnixTimeStamp);
+            var expiryDateUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(
+                expiryDateUnixTimeStamp
+            );
 
             // if (expiryDateUtc > DateTime.UtcNow)
             // {
@@ -136,17 +125,15 @@ namespace NewsAggregator.Services.Implementation
 
             var jti = principal.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-            var refreshTokenFromDB = _context.RefreshTokens.SingleOrDefault(x => x.Token == refreshToken);
+            var refreshTokenFromDB = _context.RefreshTokens.SingleOrDefault(
+                x => x.Token == refreshToken
+            );
 
             if (refreshTokenFromDB == null)
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[]
-                    {
-                        "This refresh token doesn't exist"
-                    }
-
+                    Errors = new[] { "This refresh token doesn't exist" }
                 };
             }
 
@@ -154,10 +141,7 @@ namespace NewsAggregator.Services.Implementation
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[]
-                    {
-                        "This refresh token has expired"
-                    }
+                    Errors = new[] { "This refresh token has expired" }
                 };
             }
 
@@ -165,10 +149,7 @@ namespace NewsAggregator.Services.Implementation
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[]
-                    {
-                        "This refresh token has been invalidated"
-                    }
+                    Errors = new[] { "This refresh token has been invalidated" }
                 };
             }
 
@@ -176,10 +157,7 @@ namespace NewsAggregator.Services.Implementation
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[]
-                    {
-                        "This refresh token has been used"
-                    }
+                    Errors = new[] { "This refresh token has been used" }
                 };
             }
 
@@ -187,10 +165,7 @@ namespace NewsAggregator.Services.Implementation
             {
                 return new AuthenticationResult
                 {
-                    Errors = new[]
-                    {
-                        "This refresh token doesnt match this JWT"
-                    }
+                    Errors = new[] { "This refresh token doesnt match this JWT" }
                 };
             }
 
@@ -198,11 +173,11 @@ namespace NewsAggregator.Services.Implementation
             _context.RefreshTokens.Update(refreshTokenFromDB);
             await _context.SaveChangesAsync();
 
-            var user = await _userManager.FindByIdAsync(principal.Claims.Single(x => x.Type == "UserId").Value);
+            var user = await _userManager.FindByIdAsync(
+                principal.Claims.Single(x => x.Type == "UserId").Value
+            );
 
             return await GenerateAuthResult(user);
-
-
         }
 
         private ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
@@ -215,7 +190,11 @@ namespace NewsAggregator.Services.Implementation
                 // if validatelifetime is set to true before validating a token there is a high possibility that
                 // the token we want to refresh is expired (actually who would want to refresh not expired token)
                 _tokenValidationParameters.ValidateLifetime = false;
-                var principal = tokenHandler.ValidateToken(token, _tokenValidationParameters, out SecurityToken validatedToken);
+                var principal = tokenHandler.ValidateToken(
+                    token,
+                    _tokenValidationParameters,
+                    out SecurityToken validatedToken
+                );
                 _tokenValidationParameters.ValidateLifetime = true;
                 if (!IsValidAlgorithm(validatedToken))
                 {
@@ -235,7 +214,12 @@ namespace NewsAggregator.Services.Implementation
         {
             if (validateToken is JwtSecurityToken jwtSecurityToken)
             {
-                if (jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                if (
+                    jwtSecurityToken.Header.Alg.Equals(
+                        SecurityAlgorithms.HmacSha256,
+                        StringComparison.InvariantCultureIgnoreCase
+                    )
+                )
                 {
                     return true;
                 }
@@ -243,22 +227,25 @@ namespace NewsAggregator.Services.Implementation
             return false;
         }
 
-
         private async Task<AuthenticationResult> GenerateAuthResult(ApplicationUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[]
-                {
-                    new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                    new Claim("UserId", user.Id)
-                }),
-
+                Subject = new ClaimsIdentity(
+                    new[]
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                        new Claim("UserId", user.Id)
+                    }
+                ),
                 Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256)
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256
+                )
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -275,7 +262,6 @@ namespace NewsAggregator.Services.Implementation
             await _context.RefreshTokens.AddAsync(refreshToken);
             await _context.SaveChangesAsync();
 
-
             return new AuthenticationResult
             {
                 Result = AuthenticationResultType.LoginSuccess,
@@ -284,6 +270,5 @@ namespace NewsAggregator.Services.Implementation
                 RefreshToken = refreshToken.Token
             };
         }
-
     }
 }

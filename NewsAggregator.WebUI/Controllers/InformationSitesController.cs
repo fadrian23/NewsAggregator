@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NewsAggregator.Data.Models;
-using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Extensions;
 using NewsAggregator.Services.Filters;
-using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace NewsAggregator.WebUI.Controllers
 {
@@ -29,11 +23,22 @@ namespace NewsAggregator.WebUI.Controllers
         [HttpGet]
         [AllowAnonymous]
         [Route("getpostsbydaterange")]
-        public IActionResult GetPostsByDateRange([FromQuery] string sitename, [FromQuery] PaginationFilter paginationFilter, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public IActionResult GetPostsByDateRange(
+            [FromQuery] string sitename,
+            [FromQuery] PaginationFilter paginationFilter,
+            [FromQuery] DateTime startDate,
+            [FromQuery] DateTime endDate
+        )
         {
             try
             {
-                var posts = _rssSiteService.GetPostsByDateRange(paginationFilter, startDate, endDate, null, sitename);
+                var posts = _rssSiteService.GetPostsByDateRange(
+                    paginationFilter,
+                    startDate,
+                    endDate,
+                    null,
+                    sitename
+                );
                 return Ok(posts);
             }
             catch (NotImplementedException ex)
@@ -41,14 +46,26 @@ namespace NewsAggregator.WebUI.Controllers
                 return BadRequest("Wrong sitename");
             }
         }
+
         [HttpGet]
         [Route("getpostsbydaterangeauth")]
-        public IActionResult GetPostsByDateRangeAuth([FromQuery] string sitename, [FromQuery] PaginationFilter paginationFilter, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        public IActionResult GetPostsByDateRangeAuth(
+            [FromQuery] string sitename,
+            [FromQuery] PaginationFilter paginationFilter,
+            [FromQuery] DateTime startDate,
+            [FromQuery] DateTime endDate
+        )
         {
             var userId = User.GetUserId();
             try
             {
-                var posts = _rssSiteService.GetPostsByDateRange(paginationFilter, startDate, endDate, userId, sitename);
+                var posts = _rssSiteService.GetPostsByDateRange(
+                    paginationFilter,
+                    startDate,
+                    endDate,
+                    userId,
+                    sitename
+                );
                 return Ok(posts);
             }
             catch (NotImplementedException ex)

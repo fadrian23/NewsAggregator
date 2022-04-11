@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NewsAggregator.Data.Models
 {
@@ -15,6 +12,5 @@ namespace NewsAggregator.Data.Models
         public string URL { get; set; }
         public DateTime DateTime { get; set; }
         public IEnumerable<ApplicationUserSettings> ApplicationUserSettings { get; set; }
-
     }
 }

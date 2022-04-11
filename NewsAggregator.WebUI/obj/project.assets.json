@@ -6399,11 +6399,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj",
+      "projectUniqueName": "C:\\Users\\Adrian\\Desktop\\news_aggregator\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj",
       "projectName": "NewsAggregator.WebUI",
-      "projectPath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj",
+      "projectPath": "C:\\Users\\Adrian\\Desktop\\news_aggregator\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj",
       "packagesPath": "C:\\Users\\Adrian\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.WebUI\\obj\\",
+      "outputPath": "C:\\Users\\Adrian\\Desktop\\news_aggregator\\NewsAggregator\\NewsAggregator.WebUI\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Adrian\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -6420,11 +6420,11 @@
         "net5.0": {
           "targetAlias": "net5.0",
           "projectReferences": {
-            "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj": {
-              "projectPath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj"
+            "C:\\Users\\Adrian\\Desktop\\news_aggregator\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj": {
+              "projectPath": "C:\\Users\\Adrian\\Desktop\\news_aggregator\\NewsAggregator\\NewsAggregator.Data\\NewsAggregator.Data.csproj"
             },
-            "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj": {
-              "projectPath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj"
+            "C:\\Users\\Adrian\\Desktop\\news_aggregator\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj": {
+              "projectPath": "C:\\Users\\Adrian\\Desktop\\news_aggregator\\NewsAggregator\\NewsAggregator.Services\\NewsAggregator.Services.csproj"
             }
           }
         }
@@ -6484,7 +6484,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.404\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

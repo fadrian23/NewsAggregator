@@ -3,10 +3,7 @@ using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.Models.Identity;
 using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Services;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace NewsAggregator.Services.Implementation
@@ -29,10 +26,7 @@ namespace NewsAggregator.Services.Implementation
             var result = await _userManager.SetUserNameAsync(user, newUsername);
             if (result.Succeeded)
             {
-                return new UserServiceResult
-                {
-                    Success = true
-                };
+                return new UserServiceResult { Success = true };
             }
 
             return new UserServiceResult
@@ -42,17 +36,17 @@ namespace NewsAggregator.Services.Implementation
             };
         }
 
-        public async Task<UserServiceResult> ChangePasswordAsync(string oldPassword, string newPassword, string userId)
+        public async Task<UserServiceResult> ChangePasswordAsync(
+            string oldPassword,
+            string newPassword,
+            string userId
+        )
         {
-
             var user = await GetUserAsync(userId);
             var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
             if (result.Succeeded)
             {
-                return new UserServiceResult
-                {
-                    Success = true,
-                };
+                return new UserServiceResult { Success = true, };
             }
             return new UserServiceResult
             {
@@ -61,6 +55,7 @@ namespace NewsAggregator.Services.Implementation
             };
         }
 
-        private async Task<ApplicationUser> GetUserAsync(string userId) => await _userManager.FindByIdAsync(userId);
+        private async Task<ApplicationUser> GetUserAsync(string userId) =>
+            await _userManager.FindByIdAsync(userId);
     }
 }

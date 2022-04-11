@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace NewsAggregator.Services.Filters
+﻿namespace NewsAggregator.Services.Filters
 {
     public class PaginationFilter
     {
@@ -11,19 +6,13 @@ namespace NewsAggregator.Services.Filters
         public int PageSize
         {
             get => _pageSize;
-            set
-            {
-                _pageSize = (value > 20) ? 20 : value;
-            }
+            set { _pageSize = (value > 20) ? 20 : value; }
         }
         private int _pageNumber = 1;
         public int PageNumber
         {
             get => _pageNumber;
-            set
-            {
-                _pageNumber = (value >= 1) ? value : 1;
-            }
+            set { _pageNumber = (value >= 1) ? value : 1; }
         }
 
         public PaginationFilter()

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "YreokR8JAPHy4VixwxCOp4RnUOJXN74vGj1XqMIdkNYc0+nJgPo+mA1YNXD9nVjjuVrqCwo9KwOhpfr67pORyA==",
+  "dgSpecHash": "e9076wtHySFDqrcorQ+27NPAF0MJCfTan1BWEP6hTwgyIEMKkYWbMtqPb45glzqYLKP5AEPJKUz3yGBT96d+oA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Adrian\\Desktop\\inzynierka\\backend\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj",
+  "projectFilePath": "C:\\Users\\Adrian\\Desktop\\news_aggregator\\NewsAggregator\\NewsAggregator.WebUI\\NewsAggregator.WebUI.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Adrian\\.nuget\\packages\\hangfire.aspnetcore\\1.7.22\\hangfire.aspnetcore.1.7.22.nupkg.sha512",
     "C:\\Users\\Adrian\\.nuget\\packages\\hangfire.core\\1.7.22\\hangfire.core.1.7.22.nupkg.sha512",

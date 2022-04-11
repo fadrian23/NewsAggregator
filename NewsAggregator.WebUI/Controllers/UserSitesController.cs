@@ -7,11 +7,8 @@ using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
 using NewsAggregator.WebUI.Models.Requests;
 using NewsAggregator.WebUI.Models.Responses;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace NewsAggregator.WebUI.Controllers
 {
@@ -27,14 +24,22 @@ namespace NewsAggregator.WebUI.Controllers
             _sitesService = sitesService;
         }
 
-
         [HttpGet]
         [Route("getpostsbydaterange")]
-        public IActionResult GetPostsByDateFromSubscribedSites([FromQuery] PaginationFilter paginationFilter, DateTime startDate, DateTime endDate)
+        public IActionResult GetPostsByDateFromSubscribedSites(
+            [FromQuery] PaginationFilter paginationFilter,
+            DateTime startDate,
+            DateTime endDate
+        )
         {
             string userId = User.GetUserId();
 
-            var posts = _sitesService.GetPostsFromUserSites(userId, paginationFilter, startDate, endDate);
+            var posts = _sitesService.GetPostsFromUserSites(
+                userId,
+                paginationFilter,
+                startDate,
+                endDate
+            );
 
             if (posts == null)
             {
@@ -63,7 +68,6 @@ namespace NewsAggregator.WebUI.Controllers
                 Success = result.Success
             };
 
-
             return response.Success ? Ok() : BadRequest(response);
         }
 
@@ -87,6 +91,4 @@ namespace NewsAggregator.WebUI.Controllers
             return Ok(availableSites);
         }
     }
-
-
 }

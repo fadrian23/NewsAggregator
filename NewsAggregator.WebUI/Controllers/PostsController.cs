@@ -1,10 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NewsAggregator.Services.Extensions;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.Services;
-using NewsAggregator.Services.Extensions;
-using System;
 
 namespace NewsAggregator.WebUI.Controllers
 {
@@ -54,6 +53,5 @@ namespace NewsAggregator.WebUI.Controllers
 
             return Ok(result);
         }
-
     }
 }

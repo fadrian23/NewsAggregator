@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace NewsAggregator.Services.DTOs
+﻿namespace NewsAggregator.Services.DTOs
 {
     public class RedditPostDTO : ISocialModelDTO
     {
@@ -13,6 +8,5 @@ namespace NewsAggregator.Services.DTOs
         public string URL { get; set; }
         public string Subreddit { get; set; }
         public int Score { get; set; }
-
     }
 }

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using Hangfire;
+﻿using Hangfire;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
@@ -30,9 +25,5 @@ namespace NewsAggregator.Services.Implementation
                 _rssSitesService.FetchDataFromRssFeed(site.Key, site.Value);
             }
         }
-
-
-
-
     }
 }

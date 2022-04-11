@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace NewsAggregator.Services.HelperModels
 {
@@ -13,7 +10,8 @@ namespace NewsAggregator.Services.HelperModels
         public IEnumerable<string> Errors { get; set; }
     }
 
-    public enum AuthenticationResultType {
+    public enum AuthenticationResultType
+    {
         WrongCombination = 0,
         UserNotFound = 1,
         LoginSuccess = 2,
