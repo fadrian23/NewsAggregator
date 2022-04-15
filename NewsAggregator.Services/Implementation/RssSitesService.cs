@@ -36,19 +36,24 @@ namespace NewsAggregator.Services.Implementation
             string sitename = null
         )
         {
-            if (string.IsNullOrEmpty(sitename))
+            var posts = _context.InformationSitesPosts.Where(
+                x => x.DateTime >= startDate && x.DateTime <= endDate
+            );
+
+            if (!string.IsNullOrEmpty(sitename))
             {
-                var allPosts = _context.InformationSitesPosts
-                    .Where(
-                        z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date
-                    )
-                    .OrderByDescending(x => x.DateTime)
-                    .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                    .Take(paginationFilter.PageSize);
+                posts = posts.Where(x => x.SiteName.ToLower() == sitename.ToLower());
+            }
 
-                var allPostsCount = _context.InformationSitesPosts.Count();
+            var postsCount = posts.Count();
 
-                var allPostsDto = allPosts.Select(
+            posts = posts
+                .OrderByDescending(x => x.DateTime)
+                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+                .Take(paginationFilter.PageSize);
+
+            var postDTOs = posts
+                .Select(
                     x =>
                         new RssPostDTO
                         {
@@ -57,46 +62,13 @@ namespace NewsAggregator.Services.Implementation
                             Id = x.Id,
                             SiteName = x.SiteName,
                             Title = x.Title,
-                            URL = x.URL
+                            URL = x.URL,
                         }
-                );
-
-                return new PagedResponse<IEnumerable<RssPostDTO>>(
-                    allPostsDto,
-                    paginationFilter.PageNumber,
-                    paginationFilter.PageSize,
-                    allPostsCount
-                );
-            }
-
-            var posts = _context.InformationSitesPosts
-                .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
-                .OrderByDescending(x => x.DateTime)
-                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                .Take(paginationFilter.PageSize);
-
-            var postsCount = _context.InformationSitesPosts
-                .Where(x => x.SiteName.ToLower() == sitename.ToLower())
-                .Where(z => z.DateTime.Date >= startDate.Date && z.DateTime.Date <= endDate.Date)
-                .Count();
-
-            var postsDto = posts.Select(
-                x =>
-                    new RssPostDTO
-                    {
-                        DateTime = x.DateTime,
-                        Description = x.Description,
-                        Id = x.Id,
-                        SiteName = x.SiteName,
-                        Title = x.Title,
-                        URL = x.URL,
-                        IsSavedForLater = IsArticleSaved(userId, x.Id),
-                    }
-            );
+                )
+                .ToList();
 
             return new PagedResponse<IEnumerable<RssPostDTO>>(
-                postsDto,
+                postDTOs,
                 paginationFilter.PageNumber,
                 paginationFilter.PageSize,
                 postsCount
