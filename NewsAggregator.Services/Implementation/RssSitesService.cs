@@ -91,12 +91,7 @@ namespace NewsAggregator.Services.Implementation
                         SiteName = x.SiteName,
                         Title = x.Title,
                         URL = x.URL,
-                        IsSavedForLater = !string.IsNullOrEmpty(userId)
-                            ? _context.ApplicationUserSettings
-                              .Include(a => a.SavedPosts)
-                              .FirstOrDefault(c => c.UserId == userId)
-                              .SavedPosts.Any(z => z.Id == x.Id)
-                            : false,
+                        IsSavedForLater = IsArticleSaved(userId, x.Id),
                     }
             );
 
@@ -309,6 +304,19 @@ namespace NewsAggregator.Services.Implementation
                 paginationFilter.PageSize,
                 postsCount
             );
+        }
+
+        private bool IsArticleSaved(string userId, int postId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return false;
+            }
+
+            return _context.ApplicationUserSettings
+                .Include(x => x.SavedPosts)
+                .FirstOrDefault(x => x.UserId == userId)
+                .SavedPosts.Any(x => x.Id == postId);
         }
     }
 }
