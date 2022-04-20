@@ -34,35 +34,51 @@ namespace NewsAggregator.WebUI
         {
             services.AddServices();
 
-            services.AddDbContext<ApplicationDbContext>(options => options
-            .UseSqlServer(Configuration.GetConnectionString("NewsAggregatorConnection"),
-            x => x.MigrationsAssembly("NewsAggregator.Data")));
+            services.AddHttpClient(
+                "RssFeed",
+                x => x.DefaultRequestHeaders.Add("User-Agent", "github.com/risenn23")
+            );
 
+            services.AddDbContext<ApplicationDbContext>(
+                options =>
+                    options.UseSqlServer(
+                        Configuration.GetConnectionString("NewsAggregatorConnection"),
+                        x => x.MigrationsAssembly("NewsAggregator.Data")
+                    )
+            );
 
-            services.AddHangfire(configuration => configuration
-                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseRecommendedSerializerSettings()
-                .UseSqlServerStorage(Configuration.GetConnectionString("NewsAggregatorConnection"), new SqlServerStorageOptions
-                {
-                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                    QueuePollInterval = TimeSpan.Zero,
-                    UseRecommendedIsolationLevel = true,
-                    DisableGlobalLocks = true
-                }));
+            services.AddHangfire(
+                configuration =>
+                    configuration
+                        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                        .UseSimpleAssemblyNameTypeSerializer()
+                        .UseRecommendedSerializerSettings()
+                        .UseSqlServerStorage(
+                            Configuration.GetConnectionString("NewsAggregatorConnection"),
+                            new SqlServerStorageOptions
+                            {
+                                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                                QueuePollInterval = TimeSpan.Zero,
+                                UseRecommendedIsolationLevel = true,
+                                DisableGlobalLocks = true
+                            }
+                        )
+            );
 
             services.AddHangfireServer();
 
-            services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
-            {
-                options.Password.RequireNonAlphanumeric = false;
-            })
+            services
+                .AddIdentity<ApplicationUser, ApplicationRole>(
+                    options =>
+                    {
+                        options.Password.RequireNonAlphanumeric = false;
+                    }
+                )
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
-
+            services.AddControllers().AddNewtonsoftJson();
 
             var jwtSettings = new JwtSettings();
             Configuration.Bind(nameof(jwtSettings), jwtSettings);
@@ -73,7 +89,9 @@ namespace NewsAggregator.WebUI
                 ValidateIssuer = false,
                 ValidateAudience = false,
                 ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtSettings.Secret)
+                ),
                 RequireExpirationTime = false,
                 ValidateLifetime = true,
                 // todo in prod set that to default, timespan.zero only for testing purposes
@@ -82,62 +100,83 @@ namespace NewsAggregator.WebUI
 
             services.AddSingleton(tokenValidationParameters);
 
-            services.AddAuthentication(option =>
-            {
-                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-                .AddJwtBearer(options =>
-                {
-                    options.SaveToken = true;
-                    options.TokenValidationParameters = tokenValidationParameters;
-                }
+            services
+                .AddAuthentication(
+                    option =>
+                    {
+                        option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                        option.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                        option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                    }
+                )
+                .AddJwtBearer(
+                    options =>
+                    {
+                        options.SaveToken = true;
+                        options.TokenValidationParameters = tokenValidationParameters;
+                    }
                 );
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NewsAggregator.WebUI", Version = "v1" });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            services.AddSwaggerGen(
+                c =>
                 {
-                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
+                    c.SwaggerDoc(
+                        "v1",
+                        new OpenApiInfo { Title = "NewsAggregator.WebUI", Version = "v1" }
+                    );
+                    c.AddSecurityDefinition(
+                        "Bearer",
+                        new OpenApiSecurityScheme
+                        {
+                            Description =
+                                @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
                       Enter 'Bearer' [space] and then your token in the text input below.
                       \r\n\r\nExample: 'Bearer 12345abcdef'",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
-                });
+                            Name = "Authorization",
+                            In = ParameterLocation.Header,
+                            Type = SecuritySchemeType.ApiKey,
+                            Scheme = "Bearer"
+                        }
+                    );
 
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-      {
-        {
-          new OpenApiSecurityScheme
-          {
-            Reference = new OpenApiReference
-              {
-                Type = ReferenceType.SecurityScheme,
-                Id = "Bearer"
-              },
-              Scheme = "oauth2",
-              Name = "Bearer",
-              In = ParameterLocation.Header,
-
-            },
-            new List<string>()
-          }
-        });
-            });
+                    c.AddSecurityRequirement(
+                        new OpenApiSecurityRequirement()
+                        {
+                            {
+                                new OpenApiSecurityScheme
+                                {
+                                    Reference = new OpenApiReference
+                                    {
+                                        Type = ReferenceType.SecurityScheme,
+                                        Id = "Bearer"
+                                    },
+                                    Scheme = "oauth2",
+                                    Name = "Bearer",
+                                    In = ParameterLocation.Header,
+                                },
+                                new List<string>()
+                            }
+                        }
+                    );
+                }
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager, IServiceProvider serviceProvider)
+        public void Configure(
+            IApplicationBuilder app,
+            IWebHostEnvironment env,
+            IRecurringJobManager recurringJobManager,
+            IServiceProvider serviceProvider
+        )
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NewsAggregator.WebUI v1"));
+                app.UseSwaggerUI(
+                    c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "NewsAggregator.WebUI v1")
+                );
             }
 
             app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
@@ -146,17 +185,19 @@ namespace NewsAggregator.WebUI
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-                endpoints.MapHangfireDashboard();
-            });
+            app.UseEndpoints(
+                endpoints =>
+                {
+                    endpoints.MapControllers();
+                    endpoints.MapHangfireDashboard();
+                }
+            );
 
             recurringJobManager.AddOrUpdate(
                 "DataFromRssFeeds",
-                () => serviceProvider.GetService<IScrapeJob>().GetDataFromRssFeeds(),
-                "*/10 * * * * ");
-
+                () => serviceProvider.GetService<IScrapeJob>().ScrapeRSSFeeds(),
+                "*/30 * * * * "
+            );
         }
     }
 }

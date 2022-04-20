@@ -1,28 +1,33 @@
 ﻿using Hangfire;
-using Microsoft.Extensions.Logging;
 using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace NewsAggregator.Services.Implementation
 {
     public class ScrapeJob : IScrapeJob
     {
-        private readonly ILogger<ScrapeJob> _logger;
         private readonly IRssSitesService _rssSitesService;
 
-        public ScrapeJob(ILogger<ScrapeJob> logger, IRssSitesService rssSitesService)
+        public ScrapeJob(IRssSitesService rssSitesService)
         {
-            _logger = logger;
             _rssSitesService = rssSitesService;
         }
 
         [AutomaticRetry(Attempts = 0)]
-        public void GetDataFromRssFeeds()
+        public async Task ScrapeRSSFeeds()
         {
-            _logger.LogInformation("Getting data from rss feeds.");
-            foreach (var site in AvailableRssFeeds.RssFeeds)
+            var tasks = AvailableRssFeeds.RssFeeds.Select(
+                feed => _rssSitesService.GetArticlesFromRssFeed(feed.Key, feed.Value)
+            );
+
+            // Array element is a KeyValuePair where Key is site name and Value is list of articles from this site
+            var allArticles = await Task.WhenAll(tasks);
+
+            foreach (var articles in allArticles)
             {
-                _rssSitesService.FetchDataFromRssFeed(site.Key, site.Value);
+                _rssSitesService.SaveArticles(articles.Value, articles.Key);
             }
         }
     }

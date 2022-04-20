@@ -1,4 +1,5 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
@@ -9,11 +10,15 @@ using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Services;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace NewsAggregator.Services.Implementation
 {
@@ -21,11 +26,17 @@ namespace NewsAggregator.Services.Implementation
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<RssSitesService> _logger;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public RssSitesService(ApplicationDbContext context, ILogger<RssSitesService> logger)
+        public RssSitesService(
+            ApplicationDbContext context,
+            ILogger<RssSitesService> logger,
+            IHttpClientFactory httpClientFactory
+        )
         {
             _context = context;
             _logger = logger;
+            _httpClientFactory = httpClientFactory;
         }
 
         public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(
@@ -75,124 +86,89 @@ namespace NewsAggregator.Services.Implementation
             );
         }
 
-        public void FetchDataFromRssFeed(string siteName, string URL)
+        private IEnumerable<RssPost> GetRssPostsFromRootXElement(
+            XElement rootElement,
+            string siteName
+        )
         {
-            string rss;
-            _logger.LogInformation($"Fetching posts from {siteName}");
+            var versionElement = rootElement.Attribute("version");
 
-            System.Console.WriteLine(URL);
-            using (var wc = new WebClient())
+            var feedVersion = 1;
+
+            if (versionElement is not null)
             {
-                wc.Headers["User-Agent"] = "github.com/risenn23";
-                rss = wc.DownloadString(URL);
-            }
-            XmlReader reader = XmlReader.Create(new StringReader(rss));
-            SyndicationFeed feed = SyndicationFeed.Load(reader);
-            reader.Close();
-
-            List<RssPost> items = new();
-
-            items = GetRssPostList(feed, siteName);
-
-            foreach (var item in items)
-            {
-                if (!_context.InformationSitesPosts.Any(x => x.URL == item.URL))
-                {
-                    _context.InformationSitesPosts.Add(item);
-                }
+                feedVersion = Convert.ToInt32(
+                    Convert.ToDouble(versionElement.Value, CultureInfo.InvariantCulture)
+                );
+                rootElement = rootElement.Element("channel");
             }
 
-            if (_context.SaveChanges() > 0)
+            string description = "description";
+            string date = "pubDate";
+            string item = "item";
+            var ns = rootElement.GetDefaultNamespace();
+
+            IEnumerable<XElement> articles = rootElement.Elements(item);
+
+            if (feedVersion != 2)
             {
-                _logger.LogInformation($"found new posts on {siteName}");
+                description = "summary";
+                date = "published";
+                item = "entry";
+                articles = rootElement.Elements(ns + "entry");
             }
-            else
-            {
-                _logger.LogInformation($"no new posts on {siteName}");
-            }
+
+            return articles.Select(
+                article =>
+                    new RssPost
+                    {
+                        SiteName = siteName,
+                        Description = RemoveHtmlTagsFromText(
+                            article.Element(ns + description).Value
+                        ),
+                        Title = article.Element(ns + "title").Value,
+                        URL = article.Element(ns + "link").Value,
+                        DateTime = DateTime.Parse(article.Element(ns + date).Value)
+                    }
+            );
         }
 
-        private List<RssPost> GetRssPostList(SyndicationFeed feed, string siteName)
+        private string RemoveHtmlTagsFromText(string text)
         {
-            List<RssPost> posts = new List<RssPost>();
-
-            foreach (var item in feed.Items)
-            {
-                switch (siteName)
-                {
-                    case "Onet":
-                    {
-                        posts.Add(
-                            (RssPost)DeleteXmlTagsFromPostDescription(
-                                new RssPost
-                                {
-                                    Title = item.Title.Text,
-                                    SiteName = siteName,
-                                    DateTime = item.PublishDate.DateTime,
-                                    Description = item.Summary.Text,
-                                    URL =
-                                        "http://wiadomosci.onet.pl/"
-                                        + item.Links[0].Uri.AbsolutePath,
-                                }
-                            )
-                        );
-                        break;
-                    }
-                    case "WP":
-                    {
-                        posts.Add(
-                            (RssPost)DeleteXmlTagsFromPostDescription(
-                                new RssPost
-                                {
-                                    Title = item.Title.Text,
-                                    SiteName = siteName,
-                                    DateTime = item.PublishDate.DateTime,
-                                    Description = item.Summary.Text,
-                                    URL =
-                                        "http://wiadomosci.wp.pl" + item.Links[0].Uri.AbsolutePath,
-                                }
-                            )
-                        );
-                        break;
-                    }
-                    default:
-                    {
-                        posts.Add(
-                            (RssPost)(
-                                DeleteXmlTagsFromPostDescription(
-                                    new RssPost
-                                    {
-                                        Title = item.Title.Text,
-                                        SiteName = siteName,
-                                        DateTime = item.PublishDate.DateTime,
-                                        Description = item.Summary.Text,
-                                        URL = item.Id
-                                    }
-                                )
-                            )
-                        );
-                        break;
-                    }
-                }
-            }
-
-            return posts;
+            var doc = new HtmlDocument();
+            doc.LoadHtml(text);
+            return doc.DocumentNode.InnerText;
         }
 
-        private RssPost DeleteXmlTagsFromPostDescription(RssPost post)
+        public async Task<KeyValuePair<string, IEnumerable<RssPost>>> GetArticlesFromRssFeed(
+            string siteName,
+            string URL
+        )
         {
-            HtmlDocument htmlDocument = new HtmlDocument();
-            htmlDocument.LoadHtml(post.Description);
-            var description = htmlDocument.DocumentNode.InnerText.Trim();
+            var httpClient = _httpClientFactory.CreateClient("RssFeed");
+            var stream = await httpClient.GetStreamAsync(URL);
 
-            return new RssPost
+            XElement root = XElement.Load(stream);
+
+            var articles = GetRssPostsFromRootXElement(root, siteName);
+
+            return new KeyValuePair<string, IEnumerable<RssPost>>(siteName, articles);
+        }
+
+        public void SaveArticles(IEnumerable<RssPost> articles, string siteName)
+        {
+            var newArticles = articles.Where(
+                article => !_context.InformationSitesPosts.Any(x => x.URL == article.URL)
+            );
+
+            _context.InformationSitesPosts.AddRange(newArticles);
+
+            var newArticlesCount = _context.SaveChanges();
+
+            if (newArticlesCount > 0)
             {
-                DateTime = post.DateTime,
-                Description = description,
-                SiteName = post.SiteName,
-                Title = post.Title,
-                URL = post.URL
-            };
+                _logger.LogInformation($"Found {newArticlesCount} new posts on {siteName}");
+            }
         }
 
         public bool SavePostForLater(string userId, int postId)

@@ -1,8 +1,11 @@
-﻿using NewsAggregator.Services.DTOs;
+﻿using NewsAggregator.Data.Models;
+using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.HelperModels;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace NewsAggregator.Services.Services
 {
@@ -19,7 +22,11 @@ namespace NewsAggregator.Services.Services
             PaginationFilter paginationFilter,
             string userId
         );
-        void FetchDataFromRssFeed(string siteName, string URL);
+        Task<KeyValuePair<string, IEnumerable<RssPost>>> GetArticlesFromRssFeed(
+            string siteName,
+            string URL
+        );
+        void SaveArticles(IEnumerable<RssPost> articles, string siteName);
         bool SavePostForLater(string userId, int postId);
         bool RemovePostForLater(string userId, int postId);
     }
