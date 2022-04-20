@@ -14,11 +14,11 @@ namespace NewsAggregator.WebUI.Controllers
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class InformationSitesController : ControllerBase
     {
-        private readonly IRssSitesService _rssSiteService;
+        private readonly IArticlesService _articlesService;
 
-        public InformationSitesController(IRssSitesService rssSiteService)
+        public InformationSitesController(IArticlesService articlesService)
         {
-            _rssSiteService = rssSiteService;
+            _articlesService = articlesService;
         }
 
         [HttpGet]
@@ -34,7 +34,7 @@ namespace NewsAggregator.WebUI.Controllers
 
             try
             {
-                var posts = _rssSiteService.GetPostsByDateRange(
+                var posts = _articlesService.GetPostsByDateRange(
                     paginationFilter,
                     dateRange.Start,
                     dateRange.End,

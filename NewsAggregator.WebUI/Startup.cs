@@ -193,11 +193,11 @@ namespace NewsAggregator.WebUI
                 }
             );
 
-            recurringJobManager.AddOrUpdate(
-                "DataFromRssFeeds",
-                () => serviceProvider.GetService<IScrapeJob>().ScrapeRSSFeeds(),
-                "*/30 * * * * "
-            );
+            //recurringJobManager.AddOrUpdate(
+            //    "DataFromRssFeeds",
+            //    () => serviceProvider.GetService<IScrapeJob>().ScrapeRSSFeeds(),
+            //    "*/30 * * * * "
+            //);
         }
     }
 }

@@ -8,9 +8,9 @@ namespace NewsAggregator.Services.Implementation
 {
     public class ScrapeJob : IScrapeJob
     {
-        private readonly IRssSitesService _rssSitesService;
+        private readonly IRssFeedService _rssSitesService;
 
-        public ScrapeJob(IRssSitesService rssSitesService)
+        public ScrapeJob(IRssFeedService rssSitesService)
         {
             _rssSitesService = rssSitesService;
         }

@@ -13,10 +13,9 @@ namespace NewsAggregator.WebUI
     {
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
-
-
             services.AddScoped<ISitesService, SitesService>();
-            services.AddScoped<IRssSitesService, RssSitesService>();
+            services.AddScoped<IRssFeedService, RssFeedService>();
+            services.AddScoped<IArticlesService, ArticlesService>();
 
             services.AddScoped<IScrapeJob, ScrapeJob>();
             services.AddScoped<IIdentityService, IdentityService>();

@@ -11,11 +11,11 @@ namespace NewsAggregator.WebUI.Controllers
     [Route("api/[controller]")]
     public class PostsController : ControllerBase
     {
-        private readonly IRssSitesService _rssSitesService;
+        private readonly IArticlesService _articlesService;
 
-        public PostsController(IRssSitesService rssSitesService)
+        public PostsController(IArticlesService articlesService)
         {
-            _rssSitesService = rssSitesService;
+            _articlesService = articlesService;
         }
 
         [HttpGet]
@@ -25,7 +25,7 @@ namespace NewsAggregator.WebUI.Controllers
         {
             var userId = User.GetUserId();
 
-            var result = _rssSitesService.SavePostForLater(userId, postId);
+            var result = _articlesService.SavePostForLater(userId, postId);
 
             return result ? Ok(result) : NotFound(result);
         }
@@ -37,7 +37,7 @@ namespace NewsAggregator.WebUI.Controllers
         {
             var userId = User.GetUserId();
 
-            var result = _rssSitesService.RemovePostForLater(userId, postId);
+            var result = _articlesService.RemovePostForLater(userId, postId);
 
             return result ? Ok(result) : BadRequest(result);
         }
@@ -49,7 +49,7 @@ namespace NewsAggregator.WebUI.Controllers
         {
             var userId = User.GetUserId();
 
-            var result = _rssSitesService.GetPostsByDateRangeForLater(paginationFilter, userId);
+            var result = _articlesService.GetPostsByDateRangeForLater(paginationFilter, userId);
 
             return Ok(result);
         }
