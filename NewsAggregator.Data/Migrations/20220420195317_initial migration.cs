@@ -47,32 +47,6 @@ namespace NewsAggregator.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PostCategories",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PostCategories", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SiteNames",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SiteNames", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -221,106 +195,79 @@ namespace NewsAggregator.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "HackerNewsPosts",
+                name: "RssFeeds",
+                columns: table => new
+                {
+                    RssFeedId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    URL = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ParentFeedId = table.Column<int>(type: "int", nullable: true),
+                    ApplicationUserSettingsId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RssFeeds", x => x.RssFeedId);
+                    table.ForeignKey(
+                        name: "FK_RssFeeds_ApplicationUserSettings_ApplicationUserSettingsId",
+                        column: x => x.ApplicationUserSettingsId,
+                        principalTable: "ApplicationUserSettings",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RssFeeds_RssFeeds_ParentFeedId",
+                        column: x => x.ParentFeedId,
+                        principalTable: "RssFeeds",
+                        principalColumn: "RssFeedId",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RssArticles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Author = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     URL = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PostCategoryId = table.Column<int>(type: "int", nullable: true)
+                    RssFeedId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_HackerNewsPosts", x => x.Id);
+                    table.PrimaryKey("PK_RssArticles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_HackerNewsPosts_PostCategories_PostCategoryId",
-                        column: x => x.PostCategoryId,
-                        principalTable: "PostCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Keywords",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PostCategoryId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Keywords", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Keywords_PostCategories_PostCategoryId",
-                        column: x => x.PostCategoryId,
-                        principalTable: "PostCategories",
-                        principalColumn: "Id",
+                        name: "FK_RssArticles_RssFeeds_RssFeedId",
+                        column: x => x.RssFeedId,
+                        principalTable: "RssFeeds",
+                        principalColumn: "RssFeedId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "RedditPosts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    URL = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateTime = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Subreddit = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Author = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Score = table.Column<int>(type: "int", nullable: false),
-                    PostCategoryId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RedditPosts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RedditPosts_PostCategories_PostCategoryId",
-                        column: x => x.PostCategoryId,
-                        principalTable: "PostCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ApplicationUserSettingsSiteName",
+                name: "ApplicationUserSettingsRssArticle",
                 columns: table => new
                 {
                     ApplicationUserSettingsId = table.Column<int>(type: "int", nullable: false),
-                    SiteNamesId = table.Column<int>(type: "int", nullable: false)
+                    SavedArticlesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ApplicationUserSettingsSiteName", x => new { x.ApplicationUserSettingsId, x.SiteNamesId });
+                    table.PrimaryKey("PK_ApplicationUserSettingsRssArticle", x => new { x.ApplicationUserSettingsId, x.SavedArticlesId });
                     table.ForeignKey(
-                        name: "FK_ApplicationUserSettingsSiteName_ApplicationUserSettings_ApplicationUserSettingsId",
+                        name: "FK_ApplicationUserSettingsRssArticle_ApplicationUserSettings_ApplicationUserSettingsId",
                         column: x => x.ApplicationUserSettingsId,
                         principalTable: "ApplicationUserSettings",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ApplicationUserSettingsSiteName_SiteNames_SiteNamesId",
-                        column: x => x.SiteNamesId,
-                        principalTable: "SiteNames",
+                        name: "FK_ApplicationUserSettingsRssArticle_RssArticles_SavedArticlesId",
+                        column: x => x.SavedArticlesId,
+                        principalTable: "RssArticles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.InsertData(
-                table: "SiteNames",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { 1, "Reddit" });
-
-            migrationBuilder.InsertData(
-                table: "SiteNames",
-                columns: new[] { "Id", "Name" },
-                values: new object[] { 2, "HackerNews" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ApplicationUserSettings_UserId",
@@ -328,9 +275,9 @@ namespace NewsAggregator.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ApplicationUserSettingsSiteName_SiteNamesId",
-                table: "ApplicationUserSettingsSiteName",
-                column: "SiteNamesId");
+                name: "IX_ApplicationUserSettingsRssArticle_SavedArticlesId",
+                table: "ApplicationUserSettingsRssArticle",
+                column: "SavedArticlesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -372,30 +319,30 @@ namespace NewsAggregator.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_HackerNewsPosts_PostCategoryId",
-                table: "HackerNewsPosts",
-                column: "PostCategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Keywords_PostCategoryId",
-                table: "Keywords",
-                column: "PostCategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_RedditPosts_PostCategoryId",
-                table: "RedditPosts",
-                column: "PostCategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RssArticles_RssFeedId",
+                table: "RssArticles",
+                column: "RssFeedId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RssFeeds_ApplicationUserSettingsId",
+                table: "RssFeeds",
+                column: "ApplicationUserSettingsId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RssFeeds_ParentFeedId",
+                table: "RssFeeds",
+                column: "ParentFeedId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ApplicationUserSettingsSiteName");
+                name: "ApplicationUserSettingsRssArticle");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
@@ -413,28 +360,19 @@ namespace NewsAggregator.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "HackerNewsPosts");
-
-            migrationBuilder.DropTable(
-                name: "Keywords");
-
-            migrationBuilder.DropTable(
-                name: "RedditPosts");
-
-            migrationBuilder.DropTable(
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
-                name: "ApplicationUserSettings");
-
-            migrationBuilder.DropTable(
-                name: "SiteNames");
+                name: "RssArticles");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "PostCategories");
+                name: "RssFeeds");
+
+            migrationBuilder.DropTable(
+                name: "ApplicationUserSettings");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

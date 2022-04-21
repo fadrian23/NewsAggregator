@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NewsAggregator.Data.DatabaseContext;
+using NewsAggregator.Data.Models;
 using NewsAggregator.Services.Extensions;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.Services;
 using NewsAggregator.WebUI.Models;
 using System;
+using System.Collections.Generic;
 
 namespace NewsAggregator.WebUI.Controllers
 {

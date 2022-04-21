@@ -32,13 +32,13 @@ namespace NewsAggregator.Services.Implementation
             string sitename = null
         )
         {
-            var posts = _context.InformationSitesPosts.Where(
+            var posts = _context.RssArticles.Where(
                 x => x.DateTime >= startDate && x.DateTime <= endDate
             );
 
             if (!string.IsNullOrEmpty(sitename))
             {
-                posts = posts.Where(x => x.SiteName.ToLower() == sitename.ToLower());
+                posts = posts.Where(x => x.RssFeed.Name.ToLower() == sitename.ToLower());
             }
 
             var postsCount = posts.Count();
@@ -56,7 +56,7 @@ namespace NewsAggregator.Services.Implementation
                             DateTime = x.DateTime,
                             Description = x.Description,
                             Id = x.Id,
-                            SiteName = x.SiteName,
+                            SiteName = x.RssFeed.Name,
                             Title = x.Title,
                             URL = x.URL,
                         }
@@ -74,19 +74,19 @@ namespace NewsAggregator.Services.Implementation
         public bool SavePostForLater(string userId, int postId)
         {
             var userSettings = _context.ApplicationUserSettings
-                .Include(x => x.SavedPosts)
+                .Include(x => x.SavedArticles)
                 .FirstOrDefault(x => x.UserId == userId);
 
-            var post = _context.InformationSitesPosts.FirstOrDefault(x => x.Id == postId);
+            var post = _context.RssArticles.FirstOrDefault(x => x.Id == postId);
 
-            var savedPosts = userSettings.SavedPosts.ToList();
+            var savedPosts = userSettings.SavedArticles.ToList();
 
             if (!savedPosts.Contains(post))
             {
                 savedPosts.Add(post);
             }
 
-            userSettings.SavedPosts = savedPosts;
+            userSettings.SavedArticles = savedPosts;
 
             if (_context.SaveChanges() > 0)
             {
@@ -98,16 +98,16 @@ namespace NewsAggregator.Services.Implementation
         public bool RemovePostForLater(string userId, int postId)
         {
             var userSettings = _context.ApplicationUserSettings
-                .Include(x => x.SavedPosts)
+                .Include(x => x.SavedArticles)
                 .FirstOrDefault(x => x.UserId == userId);
 
-            var post = _context.InformationSitesPosts.FirstOrDefault(x => x.Id == postId);
+            var post = _context.RssArticles.FirstOrDefault(x => x.Id == postId);
 
-            var savedPosts = userSettings.SavedPosts.ToList();
+            var savedPosts = userSettings.SavedArticles.ToList();
 
             savedPosts.Remove(post);
 
-            userSettings.SavedPosts = savedPosts;
+            userSettings.SavedArticles = savedPosts;
 
             if (_context.SaveChanges() > 0)
             {
@@ -122,15 +122,15 @@ namespace NewsAggregator.Services.Implementation
         )
         {
             var userSettings = _context.ApplicationUserSettings
-                .Include(x => x.SavedPosts)
+                .Include(x => x.SavedArticles)
                 .FirstOrDefault(x => x.UserId == userId);
 
-            var posts = userSettings.SavedPosts
+            var posts = userSettings.SavedArticles
                 .OrderByDescending(x => x.DateTime)
                 .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
                 .Take(paginationFilter.PageSize);
 
-            var postsCount = userSettings.SavedPosts.Count();
+            var postsCount = userSettings.SavedArticles.Count();
 
             var postsDto = posts.Select(
                 x =>
@@ -140,7 +140,7 @@ namespace NewsAggregator.Services.Implementation
                         Description = x.Description,
                         Id = x.Id,
                         IsSavedForLater = true,
-                        SiteName = x.SiteName,
+                        SiteName = x.RssFeed.Name,
                         Title = x.Title,
                         URL = x.URL
                     }

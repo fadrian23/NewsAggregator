@@ -19,34 +19,34 @@ namespace NewsAggregator.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ApplicationUserSettingsRssPost", b =>
+            modelBuilder.Entity("ApplicationUserSettingsRssArticle", b =>
                 {
                     b.Property<int>("ApplicationUserSettingsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SavedPostsId")
+                    b.Property<int>("SavedArticlesId")
                         .HasColumnType("int");
 
-                    b.HasKey("ApplicationUserSettingsId", "SavedPostsId");
+                    b.HasKey("ApplicationUserSettingsId", "SavedArticlesId");
 
-                    b.HasIndex("SavedPostsId");
+                    b.HasIndex("SavedArticlesId");
 
-                    b.ToTable("ApplicationUserSettingsRssPost");
+                    b.ToTable("ApplicationUserSettingsRssArticle");
                 });
 
-            modelBuilder.Entity("ApplicationUserSettingsSiteName", b =>
+            modelBuilder.Entity("ApplicationUserSettingsRssFeed", b =>
                 {
-                    b.Property<int>("ApplicationUserSettingsId")
+                    b.Property<int>("RssFeedsRssFeedId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SiteNamesId")
+                    b.Property<int>("UserSettingsId")
                         .HasColumnType("int");
 
-                    b.HasKey("ApplicationUserSettingsId", "SiteNamesId");
+                    b.HasKey("RssFeedsRssFeedId", "UserSettingsId");
 
-                    b.HasIndex("SiteNamesId");
+                    b.HasIndex("UserSettingsId");
 
-                    b.ToTable("ApplicationUserSettingsSiteName");
+                    b.ToTable("ApplicationUserSettingsRssFeed");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -293,7 +293,7 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Data.Models.RssPost", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssArticle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -306,8 +306,8 @@ namespace NewsAggregator.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("SiteName")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("RssFeedId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .HasColumnType("nvarchar(max)");
@@ -317,12 +317,14 @@ namespace NewsAggregator.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("InformationSitesPosts");
+                    b.HasIndex("RssFeedId");
+
+                    b.ToTable("RssArticles");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Data.Models.SiteName", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssFeed", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("RssFeedId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -330,164 +332,20 @@ namespace NewsAggregator.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<int?>("ParentFeedId")
+                        .HasColumnType("int");
 
-                    b.ToTable("SiteNames");
+                    b.Property<string>("URL")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "PolsatNews"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "PolsatNews_Polska"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Name = "PolsatNews_Swiat"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Name = "PolsatNews_Wideo"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Name = "PolsatNews_Biznes"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Name = "PolsatNews_Technologie"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Name = "PolsatNews_Moto"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Name = "PolsatNews_Kultura"
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Name = "PolsatNews_Sport"
-                        },
-                        new
-                        {
-                            Id = 10,
-                            Name = "PolsatNews_CzystaPolska"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Name = "Tvn24"
-                        },
-                        new
-                        {
-                            Id = 12,
-                            Name = "Onet"
-                        },
-                        new
-                        {
-                            Id = 13,
-                            Name = "WP"
-                        },
-                        new
-                        {
-                            Id = 14,
-                            Name = "Interia"
-                        },
-                        new
-                        {
-                            Id = 15,
-                            Name = "Interia_Polska"
-                        },
-                        new
-                        {
-                            Id = 16,
-                            Name = "Interia_Wywiady"
-                        },
-                        new
-                        {
-                            Id = 17,
-                            Name = "Interia_Swiat"
-                        },
-                        new
-                        {
-                            Id = 18,
-                            Name = "Interia_Zagranica"
-                        },
-                        new
-                        {
-                            Id = 19,
-                            Name = "Interia_Kultura"
-                        },
-                        new
-                        {
-                            Id = 20,
-                            Name = "Interia_Historia"
-                        },
-                        new
-                        {
-                            Id = 21,
-                            Name = "Interia_Nauka"
-                        },
-                        new
-                        {
-                            Id = 22,
-                            Name = "Interia_Religia"
-                        },
-                        new
-                        {
-                            Id = 23,
-                            Name = "Interia_Ciekawostki"
-                        },
-                        new
-                        {
-                            Id = 24,
-                            Name = "Interia_Autorzy"
-                        },
-                        new
-                        {
-                            Id = 25,
-                            Name = "Interia_Opinie"
-                        },
-                        new
-                        {
-                            Id = 26,
-                            Name = "Interia_Sport"
-                        },
-                        new
-                        {
-                            Id = 27,
-                            Name = "Interia_Kobieta"
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Name = "Interia_Menway"
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Name = "Interia_Gry"
-                        },
-                        new
-                        {
-                            Id = 30,
-                            Name = "Interia_NoweTechnologie"
-                        });
+                    b.HasKey("RssFeedId");
+
+                    b.HasIndex("ParentFeedId");
+
+                    b.ToTable("RssFeeds");
                 });
 
-            modelBuilder.Entity("ApplicationUserSettingsRssPost", b =>
+            modelBuilder.Entity("ApplicationUserSettingsRssArticle", b =>
                 {
                     b.HasOne("NewsAggregator.Data.Models.ApplicationUserSettings", null)
                         .WithMany()
@@ -495,24 +353,24 @@ namespace NewsAggregator.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewsAggregator.Data.Models.RssPost", null)
+                    b.HasOne("NewsAggregator.Data.Models.RssArticle", null)
                         .WithMany()
-                        .HasForeignKey("SavedPostsId")
+                        .HasForeignKey("SavedArticlesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ApplicationUserSettingsSiteName", b =>
+            modelBuilder.Entity("ApplicationUserSettingsRssFeed", b =>
                 {
-                    b.HasOne("NewsAggregator.Data.Models.ApplicationUserSettings", null)
+                    b.HasOne("NewsAggregator.Data.Models.RssFeed", null)
                         .WithMany()
-                        .HasForeignKey("ApplicationUserSettingsId")
+                        .HasForeignKey("RssFeedsRssFeedId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewsAggregator.Data.Models.SiteName", null)
+                    b.HasOne("NewsAggregator.Data.Models.ApplicationUserSettings", null)
                         .WithMany()
-                        .HasForeignKey("SiteNamesId")
+                        .HasForeignKey("UserSettingsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -584,6 +442,33 @@ namespace NewsAggregator.Data.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssArticle", b =>
+                {
+                    b.HasOne("NewsAggregator.Data.Models.RssFeed", "RssFeed")
+                        .WithMany("Articles")
+                        .HasForeignKey("RssFeedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RssFeed");
+                });
+
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssFeed", b =>
+                {
+                    b.HasOne("NewsAggregator.Data.Models.RssFeed", "ParentFeed")
+                        .WithMany("SubFeeds")
+                        .HasForeignKey("ParentFeedId");
+
+                    b.Navigation("ParentFeed");
+                });
+
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssFeed", b =>
+                {
+                    b.Navigation("Articles");
+
+                    b.Navigation("SubFeeds");
                 });
 #pragma warning restore 612, 618
         }

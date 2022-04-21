@@ -8,8 +8,8 @@ namespace NewsAggregator.Data.Models
         public int Id { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public IEnumerable<SiteName> SiteNames { get; set; }
+        public IEnumerable<RssFeed> RssFeeds { get; set; }
 
-        public IEnumerable<RssPost> SavedPosts { get; set; }
+        public IEnumerable<RssArticle> SavedArticles { get; set; }
     }
 }

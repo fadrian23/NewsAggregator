@@ -39,7 +39,7 @@ namespace NewsAggregator.Services.Implementation
             _httpClientFactory = httpClientFactory;
         }
 
-        private IEnumerable<RssPost> GetRssPostsFromRootXElement(
+        private IEnumerable<RssArticle> GetRssArticlesFromRootXElement(
             XElement rootElement,
             string siteName
         )
@@ -71,11 +71,15 @@ namespace NewsAggregator.Services.Implementation
                 articles = rootElement.Elements(ns + "entry");
             }
 
+            var feed = _context.RssFeeds.FirstOrDefault(
+                x => x.Name.ToLower() == siteName.ToLower()
+            );
+
             return articles.Select(
                 article =>
-                    new RssPost
+                    new RssArticle
                     {
-                        SiteName = siteName,
+                        RssFeed = feed,
                         Description = RemoveHtmlTagsFromText(
                             article.Element(ns + description).Value
                         ),
@@ -93,7 +97,7 @@ namespace NewsAggregator.Services.Implementation
             return doc.DocumentNode.InnerText;
         }
 
-        public async Task<KeyValuePair<string, IEnumerable<RssPost>>> GetArticlesFromRssFeed(
+        public async Task<KeyValuePair<string, IEnumerable<RssArticle>>> GetArticlesFromRssFeed(
             string siteName,
             string URL
         )
@@ -103,18 +107,18 @@ namespace NewsAggregator.Services.Implementation
 
             XElement root = XElement.Load(stream);
 
-            var articles = GetRssPostsFromRootXElement(root, siteName);
+            var articles = GetRssArticlesFromRootXElement(root, siteName);
 
-            return new KeyValuePair<string, IEnumerable<RssPost>>(siteName, articles);
+            return new KeyValuePair<string, IEnumerable<RssArticle>>(siteName, articles);
         }
 
-        public void SaveArticles(IEnumerable<RssPost> articles, string siteName)
+        public void SaveArticles(IEnumerable<RssArticle> articles, string siteName)
         {
             var newArticles = articles.Where(
-                article => !_context.InformationSitesPosts.Any(x => x.URL == article.URL)
+                article => !_context.RssArticles.Any(x => x.URL == article.URL)
             );
 
-            _context.InformationSitesPosts.AddRange(newArticles);
+            _context.RssArticles.AddRange(newArticles);
 
             var newArticlesCount = _context.SaveChanges();
 
@@ -132,9 +136,9 @@ namespace NewsAggregator.Services.Implementation
             }
 
             return _context.ApplicationUserSettings
-                .Include(x => x.SavedPosts)
+                .Include(x => x.SavedArticles)
                 .FirstOrDefault(x => x.UserId == userId)
-                .SavedPosts.Any(x => x.Id == postId);
+                .SavedArticles.Any(x => x.Id == postId);
         }
     }
 }

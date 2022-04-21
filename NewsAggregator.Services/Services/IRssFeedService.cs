@@ -11,10 +11,10 @@ namespace NewsAggregator.Services.Services
 {
     public interface IRssFeedService
     {
-        Task<KeyValuePair<string, IEnumerable<RssPost>>> GetArticlesFromRssFeed(
+        Task<KeyValuePair<string, IEnumerable<RssArticle>>> GetArticlesFromRssFeed(
             string siteName,
             string URL
         );
-        void SaveArticles(IEnumerable<RssPost> articles, string siteName);
+        void SaveArticles(IEnumerable<RssArticle> articles, string siteName);
     }
 }

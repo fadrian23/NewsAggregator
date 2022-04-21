@@ -10,7 +10,7 @@ using NewsAggregator.Data.DatabaseContext;
 namespace NewsAggregator.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210423121501_initial migration")]
+    [Migration("20220420195317_initial migration")]
     partial class initialmigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,19 +21,19 @@ namespace NewsAggregator.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ApplicationUserSettingsSiteName", b =>
+            modelBuilder.Entity("ApplicationUserSettingsRssArticle", b =>
                 {
                     b.Property<int>("ApplicationUserSettingsId")
                         .HasColumnType("int");
 
-                    b.Property<int>("SiteNamesId")
+                    b.Property<int>("SavedArticlesId")
                         .HasColumnType("int");
 
-                    b.HasKey("ApplicationUserSettingsId", "SiteNamesId");
+                    b.HasKey("ApplicationUserSettingsId", "SavedArticlesId");
 
-                    b.HasIndex("SiteNamesId");
+                    b.HasIndex("SavedArticlesId");
 
-                    b.ToTable("ApplicationUserSettingsSiteName");
+                    b.ToTable("ApplicationUserSettingsRssArticle");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -184,35 +184,6 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("ApplicationUserSettings");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Data.Models.HackerNewsPost", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("PostCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("URL")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostCategoryId");
-
-                    b.ToTable("HackerNewsPosts");
-                });
-
             modelBuilder.Entity("NewsAggregator.Data.Models.Identity.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
@@ -278,76 +249,6 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Data.Models.Keyword", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PostCategoryId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostCategoryId");
-
-                    b.ToTable("Keywords");
-                });
-
-            modelBuilder.Entity("NewsAggregator.Data.Models.PostCategory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PostCategories");
-                });
-
-            modelBuilder.Entity("NewsAggregator.Data.Models.RedditPost", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Author")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("DateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("PostCategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Score")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Subreddit")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("URL")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PostCategoryId");
-
-                    b.ToTable("RedditPosts");
-                });
-
             modelBuilder.Entity("NewsAggregator.Data.Models.RefreshToken", b =>
                 {
                     b.Property<string>("Token")
@@ -379,34 +280,64 @@ namespace NewsAggregator.Data.Migrations
                     b.ToTable("RefreshTokens");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Data.Models.SiteName", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssArticle", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
+                    b.Property<DateTime>("DateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RssFeedId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("URL")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("SiteNames");
+                    b.HasIndex("RssFeedId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Name = "Reddit"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Name = "HackerNews"
-                        });
+                    b.ToTable("RssArticles");
                 });
 
-            modelBuilder.Entity("ApplicationUserSettingsSiteName", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssFeed", b =>
+                {
+                    b.Property<int>("RssFeedId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ApplicationUserSettingsId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("ParentFeedId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("URL")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("RssFeedId");
+
+                    b.HasIndex("ApplicationUserSettingsId");
+
+                    b.HasIndex("ParentFeedId");
+
+                    b.ToTable("RssFeeds");
+                });
+
+            modelBuilder.Entity("ApplicationUserSettingsRssArticle", b =>
                 {
                     b.HasOne("NewsAggregator.Data.Models.ApplicationUserSettings", null)
                         .WithMany()
@@ -414,9 +345,9 @@ namespace NewsAggregator.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("NewsAggregator.Data.Models.SiteName", null)
+                    b.HasOne("NewsAggregator.Data.Models.RssArticle", null)
                         .WithMany()
-                        .HasForeignKey("SiteNamesId")
+                        .HasForeignKey("SavedArticlesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -481,35 +412,6 @@ namespace NewsAggregator.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Data.Models.HackerNewsPost", b =>
-                {
-                    b.HasOne("NewsAggregator.Data.Models.PostCategory", "PostCategory")
-                        .WithMany()
-                        .HasForeignKey("PostCategoryId");
-
-                    b.Navigation("PostCategory");
-                });
-
-            modelBuilder.Entity("NewsAggregator.Data.Models.Keyword", b =>
-                {
-                    b.HasOne("NewsAggregator.Data.Models.PostCategory", "PostCategory")
-                        .WithMany("Keywords")
-                        .HasForeignKey("PostCategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("PostCategory");
-                });
-
-            modelBuilder.Entity("NewsAggregator.Data.Models.RedditPost", b =>
-                {
-                    b.HasOne("NewsAggregator.Data.Models.PostCategory", "PostCategory")
-                        .WithMany()
-                        .HasForeignKey("PostCategoryId");
-
-                    b.Navigation("PostCategory");
-                });
-
             modelBuilder.Entity("NewsAggregator.Data.Models.RefreshToken", b =>
                 {
                     b.HasOne("NewsAggregator.Data.Models.Identity.ApplicationUser", "User")
@@ -519,9 +421,40 @@ namespace NewsAggregator.Data.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("NewsAggregator.Data.Models.PostCategory", b =>
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssArticle", b =>
                 {
-                    b.Navigation("Keywords");
+                    b.HasOne("NewsAggregator.Data.Models.RssFeed", "RssFeed")
+                        .WithMany("Articles")
+                        .HasForeignKey("RssFeedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RssFeed");
+                });
+
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssFeed", b =>
+                {
+                    b.HasOne("NewsAggregator.Data.Models.ApplicationUserSettings", null)
+                        .WithMany("RssFeeds")
+                        .HasForeignKey("ApplicationUserSettingsId");
+
+                    b.HasOne("NewsAggregator.Data.Models.RssFeed", "ParentFeed")
+                        .WithMany("SubFeeds")
+                        .HasForeignKey("ParentFeedId");
+
+                    b.Navigation("ParentFeed");
+                });
+
+            modelBuilder.Entity("NewsAggregator.Data.Models.ApplicationUserSettings", b =>
+                {
+                    b.Navigation("RssFeeds");
+                });
+
+            modelBuilder.Entity("NewsAggregator.Data.Models.RssFeed", b =>
+                {
+                    b.Navigation("Articles");
+
+                    b.Navigation("SubFeeds");
                 });
 #pragma warning restore 612, 618
         }

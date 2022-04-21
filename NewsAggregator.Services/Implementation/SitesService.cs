@@ -27,98 +27,102 @@ namespace NewsAggregator.Services.Implementation
             DateTime endDate
         )
         {
-            var userSites = _context.ApplicationUserSettings
-                .Include(x => x.SiteNames)
-                .FirstOrDefault(z => z.UserId == userId)
-                .SiteNames.Select(xz => xz.Name.ToLower())
-                .ToList();
+            // todo
 
-            var RssPostDTOs = _context.InformationSitesPosts
-                .Where(x => userSites.Contains(x.SiteName.ToLower()))
-                .Where(x => x.DateTime.Date >= startDate.Date && x.DateTime.Date <= endDate.Date)
-                .OrderByDescending(x => x.DateTime)
-                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                .Take(paginationFilter.PageSize);
+            //var userSites = _context.ApplicationUserSettings
+            //    .Include(x => x.SiteNames)
+            //    .FirstOrDefault(z => z.UserId == userId)
+            //    .SiteNames.Select(xz => xz.Name.ToLower())
+            //    .ToList();
 
-            var postsCount = _context.InformationSitesPosts
-                .Where(x => userSites.Contains(x.SiteName.ToLower()))
-                .Where(x => x.DateTime.Date >= startDate.Date && x.DateTime.Date <= endDate.Date)
-                .Count();
+            //var RssPostDTOs = _context.RssArticles
+            //    .Where(x => userSites.Contains(x.SiteName.ToLower()))
+            //    .Where(x => x.DateTime.Date >= startDate.Date && x.DateTime.Date <= endDate.Date)
+            //    .OrderByDescending(x => x.DateTime)
+            //    .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
+            //    .Take(paginationFilter.PageSize);
 
-            var data = RssPostDTOs.Select(
-                x =>
-                    new RssPostDTO
-                    {
-                        DateTime = x.DateTime,
-                        Description = x.Description,
-                        Id = x.Id,
-                        SiteName = x.SiteName,
-                        Title = x.Title,
-                        URL = x.URL,
-                        IsSavedForLater = !string.IsNullOrEmpty(userId)
-                            ? _context.ApplicationUserSettings
-                              .Include(a => a.SavedPosts)
-                              .FirstOrDefault(c => c.UserId == userId)
-                              .SavedPosts.Any(z => z.Id == x.Id)
-                            : false,
-                    }
-            );
+            //var postsCount = _context.RssArticles
+            //    .Where(x => userSites.Contains(x.SiteName.ToLower()))
+            //    .Where(x => x.DateTime.Date >= startDate.Date && x.DateTime.Date <= endDate.Date)
+            //    .Count();
+
+            //var data = RssPostDTOs.Select(
+            //    x =>
+            //        new RssPostDTO
+            //        {
+            //            DateTime = x.DateTime,
+            //            Description = x.Description,
+            //            Id = x.Id,
+            //            SiteName = x.SiteName,
+            //            Title = x.Title,
+            //            URL = x.URL,
+            //            IsSavedForLater = !string.IsNullOrEmpty(userId)
+            //                ? _context.ApplicationUserSettings
+            //                  .Include(a => a.SavedArticles)
+            //                  .FirstOrDefault(c => c.UserId == userId)
+            //                  .SavedArticles.Any(z => z.Id == x.Id)
+            //                : false,
+            //        }
+            //);
 
             return new PagedResponse<IEnumerable<RssPostDTO>>(
-                data,
+                null,
                 paginationFilter.PageNumber,
                 paginationFilter.PageSize,
-                postsCount
+                1
             );
         }
 
         public List<string> GetSubscribedSites(string userId)
         {
             var result = _context.ApplicationUserSettings
-                .Include(x => x.SiteNames)
+                .Include(x => x.RssFeeds)
                 .FirstOrDefault(x => x.UserId == userId)
-                .SiteNames.Select(x => x.Name)
+                .RssFeeds.Select(x => x.Name)
                 .ToList();
             return result;
         }
 
         public SiteSubscriptionResult SubscribeToSites(IEnumerable<string> sites, string userId)
         {
-            var userSettings = _context.ApplicationUserSettings
-                .Include(x => x.SiteNames)
-                .FirstOrDefault(z => z.UserId == userId);
+            // todo after refactoring rssarticle model
 
-            List<SiteName> siteNames = new();
+            //var userSettings = _context.ApplicationUserSettings
+            //    .Include(x => x.SiteNames)
+            //    .FirstOrDefault(z => z.UserId == userId);
 
-            var result = new SiteSubscriptionResult
-            {
-                Success = false,
-                Errors = new List<string>()
-            };
+            //List<SiteName> siteNames = new();
 
-            foreach (var site in sites)
-            {
-                var sitename = _context.SiteNames.FirstOrDefault(
-                    x => x.Name.ToLower() == site.ToLower()
-                );
-                if (sitename != null)
-                {
-                    siteNames.Add(sitename);
-                }
-                else
-                {
-                    result.Errors.Add($"Could not find {site} in available sites.");
-                }
-            }
+            //var result = new SiteSubscriptionResult
+            //{
+            //    Success = false,
+            //    Errors = new List<string>()
+            //};
 
-            if (result.Errors.Count > 0)
-            {
-                return result;
-            }
+            //foreach (var site in sites)
+            //{
+            //    var sitename = _context.SiteNames.FirstOrDefault(
+            //        x => x.Name.ToLower() == site.ToLower()
+            //    );
+            //    if (sitename != null)
+            //    {
+            //        siteNames.Add(sitename);
+            //    }
+            //    else
+            //    {
+            //        result.Errors.Add($"Could not find {site} in available sites.");
+            //    }
+            //}
 
-            userSettings.SiteNames = siteNames;
+            //if (result.Errors.Count > 0)
+            //{
+            //    return result;
+            //}
 
-            _context.SaveChanges();
+            //userSettings.SiteNames = siteNames;
+
+            //_context.SaveChanges();
 
             return new SiteSubscriptionResult { Success = true };
         }

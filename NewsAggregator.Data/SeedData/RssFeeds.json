@@ -1,0 +1,126 @@
+[
+    {
+        "Name": "Polsat News",
+        "URL": "https://www.polsatnews.pl/rss/wszystkie.xml",
+        "SubFeeds": [
+            {
+                "Name": "Polska",
+                "URL": "https://www.polsatnews.pl/rss/polska.xml"
+            },
+            {
+                "Name": "Swiat",
+                "URL": "https://www.polsatnews.pl/rss/swiat.xml"
+            },
+            {
+                "Name": "Wideo",
+                "URL": "https://www.polsatnews.pl/rss/wideo.xml"
+            },
+            {
+                "Name": "Biznes",
+                "URL": "https://www.polsatnews.pl/rss/biznes.xml"
+            },
+            {
+                "Name": "Technologie",
+                "URL": "https://www.polsatnews.pl/rss/technologie.xml"
+            },
+            {
+                "Name": "Moto",
+                "URL": "https://www.polsatnews.pl/rss/moto.xml"
+            },
+            {
+                "Name": "Kultura",
+                "URL": "https://www.polsatnews.pl/rss/kultura.xml"
+            },
+            {
+                "Name": "Sport",
+                "URL": "https://www.polsatnews.pl/rss/sport.xml"
+            },
+            {
+                "Name": "Czysta Polska",
+                "URL": "https://www.polsatnews.pl/rss/czysta-polska.xml"
+            }
+        ]
+    },
+    {
+        "Name": "Tvn24",
+        "URL": "https://tvn24.pl/najnowsze.xml"
+    },
+    {
+        "Name": "Onet",
+        "URL": "https://wiadomosci.onet.pl/.feed"
+    },
+    {
+        "Name": "WP",
+        "URL": "https://wiadomosci.wp.pl/RSS.XML"
+    },
+    {
+        "Name": "Interia",
+        "URL": "https://wydarzenia.interia.pl/feed",
+        "SubFeeds": [
+            {
+                "Name": "Polska",
+                "URL": "https://wydarzenia.interia.pl/polska/feed"
+            },
+            {
+                "Name": "Wywiady",
+                "URL": "https://wydarzenia.interia.pl/wywiady/feed"
+            },
+            {
+                "Name": "Swiat",
+                "URL": "https://wydarzenia.interia.pl/swiat/feed"
+            },
+            {
+                "Name": "Zagranica",
+                "URL": "https://wydarzenia.interia.pl/zagranica/feed"
+            },
+            {
+                "Name": "Kultura",
+                "URL": "https://wydarzenia.interia.pl/kultura/feed"
+            },
+            {
+                "Name": "Historia",
+                "URL": "https://wydarzenia.interia.pl/historia/feed"
+            },
+            {
+                "Name": "Nauka",
+                "URL": "https://wydarzenia.interia.pl/nauka/feed"
+            },
+            {
+                "Name": "Religia",
+                "URL": "https://wydarzenia.interia.pl/religia/feed"
+            },
+            {
+                "Name": "Ciekawostki",
+                "URL": "https://wydarzenia.interia.pl/ciekawostki/feed"
+            },
+            {
+                "Name": "Autorzy",
+                "URL": "https://wydarzenia.interia.pl/autor/feed"
+            },
+            {
+                "Name": "Opinie",
+                "URL": "https://wydarzenia.interia.pl/opinie/feed"
+            },
+            {
+                "Name": "Sport",
+                "URL": "https://sport.interia.pl/feed"
+            },
+            {
+                "Name": "Kobieta",
+                "URL": "https://kobieta.interia.pl/feed"
+            },
+            {
+                "Name": "Menway",
+                "URL": "https://menway.interia.pl/feed"
+            },
+            {
+                "Name": "Gry",
+                "URL": "https://gry.interia.pl/feed"
+            },
+            {
+                "Name": "Nowe Technologie",
+                "URL": "https://nt.interia.pl/feed"
+            }
+        ]
+    }
+]

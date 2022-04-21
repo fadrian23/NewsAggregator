@@ -198,6 +198,7 @@ namespace NewsAggregator.WebUI
             //    () => serviceProvider.GetService<IScrapeJob>().ScrapeRSSFeeds(),
             //    "*/30 * * * * "
             //);
+
         }
     }
 }
