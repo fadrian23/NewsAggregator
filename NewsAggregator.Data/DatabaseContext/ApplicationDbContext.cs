@@ -30,8 +30,6 @@ namespace NewsAggregator.Data.DatabaseContext
                 .HasOne(x => x.ParentFeed)
                 .WithMany(x => x.SubFeeds)
                 .HasForeignKey(x => x.ParentFeedId);
-
-            builder.Entity<RssFeed>().HasData(JsonSeedHelper.GetRssFeedData());
         }
     }
 }
