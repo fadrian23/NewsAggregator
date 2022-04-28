@@ -78,7 +78,15 @@ namespace NewsAggregator.WebUI
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddControllers().AddNewtonsoftJson();
+            services
+                .AddControllers()
+                .AddNewtonsoftJson(
+                    options =>
+                        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft
+                            .Json
+                            .ReferenceLoopHandling
+                            .Ignore
+                );
 
             var jwtSettings = new JwtSettings();
             Configuration.Bind(nameof(jwtSettings), jwtSettings);
@@ -193,12 +201,11 @@ namespace NewsAggregator.WebUI
                 }
             );
 
-            //recurringJobManager.AddOrUpdate(
-            //    "DataFromRssFeeds",
-            //    () => serviceProvider.GetService<IScrapeJob>().ScrapeRSSFeeds(),
-            //    "*/30 * * * * "
-            //);
-
+            recurringJobManager.AddOrUpdate(
+                "DataFromRssFeeds",
+                () => serviceProvider.GetService<IScrapeJob>().ScrapeRSSFeeds(),
+                "*/30 * * * * "
+            );
         }
     }
 }
