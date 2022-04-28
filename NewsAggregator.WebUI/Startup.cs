@@ -14,7 +14,7 @@ using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models.Identity;
 using NewsAggregator.Services.Options;
 using NewsAggregator.Services.Services;
-using NewsAggregator.WebUI.StartupFilters;
+using NewsAggregator.WebApi.Filters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -159,12 +159,9 @@ namespace NewsAggregator.WebUI
             IApplicationBuilder app,
             IWebHostEnvironment env,
             IRecurringJobManager recurringJobManager,
-            IServiceProvider serviceProvider,
-            ApplicationDbContext dbContext
+            IServiceProvider serviceProvider
         )
         {
-            dbContext.Database.Migrate();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -184,7 +181,12 @@ namespace NewsAggregator.WebUI
                 endpoints =>
                 {
                     endpoints.MapControllers();
-                    endpoints.MapHangfireDashboard();
+                    endpoints.MapHangfireDashboard(
+                        new DashboardOptions
+                        {
+                            Authorization = new[] { new HangfireAuthorizationFilter() }
+                        }
+                    );
                 }
             );
 
