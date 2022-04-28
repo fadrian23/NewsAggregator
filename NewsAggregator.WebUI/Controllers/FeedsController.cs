@@ -5,9 +5,12 @@ using NewsAggregator.Services.Extensions;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.Helpers;
 using NewsAggregator.Services.Services;
+using NewsAggregator.WebUI.Models;
 using NewsAggregator.WebUI.Models.Requests;
 using NewsAggregator.WebUI.Models.Responses;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NewsAggregator.WebUI.Controllers
@@ -15,35 +18,37 @@ namespace NewsAggregator.WebUI.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class UserSitesController : ControllerBase
+    public class FeedsController : ControllerBase
     {
         private readonly ISitesService _sitesService;
 
-        public UserSitesController(ISitesService sitesService)
+        public FeedsController(ISitesService sitesService)
         {
             _sitesService = sitesService;
         }
 
         [HttpGet]
-        [Route("getpostsbydaterange")]
-        public IActionResult GetPostsByDateFromSubscribedSites(
+        [Route("getarticles")]
+        public IActionResult GetArticlesFromSubscribedFeeds(
             [FromQuery] PaginationFilter paginationFilter,
-            DateTime startDate,
-            DateTime endDate
+            DateRange dateRange
         )
         {
             string userId = User.GetUserId();
 
-            var posts = _sitesService.GetPostsFromUserSites(
+            var posts = _sitesService.GetArticlesFromSubscribedFeeds(
                 userId,
                 paginationFilter,
-                startDate,
-                endDate
+                dateRange.Start,
+                dateRange.End
             );
+
+            Console.WriteLine(dateRange.Start);
+            Console.WriteLine(dateRange.End);
 
             if (posts == null)
             {
-                return NotFound();
+                return NoContent();
             }
 
             return Ok(posts);
@@ -51,16 +56,11 @@ namespace NewsAggregator.WebUI.Controllers
 
         [HttpPost]
         [Route("subscribe")]
-        public IActionResult SubscribeToSites(UserSitesSubscribeRequest userSitesSubscribeRequest)
+        public IActionResult SubscribeToFeeds(IEnumerable<int> feedIds)
         {
             string userId = User.GetUserId();
 
-            if (userSitesSubscribeRequest.Sites == null)
-            {
-                return BadRequest();
-            }
-
-            var result = _sitesService.SubscribeToSites(userSitesSubscribeRequest.Sites, userId);
+            var result = _sitesService.SubscribeToFeeds(feedIds, userId);
 
             var response = new UserSitesSubscribeResponse
             {
@@ -68,27 +68,28 @@ namespace NewsAggregator.WebUI.Controllers
                 Success = result.Success
             };
 
-            return response.Success ? Ok() : BadRequest(response);
+            return response.Success ? Ok(response) : BadRequest(response);
         }
 
         [HttpGet]
-        [Route("getsubscribedsites")]
-        public IActionResult GetSubscribedSites()
+        [Route("getsubscribedfeeds")]
+        public IActionResult GetSubscribedFeeds()
         {
             string userId = User.GetUserId();
 
-            var result = _sitesService.GetSubscribedSites(userId);
+            var result = _sitesService.GetSubscribedFeeds(userId);
 
             return Ok(result);
         }
 
         [HttpGet]
         [Route("available")]
-        public IActionResult GetAvailableSites()
+        [AllowAnonymous]
+        public IActionResult GetAvailableFeeds()
         {
-            var availableSites = AvailableRssFeeds.RssFeeds.Keys.ToArray();
+            var availableFeeds = _sitesService.GetAvailableFeeds();
 
-            return Ok(availableSites);
+            return Ok(availableFeeds);
         }
     }
 }
