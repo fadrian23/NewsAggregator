@@ -15,41 +15,31 @@ namespace NewsAggregator.WebUI.Controllers
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    public class InformationSitesController : ControllerBase
+    public class ArticlesController : ControllerBase
     {
         private readonly IArticlesService _articlesService;
 
-        public InformationSitesController(IArticlesService articlesService)
+        public ArticlesController(IArticlesService articlesService)
         {
             _articlesService = articlesService;
         }
 
         [HttpGet]
         [AllowAnonymous]
-        [Route("getposts")]
-        public IActionResult GetPosts(
-            string siteName,
+        public IActionResult GetArticles(
+            int? feedId,
             [FromQuery] PaginationFilter paginationFilter,
             [FromQuery] DateRange dateRange
         )
         {
-            var userId = User.GetUserId();
+            var articles = _articlesService.GetArticlesByDateRange(
+                paginationFilter,
+                dateRange.Start,
+                dateRange.End,
+                feedId
+            );
 
-            try
-            {
-                var posts = _articlesService.GetPostsByDateRange(
-                    paginationFilter,
-                    dateRange.Start,
-                    dateRange.End,
-                    userId,
-                    siteName
-                );
-                return Ok(posts);
-            }
-            catch (NotImplementedException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            return articles.Success ? Ok(articles) : BadRequest();
         }
     }
 }

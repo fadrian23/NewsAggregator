@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Services.DTOs;
+using NewsAggregator.Services.Extensions;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.HelperModels;
 using NewsAggregator.Services.Services;
@@ -16,39 +17,33 @@ namespace NewsAggregator.Services.Implementation
     public class ArticlesService : IArticlesService
     {
         private readonly ApplicationDbContext _context;
-        private readonly ILogger<ArticlesService> _logger;
 
-        public ArticlesService(ApplicationDbContext context, ILogger<ArticlesService> logger)
+        public ArticlesService(ApplicationDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
-        public PagedResponse<IEnumerable<RssArticleDTO>> GetPostsByDateRange(
+        public PagedResponse<IEnumerable<RssArticleDTO>> GetArticlesByDateRange(
             PaginationFilter paginationFilter,
             DateTime startDate,
             DateTime endDate,
-            string userId = null,
-            string sitename = null
+            int? feedId
         )
         {
-            var posts = _context.RssArticles.Where(
+            var articles = _context.RssArticles.Where(
                 x => x.DateTime >= startDate && x.DateTime <= endDate
             );
 
-            if (!string.IsNullOrEmpty(sitename))
+            if (feedId != null)
             {
-                posts = posts.Where(x => x.RssFeed.Name.ToLower() == sitename.ToLower());
+                articles = articles.Where(x => x.RssFeedId == feedId);
             }
 
-            var postsCount = posts.Count();
+            var articlesCount = articles.Count();
 
-            posts = posts
-                .OrderByDescending(x => x.DateTime)
-                .Skip((paginationFilter.PageNumber - 1) * paginationFilter.PageSize)
-                .Take(paginationFilter.PageSize);
+            var paginatedArticles = articles.Paginate(paginationFilter);
 
-            var postDTOs = posts
+            var articleDTOs = paginatedArticles
                 .Select(
                     x =>
                         new RssArticleDTO
@@ -64,10 +59,10 @@ namespace NewsAggregator.Services.Implementation
                 .ToList();
 
             return new PagedResponse<IEnumerable<RssArticleDTO>>(
-                postDTOs,
+                articleDTOs,
                 paginationFilter.PageNumber,
                 paginationFilter.PageSize,
-                postsCount
+                articlesCount
             );
         }
 
