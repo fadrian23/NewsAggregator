@@ -9,61 +9,56 @@ namespace NewsAggregator.WebUI.Binders
     public class DateRangeBinder : IModelBinder
     {
         /*
-         * Binding rules:
-         * if both Start and End date isn't provided, then Start date will be first millisecond of today and End date the last millisecond
-         * if Start is provided and End isn't, then End date will be DateTime.MaxValue
-         * if Start is not provided and End is, then Start date will be DateTime.MinValue
+         * set DateTime.MinValue to startdate if it's not provided
+         * set DateTime.MaxValue to enddate if it's not provided
          */
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
             var startValue = bindingContext.ValueProvider.GetValue("Start").FirstValue;
             var endValue = bindingContext.ValueProvider.GetValue("End").FirstValue;
 
-            if (string.IsNullOrEmpty(startValue) && string.IsNullOrEmpty(endValue))
+            var startDateValid = true;
+            var endDateValid = true;
+
+            if (!DateTime.TryParse(startValue, out var startDate))
             {
-                var today = DateTime.Today;
-                var model = new DateRange
-                {
-                    Start = today.AbsoluteStart(),
-                    End = today.AbsoluteEnd(),
-                };
-
-                bindingContext.Result = ModelBindingResult.Success(model);
-            }
-
-            if (!string.IsNullOrEmpty(startValue) && string.IsNullOrEmpty(endValue))
-            {
-                if (DateTime.TryParse(startValue, out DateTime date))
-                {
-                    var model = new DateRange { Start = date, End = DateTime.MaxValue, };
-
-                    bindingContext.Result = ModelBindingResult.Success(model);
-                }
-                else
+                startDateValid = false;
+                if (startValue is not null)
                 {
                     bindingContext.ModelState.TryAddModelError(
                         bindingContext.ModelName,
-                        "Wrong format of Start DateTime"
+                        "Start value is not correct"
                     );
+                    return Task.CompletedTask;
                 }
             }
 
-            if (string.IsNullOrEmpty(startValue) && !string.IsNullOrEmpty(endValue))
+            if (!DateTime.TryParse(endValue, out var endDate))
             {
-                if (DateTime.TryParse(endValue, out DateTime date))
-                {
-                    var model = new DateRange { Start = DateTime.MinValue, End = date, };
-
-                    bindingContext.Result = ModelBindingResult.Success(model);
-                }
-                else
+                endDateValid = false;
+                if (endValue is not null)
                 {
                     bindingContext.ModelState.TryAddModelError(
                         bindingContext.ModelName,
-                        "Wrong format of End DateTime"
+                        "End value is not correct"
                     );
+                    return Task.CompletedTask;
                 }
             }
+
+            DateRange model = new DateRange();
+
+            if (!startDateValid)
+                model.Start = DateTime.MinValue;
+            else
+                model.Start = startDate;
+
+            if (!endDateValid)
+                model.End = DateTime.MaxValue;
+            else
+                model.End = endDate;
+
+            bindingContext.Result = ModelBindingResult.Success(model);
 
             return Task.CompletedTask;
         }
