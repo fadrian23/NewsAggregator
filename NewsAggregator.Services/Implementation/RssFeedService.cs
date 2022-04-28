@@ -41,7 +41,7 @@ namespace NewsAggregator.Services.Implementation
 
         private IEnumerable<RssArticle> GetRssArticlesFromRootXElement(
             XElement rootElement,
-            string siteName
+            RssFeed feed
         )
         {
             var versionElement = rootElement.Attribute("version");
@@ -71,10 +71,6 @@ namespace NewsAggregator.Services.Implementation
                 articles = rootElement.Elements(ns + "entry");
             }
 
-            var feed = _context.RssFeeds.FirstOrDefault(
-                x => x.Name.ToLower() == siteName.ToLower()
-            );
-
             return articles.Select(
                 article =>
                     new RssArticle
@@ -98,18 +94,18 @@ namespace NewsAggregator.Services.Implementation
         }
 
         public async Task<KeyValuePair<string, IEnumerable<RssArticle>>> GetArticlesFromRssFeed(
-            string siteName,
-            string URL
+            RssFeed feed
         )
         {
             var httpClient = _httpClientFactory.CreateClient("RssFeed");
-            var stream = await httpClient.GetStreamAsync(URL);
+
+            var stream = await httpClient.GetStreamAsync(feed.URL);
 
             XElement root = XElement.Load(stream);
 
-            var articles = GetRssArticlesFromRootXElement(root, siteName);
+            var articles = GetRssArticlesFromRootXElement(root, feed);
 
-            return new KeyValuePair<string, IEnumerable<RssArticle>>(siteName, articles);
+            return new KeyValuePair<string, IEnumerable<RssArticle>>(feed.Name, articles);
         }
 
         public void SaveArticles(IEnumerable<RssArticle> articles, string siteName)
