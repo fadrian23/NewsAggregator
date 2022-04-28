@@ -24,7 +24,7 @@ namespace NewsAggregator.Services.Implementation
             _logger = logger;
         }
 
-        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(
+        public PagedResponse<IEnumerable<RssArticleDTO>> GetPostsByDateRange(
             PaginationFilter paginationFilter,
             DateTime startDate,
             DateTime endDate,
@@ -51,7 +51,7 @@ namespace NewsAggregator.Services.Implementation
             var postDTOs = posts
                 .Select(
                     x =>
-                        new RssPostDTO
+                        new RssArticleDTO
                         {
                             DateTime = x.DateTime,
                             Description = x.Description,
@@ -63,7 +63,7 @@ namespace NewsAggregator.Services.Implementation
                 )
                 .ToList();
 
-            return new PagedResponse<IEnumerable<RssPostDTO>>(
+            return new PagedResponse<IEnumerable<RssArticleDTO>>(
                 postDTOs,
                 paginationFilter.PageNumber,
                 paginationFilter.PageSize,
@@ -116,7 +116,7 @@ namespace NewsAggregator.Services.Implementation
             return false;
         }
 
-        public PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRangeForLater(
+        public PagedResponse<IEnumerable<RssArticleDTO>> GetPostsByDateRangeForLater(
             PaginationFilter paginationFilter,
             string userId
         )
@@ -134,7 +134,7 @@ namespace NewsAggregator.Services.Implementation
 
             var postsDto = posts.Select(
                 x =>
-                    new RssPostDTO
+                    new RssArticleDTO
                     {
                         DateTime = x.DateTime,
                         Description = x.Description,
@@ -146,7 +146,7 @@ namespace NewsAggregator.Services.Implementation
                     }
             );
 
-            return new PagedResponse<IEnumerable<RssPostDTO>>(
+            return new PagedResponse<IEnumerable<RssArticleDTO>>(
                 postsDto,
                 paginationFilter.PageNumber,
                 paginationFilter.PageSize,

@@ -11,14 +11,14 @@ namespace NewsAggregator.Services.Services
 {
     public interface IArticlesService
     {
-        PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRange(
+        PagedResponse<IEnumerable<RssArticleDTO>> GetPostsByDateRange(
             PaginationFilter paginationFilter,
             DateTime startDate,
             DateTime endDate,
             string userId = null,
             string sitename = null
         );
-        PagedResponse<IEnumerable<RssPostDTO>> GetPostsByDateRangeForLater(
+        PagedResponse<IEnumerable<RssArticleDTO>> GetPostsByDateRangeForLater(
             PaginationFilter paginationFilter,
             string userId
         );
