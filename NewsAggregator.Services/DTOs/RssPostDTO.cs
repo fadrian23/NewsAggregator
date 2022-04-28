@@ -10,7 +10,7 @@ namespace NewsAggregator.Services.DTOs
         public string Description { get; set; }
         public string URL { get; set; }
         public DateTime DateTime { get; set; }
-        public string SiteName { get; set; }
+        public int RssFeedId { get; set; }
         public bool IsSavedForLater { get; set; }
     }
 }

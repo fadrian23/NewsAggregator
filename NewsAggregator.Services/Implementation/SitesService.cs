@@ -49,7 +49,7 @@ namespace NewsAggregator.Services.Implementation
                             Id = article.Id,
                             DateTime = article.DateTime,
                             Description = article.Description,
-                            SiteName = article.RssFeed.Name,
+                            RssFeedId = article.RssFeed.RssFeedId,
                             Title = article.Title,
                             URL = article.URL,
                             IsSavedForLater = _context.ApplicationUserSettings

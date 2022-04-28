@@ -51,7 +51,7 @@ namespace NewsAggregator.Services.Implementation
                             DateTime = x.DateTime,
                             Description = x.Description,
                             Id = x.Id,
-                            SiteName = x.RssFeed.Name,
+                            RssFeedId = x.RssFeed.RssFeedId,
                             Title = x.Title,
                             URL = x.URL,
                         }
@@ -122,7 +122,7 @@ namespace NewsAggregator.Services.Implementation
                         Description = x.Description,
                         Id = x.Id,
                         IsSavedForLater = true,
-                        SiteName = x.RssFeed.Name,
+                        RssFeedId = x.RssFeed.RssFeedId,
                         Title = x.Title,
                         URL = x.URL
                     }
