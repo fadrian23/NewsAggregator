@@ -1,4 +1,5 @@
-﻿using NewsAggregator.Services.DTOs;
+﻿using NewsAggregator.Data.Models;
+using NewsAggregator.Services.DTOs;
 using NewsAggregator.Services.Filters;
 using NewsAggregator.Services.HelperModels;
 using System;
@@ -8,13 +9,14 @@ namespace NewsAggregator.Services.Services
 {
     public interface ISitesService
     {
-        PagedResponse<IEnumerable<RssPostDTO>> GetPostsFromUserSites(
+        PagedResponse<IEnumerable<RssArticleDTO>> GetArticlesFromSubscribedFeeds(
             string userId,
             PaginationFilter paginationFilter,
             DateTime startDate,
             DateTime endDate
         );
-        SiteSubscriptionResult SubscribeToSites(IEnumerable<string> sites, string userId);
-        List<string> GetSubscribedSites(string userId);
+        SiteSubscriptionResult SubscribeToFeeds(IEnumerable<int> feedIds, string userId);
+        IEnumerable<RssFeedDTO> GetSubscribedFeeds(string userId);
+        IEnumerable<RssFeedDTO> GetAvailableFeeds();
     }
 }
