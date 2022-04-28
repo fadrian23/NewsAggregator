@@ -14,6 +14,7 @@ using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Data.Models.Identity;
 using NewsAggregator.Services.Options;
 using NewsAggregator.Services.Services;
+using NewsAggregator.WebUI.StartupFilters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -47,24 +48,7 @@ namespace NewsAggregator.WebUI
                     )
             );
 
-            services.AddHangfire(
-                configuration =>
-                    configuration
-                        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                        .UseSimpleAssemblyNameTypeSerializer()
-                        .UseRecommendedSerializerSettings()
-                        .UseSqlServerStorage(
-                            Configuration.GetConnectionString("NewsAggregatorConnection"),
-                            new SqlServerStorageOptions
-                            {
-                                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
-                                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
-                                QueuePollInterval = TimeSpan.Zero,
-                                UseRecommendedIsolationLevel = true,
-                                DisableGlobalLocks = true
-                            }
-                        )
-            );
+            services.AddHangfireAfterMigrations(Configuration);
 
             services.AddHangfireServer();
 
@@ -175,9 +159,12 @@ namespace NewsAggregator.WebUI
             IApplicationBuilder app,
             IWebHostEnvironment env,
             IRecurringJobManager recurringJobManager,
-            IServiceProvider serviceProvider
+            IServiceProvider serviceProvider,
+            ApplicationDbContext dbContext
         )
         {
+            dbContext.Database.Migrate();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

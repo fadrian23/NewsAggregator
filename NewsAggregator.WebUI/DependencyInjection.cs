@@ -1,5 +1,10 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Hangfire;
+using Hangfire.SqlServer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NewsAggregator.Data.DatabaseContext;
 using NewsAggregator.Services.Implementation;
 using NewsAggregator.Services.Services;
 using System;
@@ -22,6 +27,40 @@ namespace NewsAggregator.WebUI
 
             services.AddScoped<IUserService, UserService>();
 
+            return services;
+        }
+
+        public static IServiceCollection AddHangfireAfterMigrations(
+            this IServiceCollection services,
+            IConfiguration configuration
+        )
+        {
+            services.AddHangfire(
+                (serviceProvider, config) =>
+                {
+                    var context = serviceProvider
+                        .CreateScope()
+                        .ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                    context.Database.Migrate();
+
+                    config
+                        .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                        .UseSimpleAssemblyNameTypeSerializer()
+                        .UseRecommendedSerializerSettings()
+                        .UseSqlServerStorage(
+                            configuration.GetConnectionString("NewsAggregatorConnection"),
+                            new SqlServerStorageOptions
+                            {
+                                CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                                SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                                QueuePollInterval = TimeSpan.Zero,
+                                UseRecommendedIsolationLevel = true,
+                                DisableGlobalLocks = true
+                            }
+                        );
+                }
+            );
             return services;
         }
     }
