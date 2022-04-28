@@ -48,7 +48,7 @@ INSERT [dbo].[RssFeeds] ([RssFeedId], [Name], [URL], [ParentFeedId]) VALUES (22,
 GO
 INSERT [dbo].[RssFeeds] ([RssFeedId], [Name], [URL], [ParentFeedId]) VALUES (23, N'Ciekawostki', N'https://wydarzenia.interia.pl/ciekawostki/feed', 14)
 GO
-INSERT [dbo].[RssFeeds] ([RssFeedId], [Name], [URL], [ParentFeedId]) VALUES (24, N'Autorzy', N'https://wydarzenia.interia.pl/autorzy/feed', 14)
+INSERT [dbo].[RssFeeds] ([RssFeedId], [Name], [URL], [ParentFeedId]) VALUES (24, N'Autorzy', N'https://wydarzenia.interia.pl/autor/feed', 14)
 GO
 INSERT [dbo].[RssFeeds] ([RssFeedId], [Name], [URL], [ParentFeedId]) VALUES (25, N'Opinie', N'https://wydarzenia.interia.pl/opinie/feed', 14)
 GO
