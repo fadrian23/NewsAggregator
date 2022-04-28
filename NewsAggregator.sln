@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31129.286
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.WebUI", "NewsAggregator.WebUI.csproj", "{A18E842A-5C14-4E45-ADAE-425C3322E459}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.WebApi", "NewsAggregator.WebUI\NewsAggregator.WebApi.csproj", "{A18E842A-5C14-4E45-ADAE-425C3322E459}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.Data", "..\NewsAggregator.Data\NewsAggregator.Data.csproj", "{DF7934D5-8BCA-49EF-9CF7-B21DEC9F2128}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.Data", "NewsAggregator.Data\NewsAggregator.Data.csproj", "{DF7934D5-8BCA-49EF-9CF7-B21DEC9F2128}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.Services", "..\NewsAggregator.Services\NewsAggregator.Services.csproj", "{7D5E16BE-BB0D-44D7-AC32-2EEEE30ACAB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.Services", "NewsAggregator.Services\NewsAggregator.Services.csproj", "{7D5E16BE-BB0D-44D7-AC32-2EEEE30ACAB4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
