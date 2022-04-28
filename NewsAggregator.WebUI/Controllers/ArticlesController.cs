@@ -41,5 +41,36 @@ namespace NewsAggregator.WebUI.Controllers
 
             return articles.Success ? Ok(articles) : BadRequest();
         }
+
+        [HttpGet("{articleId}")]
+        public IActionResult SaveArticle(int articleId)
+        {
+            var userId = User.GetUserId();
+
+            var result = _articlesService.SaveArticle(userId, articleId);
+
+            return result ? Ok(result) : NotFound(result);
+        }
+
+        [HttpDelete("{articleId}")]
+        public IActionResult RemoveArticle(int articleId)
+        {
+            var userId = User.GetUserId();
+
+            var result = _articlesService.RemoveArticle(userId, articleId);
+
+            return result ? Ok(result) : BadRequest(result);
+        }
+
+        [HttpGet]
+        [Route("saved")]
+        public IActionResult GetSavedArticles([FromQuery] PaginationFilter paginationFilter)
+        {
+            var userId = User.GetUserId();
+
+            var result = _articlesService.GetPostsByDateRangeForLater(paginationFilter, userId);
+
+            return Ok(result);
+        }
     }
 }

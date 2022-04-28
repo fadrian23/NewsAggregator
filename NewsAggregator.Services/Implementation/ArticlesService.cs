@@ -66,49 +66,36 @@ namespace NewsAggregator.Services.Implementation
             );
         }
 
-        public bool SavePostForLater(string userId, int postId)
+        public bool SaveArticle(string userId, int postId)
         {
             var userSettings = _context.ApplicationUserSettings
                 .Include(x => x.SavedArticles)
                 .FirstOrDefault(x => x.UserId == userId);
 
-            var post = _context.RssArticles.FirstOrDefault(x => x.Id == postId);
+            var article = _context.RssArticles.FirstOrDefault(x => x.Id == postId);
 
-            var savedPosts = userSettings.SavedArticles.ToList();
-
-            if (!savedPosts.Contains(post))
+            if (!userSettings.SavedArticles.Contains(article))
             {
-                savedPosts.Add(post);
+                userSettings.SavedArticles.Add(article);
             }
 
-            userSettings.SavedArticles = savedPosts;
-
-            if (_context.SaveChanges() > 0)
-            {
-                return true;
-            }
-            return false;
+            return _context.SaveChanges() > 0;
         }
 
-        public bool RemovePostForLater(string userId, int postId)
+        public bool RemoveArticle(string userId, int postId)
         {
             var userSettings = _context.ApplicationUserSettings
                 .Include(x => x.SavedArticles)
                 .FirstOrDefault(x => x.UserId == userId);
 
-            var post = _context.RssArticles.FirstOrDefault(x => x.Id == postId);
+            var article = _context.RssArticles.FirstOrDefault(x => x.Id == postId);
 
-            var savedPosts = userSettings.SavedArticles.ToList();
-
-            savedPosts.Remove(post);
-
-            userSettings.SavedArticles = savedPosts;
-
-            if (_context.SaveChanges() > 0)
+            if (userSettings.SavedArticles.Contains(article))
             {
-                return true;
+                userSettings.SavedArticles.Remove(article);
             }
-            return false;
+
+            return _context.SaveChanges() > 0;
         }
 
         public PagedResponse<IEnumerable<RssArticleDTO>> GetPostsByDateRangeForLater(

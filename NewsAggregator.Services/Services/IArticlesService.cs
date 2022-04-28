@@ -21,7 +21,7 @@ namespace NewsAggregator.Services.Services
             PaginationFilter paginationFilter,
             string userId
         );
-        bool SavePostForLater(string userId, int postId);
-        bool RemovePostForLater(string userId, int postId);
+        bool SaveArticle(string userId, int postId);
+        bool RemoveArticle(string userId, int postId);
     }
 }
