@@ -43,9 +43,6 @@ namespace NewsAggregator.WebUI.Controllers
                 dateRange.End
             );
 
-            Console.WriteLine(dateRange.Start);
-            Console.WriteLine(dateRange.End);
-
             if (posts == null)
             {
                 return NoContent();
@@ -90,6 +87,15 @@ namespace NewsAggregator.WebUI.Controllers
             var availableFeeds = _sitesService.GetAvailableFeeds();
 
             return Ok(availableFeeds);
+        }
+
+        [HttpGet("{id}")]
+        [AllowAnonymous]
+        public IActionResult GetFeed(int id)
+        {
+            var feed = _sitesService.GetFeedById(id);
+
+            return feed is null ? NoContent() : Ok(feed);
         }
     }
 }

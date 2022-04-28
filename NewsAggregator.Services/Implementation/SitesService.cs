@@ -135,5 +135,21 @@ namespace NewsAggregator.Services.Implementation
 
             return new SiteSubscriptionResult { Errors = null, Success = true };
         }
+
+        public RssFeedDTO GetFeedById(int id)
+        {
+            var feed = _context.RssFeeds.FirstOrDefault(x => x.RssFeedId == id);
+
+            if (feed == null)
+                return null;
+
+            return new RssFeedDTO
+            {
+                Id = feed.RssFeedId,
+                Name = feed.Name,
+                ParentFeedId = feed.ParentFeedId,
+                URL = feed.URL
+            };
+        }
     }
 }

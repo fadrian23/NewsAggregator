@@ -18,5 +18,6 @@ namespace NewsAggregator.Services.Services
         SiteSubscriptionResult SubscribeToFeeds(IEnumerable<int> feedIds, string userId);
         IEnumerable<RssFeedDTO> GetSubscribedFeeds(string userId);
         IEnumerable<RssFeedDTO> GetAvailableFeeds();
+        RssFeedDTO GetFeedById(int id);
     }
 }
