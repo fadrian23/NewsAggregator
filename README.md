@@ -11,13 +11,4 @@ NewsAggregator allows you to view top posts from information sites, hackernews a
 * Dotnet SDK
 
 ### Usage
-* WebAPI
-  * In the project root directory run
-  ```
-  dotnet build
-  ```
-  * then
-  ```
-  dotnet run
-  ```
-  App starts on http://localhost:5000
+Run `docker compose up` in root directory
