@@ -1,5 +1,5 @@
 ### NewsAggregator
-NewsAggregator allows you to view top posts from information sites, hackernews and redditservice, polsatnews and others.
+NewsAggregator allows you to view all the accumulated news from RSS feeds since the application started. News pages are checked every 10 minutes for new articles.
 
 ### Tech
 * ASP.NET Core 5.0
